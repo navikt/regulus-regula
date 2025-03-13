@@ -3,9 +3,7 @@ package no.nav.tsm.regulus.regula.trees.legesuspensjon
 import no.nav.tsm.regulus.regula.executor.RuleHit
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 
-enum class LegeSuspensjonRuleHit(
-    val ruleHit: RuleHit,
-) {
+enum class LegeSuspensjonRuleHit(val ruleHit: RuleHit) {
     BEHANDLER_SUSPENDERT(
         ruleHit = RuleHit(
             rule = "BEHANDLER_SUSPENDERT",

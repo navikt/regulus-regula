@@ -7,6 +7,8 @@ import no.nav.tsm.regulus.regula.executor.RuleExecution
 import no.nav.tsm.regulus.regula.executor.RuleResult
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.trees.legesuspensjon.LegeSuspensjonRulesExecution
+import no.nav.tsm.regulus.regula.trees.validation.ValidationRulePayload
+import no.nav.tsm.regulus.regula.trees.validation.ValidationRulesExecution
 
 class RuleExecutor() {
     private val ruleExecution =
@@ -14,7 +16,17 @@ class RuleExecutor() {
             LegeSuspensjonRulesExecution(
                 "What", true
             ),
-            // ValidationRulesExecution(validationRuleTree),
+            ValidationRulesExecution(
+                "What", ValidationRulePayload(
+                    rulesetVersion = "2",
+                    perioder = emptyList(),
+                    legekontorOrgnr = "123",
+                    behandlerFnr = "08201023912",
+                    avsenderFnr = "01912391932",
+                    patientPersonNumber = "92102931803"
+
+                )
+            ),
             // PeriodLogicRulesExecution(periodLogicRuleTree),
             // HPRRulesExecution(hprRuleTree),
             // ArbeidsuforhetRulesExecution(arbeidsuforhetRuleTree),

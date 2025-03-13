@@ -4,19 +4,19 @@ import no.nav.tsm.regulus.regula.dsl.*
 import no.nav.tsm.regulus.regula.executor.RuleResult
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.trees.legesuspensjon.legeSuspensjonRuleTree
+import no.nav.tsm.regulus.regula.trees.validation.validationRuleTree
 
 fun main() {
-    val ruleTrees =
-        listOf(
-            "Lege suspensjon" to legeSuspensjonRuleTree,
-            // "Validation" to validationRuleTree,
-            // "Periode validering" to periodLogicRuleTree,
-            // "HPR" to hprRuleTree,
-            // "Arbeidsuforhet" to arbeidsuforhetRuleTree,
-            // "Pasient under 13" to patientAgeUnder13RuleTree,
-            // "Periode" to periodeRuleTree,
-            // "Tilbakedatering" to tilbakedateringRuleTree,
-        )
+    val ruleTrees = listOf(
+        "Lege suspensjon" to legeSuspensjonRuleTree,
+        "Validation" to validationRuleTree,
+        // "Periode validering" to periodLogicRuleTree,
+        // "HPR" to hprRuleTree,
+        // "Arbeidsuforhet" to arbeidsuforhetRuleTree,
+        // "Pasient under 13" to patientAgeUnder13RuleTree,
+        // "Periode" to periodeRuleTree,
+        // "Tilbakedatering" to tilbakedateringRuleTree,
+    )
 
     ruleTrees.forEachIndexed { idx, (name, ruleTree) -> // add index to differentiate each loop
         val builder = StringBuilder()

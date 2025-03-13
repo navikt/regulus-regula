@@ -16,13 +16,14 @@ class LegeSuspensjonRulesExecution(
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     override fun runRules(): Pair<LegeSuspensjonTreeOutput, Juridisk> =
-        legeSuspensjonRuleTree.first.evaluate(behandlerSuspendert)
+        legeSuspensjonRuleTree.first
+            .evaluate(behandlerSuspendert)
             .also { legeSuspensjonRulePath ->
                 logger.info("Rules ${sykmeldingId}, ${legeSuspensjonRulePath.printRulePath()}")
             } to legeSuspensjonRuleTree.second
 }
 
-private fun TreeNode<LegeSuspensjonRules, RuleResult>.evaluate(
+private fun LegeSuspensjonTreeNode.evaluate(
     behandlerSuspendert: Boolean,
 ): LegeSuspensjonTreeOutput =
     when (this) {
