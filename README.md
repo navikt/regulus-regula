@@ -55,10 +55,8 @@ Regeleksekveringsmotoren forventer at reglene består av:
 
 ### Overordnet definisjoner
 
-* Et enum som beskriver alle regel-navnene
+* Et enum som beskriver alle regel-navnene, og utfall for hver regel
   * `enum FooBarRules { ... }`
-* Et enum som beskriver alle regel-utfall
-  * `enum class FooBarRuleOutcomes: RuleOutcome { ... }`
 * Et `tree` som implementerer alle reglene, og deres yes/no utfall
   * `val fooBarTree = treetree<LegeSuspensjonRules, RuleResult>(LegeSuspensjonRules.FirstRule) { ... }`
 

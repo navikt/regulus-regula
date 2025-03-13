@@ -5,14 +5,14 @@ import no.nav.tsm.regulus.regula.executor.RuleExecution
 import no.nav.tsm.regulus.regula.executor.RuleResult
 import org.slf4j.LoggerFactory
 
-typealias ValidationTreeOutput = TreeOutput<ValidationRules, RuleResult>
+typealias ValidationTreeOutput = TreeOutput<ValidationRule, RuleResult>
 
-typealias ValidationTreeNode = TreeNode<ValidationRules, RuleResult>
+typealias ValidationTreeNode = TreeNode<ValidationRule, RuleResult>
 
 class ValidationRulesExecution(
     private val sykmeldingId: String,
     private val validationRulePayload: ValidationRulePayload,
-) : RuleExecution<ValidationRules> {
+) : RuleExecution<ValidationRule> {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     override fun runRules(): Pair<ValidationTreeOutput, Juridisk> =

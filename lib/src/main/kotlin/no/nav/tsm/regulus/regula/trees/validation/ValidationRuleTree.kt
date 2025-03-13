@@ -9,16 +9,16 @@ import no.nav.tsm.regulus.regula.executor.no
 import no.nav.tsm.regulus.regula.executor.yes
 
 val validationRuleTree =
-    tree<ValidationRules, RuleResult>(ValidationRules.UGYLDIG_REGELSETTVERSJON) {
-        yes(INVALID, ValidationRuleOutcomes.UGYLDIG_REGELSETTVERSJON)
-        no(ValidationRules.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39) {
-            yes(INVALID, ValidationRuleOutcomes.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39)
-            no(ValidationRules.UGYLDIG_ORGNR_LENGDE) {
-                yes(INVALID, ValidationRuleOutcomes.UGYLDIG_ORGNR_LENGDE)
-                no(ValidationRules.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR) {
-                    yes(INVALID, ValidationRuleOutcomes.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR)
-                    no(ValidationRules.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR) {
-                        yes(INVALID, ValidationRuleOutcomes.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR)
+    tree<ValidationRule, RuleResult>(ValidationRule.UGYLDIG_REGELSETTVERSJON) {
+        yes(INVALID, ValidationRule.UGYLDIG_REGELSETTVERSJON.Outcome)
+        no(ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39) {
+            yes(INVALID, ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39.Outcome)
+            no(ValidationRule.UGYLDIG_ORGNR_LENGDE) {
+                yes(INVALID, ValidationRule.UGYLDIG_ORGNR_LENGDE.Outcome)
+                no(ValidationRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR) {
+                    yes(INVALID, ValidationRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR.Outcome)
+                    no(ValidationRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR) {
+                        yes(INVALID, ValidationRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR.Outcome)
                         no(OK)
                     }
                 }

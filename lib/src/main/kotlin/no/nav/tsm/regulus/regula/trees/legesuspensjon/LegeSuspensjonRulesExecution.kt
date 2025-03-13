@@ -5,14 +5,14 @@ import no.nav.tsm.regulus.regula.dsl.*
 import no.nav.tsm.regulus.regula.executor.RuleExecution
 import no.nav.tsm.regulus.regula.executor.RuleResult
 
-typealias LegeSuspensjonTreeOutput = TreeOutput<LegeSuspensjonRules, RuleResult>
+typealias LegeSuspensjonTreeOutput = TreeOutput<LegeSuspensjonRule, RuleResult>
 
-typealias LegeSuspensjonTreeNode = TreeNode<LegeSuspensjonRules, RuleResult>
+typealias LegeSuspensjonTreeNode = TreeNode<LegeSuspensjonRule, RuleResult>
 
 class LegeSuspensjonRulesExecution(
     private val sykmeldingId: String,
     private val behandlerSuspendert: Boolean
-) : RuleExecution<LegeSuspensjonRules> {
+) : RuleExecution<LegeSuspensjonRule> {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     override fun runRules(): Pair<LegeSuspensjonTreeOutput, Juridisk> =

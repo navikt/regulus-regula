@@ -3,22 +3,14 @@ package no.nav.tsm.regulus.regula.trees.validation
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.utils.daysBetween
 
-enum class ValidationRules {
-    UGYLDIG_REGELSETTVERSJON,
-    MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39,
-    UGYLDIG_ORGNR_LENGDE,
-    AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR,
-    BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR,
-}
+private typealias ValidationRuleFn = (payload: ValidationRulePayload) -> RuleOutput<ValidationRule>
 
-private typealias ValidationRuleFn = (payload: ValidationRulePayload) -> RuleOutput<ValidationRules>
-
-fun getRule(rules: ValidationRules): ValidationRuleFn = when (rules) {
-    ValidationRules.UGYLDIG_REGELSETTVERSJON -> Rules.ugyldigRegelsettversjon
-    ValidationRules.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 -> Rules.manglendeDynamiskesporsmaalversjon2uke39
-    ValidationRules.UGYLDIG_ORGNR_LENGDE -> Rules.ugyldingOrgNummerLengde
-    ValidationRules.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR -> Rules.avsenderSammeSomPasient
-    ValidationRules.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR -> Rules.behandlerSammeSomPasient
+fun getRule(rules: ValidationRule): ValidationRuleFn = when (rules) {
+    ValidationRule.UGYLDIG_REGELSETTVERSJON -> Rules.ugyldigRegelsettversjon
+    ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 -> Rules.manglendeDynamiskesporsmaalversjon2uke39
+    ValidationRule.UGYLDIG_ORGNR_LENGDE -> Rules.ugyldingOrgNummerLengde
+    ValidationRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR -> Rules.avsenderSammeSomPasient
+    ValidationRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR -> Rules.behandlerSammeSomPasient
 }
 
 private val Rules = object {
@@ -27,7 +19,7 @@ private val Rules = object {
 
         RuleOutput(
             ruleInputs = mapOf("rulesetVersion" to rulesetVersion),
-            rule = ValidationRules.UGYLDIG_REGELSETTVERSJON,
+            rule = ValidationRule.UGYLDIG_REGELSETTVERSJON,
             ruleResult = rulesetVersion !in arrayOf(null, "", "1", "2", "3"),
         )
     }
@@ -49,7 +41,7 @@ private val Rules = object {
                     "sykmeldingPerioder" to sykmeldingPerioder,
                     // "utdypendeOpplysninger" to payload.utdypendeOpplysninger,
                 ),
-            rule = ValidationRules.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39,
+            rule = ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39,
             ruleResult = manglendeDynamiskesporsmaalversjon2uke39,
         )
     }
@@ -61,7 +53,7 @@ private val Rules = object {
 
         RuleOutput(
             ruleInputs = mapOf("ugyldingOrgNummerLengde" to ugyldingOrgNummerLengde),
-            rule = ValidationRules.UGYLDIG_ORGNR_LENGDE,
+            rule = ValidationRule.UGYLDIG_ORGNR_LENGDE,
             ruleResult = ugyldingOrgNummerLengde,
         )
     }
@@ -77,7 +69,7 @@ private val Rules = object {
                 "avsenderFnr" to avsenderFnr,
                 "patientPersonNumber" to patientPersonNumber,
             ),
-            rule = ValidationRules.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR,
+            rule = ValidationRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR,
             ruleResult = avsenderSammeSomPasient,
         )
     }
@@ -93,7 +85,7 @@ private val Rules = object {
                 "behandlerFnr" to behandlerFnr,
                 "pasientFodselsNummer" to pasientFodselsNummer,
             ),
-            rule = ValidationRules.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR,
+            rule = ValidationRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR,
             ruleResult = behandlerSammeSomPasient,
         )
     }

@@ -2,12 +2,12 @@ package no.nav.tsm.regulus.regula.executor
 
 import no.nav.tsm.regulus.regula.dsl.RuleNode
 
-interface RuleOutcome {
-    val status: RuleStatus
-    val rule: String
-    val messageForUser: String
-    val messageForSender: String
-}
+data class RuleOutcome(
+    val status: RuleStatus,
+    val rule: String,
+    val messageForUser: String,
+    val messageForSender: String,
+)
 
 data class RuleResult(
     val status: RuleStatus,
