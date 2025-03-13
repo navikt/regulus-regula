@@ -48,3 +48,29 @@ graph TD
 
 
 <!-- RULE_MARKER_END -->
+
+## Strukturen på et regel-tre
+
+Regeleksekveringsmotoren forventer at reglene består av:
+
+### Overordnet definisjoner
+
+* Et enum som beskriver alle regel-navnene
+  * `enum FooBarRules { ... }`
+* Et enum som beskriver alle regel-utfall
+  * `enum class FooBarRuleOutcomes: RuleOutcome { ... }`
+* Et `tree` som implementerer alle reglene, og deres yes/no utfall
+  * `val fooBarTree = treetree<LegeSuspensjonRules, RuleResult>(LegeSuspensjonRules.FirstRule) { ... }`
+
+### Eksekveringsspesifikt
+
+* En data-klasse som definerer hvilke verdier dette regel-treet trenger
+  * `data class FooBarPayload(...)`
+* En klasse som implementerer binder sammen regel-treet og payload
+  * `class FooBarRuleEvaluator(...): RuleExecution<FooBarRules> { ... }`
+* Reglene!
+  * En funksjon som sørger for at alle funksjonene er implementert
+    * `fun getRule(rules: ValidationRules): ValidationRuleFn = when { ... }`
+  * Et sett med pure functions som implementerer hver regel
+    * `typealias FooBarRuleFn = (payload: FooBarPayload) -> RuleOutput<FooBarRules>`
+    * `val fooBarRule1: FooBarRuleFn = { payload -> ... }`
