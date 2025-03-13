@@ -9,7 +9,7 @@ typealias HPRTreeNode = TreeNode<HprRule, RuleResult>
 
 typealias HPRTreeOutput = TreeOutput<HprRule, RuleResult>
 
-class HPRRulesExecution(
+class HprRulesExecution(
     private val sykmeldingId: String,
     private val hprRulePayload: HprRulePayload,
 ) : RuleExecution<HprRule> {

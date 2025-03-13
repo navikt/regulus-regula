@@ -6,7 +6,6 @@ import no.nav.tsm.regulus.regula.trees.hpr.extras.HelsepersonellKategori
 import no.nav.tsm.regulus.regula.utils.daysBetween
 import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.latestTom
-import org.slf4j.LoggerFactory
 
 private typealias HprRuleFn = (payload: HprRulePayload) -> RuleOutput<HprRule>
 

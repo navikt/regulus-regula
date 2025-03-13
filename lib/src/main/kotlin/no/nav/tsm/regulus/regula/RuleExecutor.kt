@@ -1,7 +1,7 @@
 package no.nav.tsm.regulus.regula
 
 
-import no.nav.tsm.regulus.regula.trees.hpr.HPRRulesExecution
+import no.nav.tsm.regulus.regula.trees.hpr.HprRulesExecution
 import no.nav.tsm.regulus.regula.dsl.Juridisk
 import no.nav.tsm.regulus.regula.dsl.TreeOutput
 import no.nav.tsm.regulus.regula.dsl.printRulePath
@@ -36,7 +36,7 @@ fun runSykmeldingRules(
             )
         ),
         // PeriodLogicRulesExecution(periodLogicRuleTree),
-        HPRRulesExecution(
+        HprRulesExecution(
             sykmeldingId, HprRulePayload(
                 sykmeldingId = sykmeldingId,
                 behandler = Behandler(
