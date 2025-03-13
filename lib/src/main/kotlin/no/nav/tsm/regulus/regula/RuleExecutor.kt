@@ -1,15 +1,19 @@
 package no.nav.tsm.regulus.regula
 
 
+import no.nav.tsm.regulus.regula.trees.hpr.HPRRulesExecution
 import no.nav.tsm.regulus.regula.dsl.Juridisk
 import no.nav.tsm.regulus.regula.dsl.TreeOutput
 import no.nav.tsm.regulus.regula.dsl.printRulePath
 import no.nav.tsm.regulus.regula.executor.RuleExecution
 import no.nav.tsm.regulus.regula.executor.RuleResult
 import no.nav.tsm.regulus.regula.executor.RuleStatus
+import no.nav.tsm.regulus.regula.trees.hpr.Behandler
+import no.nav.tsm.regulus.regula.trees.hpr.HprRulePayload
 import no.nav.tsm.regulus.regula.trees.legesuspensjon.LegeSuspensjonRulesExecution
 import no.nav.tsm.regulus.regula.trees.validation.ValidationRulePayload
 import no.nav.tsm.regulus.regula.trees.validation.ValidationRulesExecution
+import java.time.LocalDateTime
 
 typealias RuleExecutionResult = List<Pair<TreeOutput<out Enum<*>, RuleResult>, Juridisk>>
 
@@ -32,7 +36,17 @@ fun runSykmeldingRules(
             )
         ),
         // PeriodLogicRulesExecution(periodLogicRuleTree),
-        // HPRRulesExecution(hprRuleTree),
+        HPRRulesExecution(
+            sykmeldingId, HprRulePayload(
+                sykmeldingId = sykmeldingId,
+                behandler = Behandler(
+                    godkjenninger = emptyList()
+                ),
+                perioder = emptyList(),
+                startdato = null,
+                signaturDato = LocalDateTime.now(),
+            )
+        ),
         // ArbeidsuforhetRulesExecution(arbeidsuforhetRuleTree),
         // PatientAgeUnder13RulesExecution(patientAgeUnder13RuleTree),
         // PeriodeRulesExecution(periodeRuleTree),

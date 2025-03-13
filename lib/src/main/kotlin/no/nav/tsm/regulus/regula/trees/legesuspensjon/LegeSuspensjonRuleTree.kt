@@ -10,6 +10,6 @@ import no.nav.tsm.regulus.regula.executor.yes
 val legeSuspensjonRuleTree = tree<LegeSuspensjonRule, RuleResult>(
     LegeSuspensjonRule.BEHANDLER_SUSPENDERT
 ) {
-    yes(RuleStatus.INVALID, LegeSuspensjonRule.BEHANDLER_SUSPENDERT.Outcome)
+    yes(RuleStatus.INVALID, LegeSuspensjonRule.Outcomes.BEHANDLER_SUSPENDERT)
     no(RuleStatus.OK)
 } to UtenJuridisk

@@ -3,6 +3,7 @@ package no.nav.tsm.regulus.regula.generator
 import no.nav.tsm.regulus.regula.dsl.*
 import no.nav.tsm.regulus.regula.executor.RuleResult
 import no.nav.tsm.regulus.regula.executor.RuleStatus
+import no.nav.tsm.regulus.regula.trees.hpr.hprRuleTree
 import no.nav.tsm.regulus.regula.trees.legesuspensjon.legeSuspensjonRuleTree
 import no.nav.tsm.regulus.regula.trees.validation.validationRuleTree
 
@@ -11,7 +12,7 @@ fun main() {
         "Lege suspensjon" to legeSuspensjonRuleTree,
         "Validation" to validationRuleTree,
         // "Periode validering" to periodLogicRuleTree,
-        // "HPR" to hprRuleTree,
+        "HPR" to hprRuleTree,
         // "Arbeidsuforhet" to arbeidsuforhetRuleTree,
         // "Pasient under 13" to patientAgeUnder13RuleTree,
         // "Periode" to periodeRuleTree,

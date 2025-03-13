@@ -5,9 +5,9 @@ import no.nav.tsm.regulus.regula.executor.RuleExecution
 import no.nav.tsm.regulus.regula.executor.RuleResult
 import org.slf4j.LoggerFactory
 
-typealias ValidationTreeOutput = TreeOutput<ValidationRule, RuleResult>
-
 typealias ValidationTreeNode = TreeNode<ValidationRule, RuleResult>
+
+typealias ValidationTreeOutput = TreeOutput<ValidationRule, RuleResult>
 
 class ValidationRulesExecution(
     private val sykmeldingId: String,

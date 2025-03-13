@@ -1,19 +1,22 @@
 package no.nav.tsm.regulus.regula.trees.legesuspensjon
 
-import no.nav.tsm.regulus.regula.executor.RuleDefinitions
 import no.nav.tsm.regulus.regula.executor.RuleOutcome
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 
-enum class LegeSuspensjonRule : RuleDefinitions {
+enum class LegeSuspensjonRule {
     BEHANDLER_SUSPENDERT;
 
-    override val Outcome: RuleOutcome
-        get() = when (this) {
-            BEHANDLER_SUSPENDERT -> RuleOutcome(
-                rule = this.name,
-                status = RuleStatus.INVALID,
-                messageForSender = "Behandler er suspendert av NAV på konsultasjonstidspunkt. Pasienten har fått beskjed.",
-                messageForUser = "Den som sykmeldte deg har mistet retten til å skrive sykmeldinger."
-            )
-        }
+    enum class Outcomes(
+        override val rule: String,
+        override val status: RuleStatus,
+        override val messageForSender: String,
+        override val messageForUser: String,
+    ) : RuleOutcome {
+        BEHANDLER_SUSPENDERT(
+            rule = "BEHANDLER_SUSPENDERT",
+            status = RuleStatus.INVALID,
+            messageForSender = "no.nav.tsm.regulus.regula.trees.hpr.Behandler er suspendert av NAV på konsultasjonstidspunkt. Pasienten har fått beskjed.",
+            messageForUser = "Den som sykmeldte deg har mistet retten til å skrive sykmeldinger."
+        )
+    }
 }
