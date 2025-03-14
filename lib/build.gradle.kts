@@ -6,9 +6,7 @@ plugins {
     id("com.diffplug.spotless") version "7.0.2"
 }
 
-repositories {
-    mavenCentral()
-}
+repositories { mavenCentral() }
 
 dependencies {
     testImplementation(libs.junit.jupiter.engine)
@@ -18,21 +16,11 @@ dependencies {
     api(libs.slf4j)
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
-}
+java { toolchain { languageVersion = JavaLanguageVersion.of(21) } }
 
-spotless {
-    kotlin { ktfmt("0.54").kotlinlangStyle().configure {
+spotless { kotlin { ktfmt("0.54").kotlinlangStyle() } }
 
-    } }
-}
-
-tasks.named<Test>("test") {
-    useJUnitPlatform()
-}
+tasks.named<Test>("test") { useJUnitPlatform() }
 
 tasks.register<JavaExec>("generate-mermaid") {
     val output = ByteArrayOutputStream()
@@ -53,14 +41,10 @@ tasks.register<JavaExec>("generate-mermaid") {
 
         val newLines: List<String> =
             lines.subList(0, start) +
-                    listOf(
-                        starterTag,
-                    ) +
-                    output.toString().split("\n") +
-                    listOf(
-                        endTag,
-                    ) +
-                    lines.subList(end + 1, lines.size)
+                listOf(starterTag) +
+                output.toString().split("\n") +
+                listOf(endTag) +
+                lines.subList(end + 1, lines.size)
         readme.writeText(newLines.joinToString("\n"))
     }
 }
