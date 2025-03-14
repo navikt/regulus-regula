@@ -31,3 +31,5 @@ fun <T, R> tree(rule: T, init: RuleNode<T, R>.() -> Unit): RuleNode<T, R> =
 fun <T, R> rule(rule: T, init: RuleNode<T, R>.() -> Unit): RuleNode<T, R> =
     RuleNode<T, R>(rule).apply(init)
 
+fun <T, R> subTree(rule: T, init: RuleNode<T, R>.() -> Unit): RuleNode<T, R> =
+    RuleNode<T, R>(rule).apply(init)

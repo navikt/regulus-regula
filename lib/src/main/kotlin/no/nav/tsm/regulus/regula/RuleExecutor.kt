@@ -37,7 +37,7 @@ fun runSykmeldingRules(
         ),
         // PeriodLogicRulesExecution(periodLogicRuleTree),
         HprRulesExecution(
-            sykmeldingId, HprRulePayload(
+            HprRulePayload(
                 sykmeldingId = sykmeldingId,
                 behandler = Behandler(
                     godkjenninger = emptyList()

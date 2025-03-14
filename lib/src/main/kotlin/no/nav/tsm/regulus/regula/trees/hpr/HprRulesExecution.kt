@@ -10,7 +10,6 @@ typealias HPRTreeNode = TreeNode<HprRule, RuleResult>
 typealias HPRTreeOutput = TreeOutput<HprRule, RuleResult>
 
 class HprRulesExecution(
-    private val sykmeldingId: String,
     private val hprRulePayload: HprRulePayload,
 ) : RuleExecution<HprRule> {
     private val logger = LoggerFactory.getLogger(this::class.java)
@@ -19,7 +18,7 @@ class HprRulesExecution(
         hprRuleTree.first
             .evaluate(hprRulePayload)
             .also { hprRulePath ->
-                logger.info("Rules ${sykmeldingId}, ${hprRulePath.printRulePath()}")
+                logger.info("Rules ${hprRulePayload.sykmeldingId}, ${hprRulePath.printRulePath()}")
             } to hprRuleTree.second
 }
 

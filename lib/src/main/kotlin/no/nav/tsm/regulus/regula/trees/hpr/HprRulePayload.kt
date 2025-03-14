@@ -17,7 +17,7 @@ data class Behandler(
 )
 
 data class Godkjenning(
-    val autorisasjon: Autorisasjon?,
+    val autorisasjon: Kode?,
     val helsepersonellkategori: Kode?,
     val tillegskompetanse: List<Tillegskompetanse>?
 )
@@ -37,10 +37,4 @@ data class Kode(
     val aktiv: Boolean,
     val oid: Int,
     val verdi: String?,
-)
-
-data class Autorisasjon(
-    val aktiv: Boolean?,
-    val oid: Int?,
-    val verdi: String?
 )
