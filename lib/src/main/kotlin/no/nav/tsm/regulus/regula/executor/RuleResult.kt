@@ -2,6 +2,12 @@ package no.nav.tsm.regulus.regula.executor
 
 import no.nav.tsm.regulus.regula.dsl.RuleNode
 
+enum class RuleStatus {
+    OK,
+    MANUAL_PROCESSING,
+    INVALID,
+}
+
 interface RuleOutcome {
     val status: RuleStatus
     val rule: String

@@ -1,6 +1,5 @@
 package no.nav.tsm.regulus.regula.executor
 
-import no.nav.tsm.regulus.regula.dsl.Juridisk
 import no.nav.tsm.regulus.regula.dsl.ResultNode
 import no.nav.tsm.regulus.regula.dsl.RuleNode
 import no.nav.tsm.regulus.regula.dsl.RuleOutput

@@ -1,4 +1,4 @@
-package no.nav.tsm.regulus.regula.dsl
+package no.nav.tsm.regulus.regula.executor
 
 import no.nav.tsm.regulus.regula.juridisk.JuridiskHenvisning
 

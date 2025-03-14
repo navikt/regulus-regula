@@ -1,8 +1,8 @@
 package no.nav.tsm.regulus.regula.trees.hpr
 
-import no.nav.tsm.regulus.regula.dsl.MedJuridisk
 import no.nav.tsm.regulus.regula.dsl.RuleNode
 import no.nav.tsm.regulus.regula.dsl.tree
+import no.nav.tsm.regulus.regula.executor.MedJuridisk
 import no.nav.tsm.regulus.regula.executor.RuleResult
 import no.nav.tsm.regulus.regula.executor.RuleStatus.INVALID
 import no.nav.tsm.regulus.regula.executor.RuleStatus.OK

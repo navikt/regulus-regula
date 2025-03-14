@@ -1,8 +1,10 @@
 package no.nav.tsm.regulus.regula.generator
 
 import no.nav.tsm.regulus.regula.dsl.*
+import no.nav.tsm.regulus.regula.executor.MedJuridisk
 import no.nav.tsm.regulus.regula.executor.RuleResult
 import no.nav.tsm.regulus.regula.executor.RuleStatus
+import no.nav.tsm.regulus.regula.executor.UtenJuridisk
 import no.nav.tsm.regulus.regula.trees.hpr.hprRuleTree
 import no.nav.tsm.regulus.regula.trees.legesuspensjon.legeSuspensjonRuleTree
 import no.nav.tsm.regulus.regula.trees.validation.validationRuleTree

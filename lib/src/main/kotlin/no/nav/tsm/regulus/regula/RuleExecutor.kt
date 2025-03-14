@@ -1,9 +1,9 @@
 package no.nav.tsm.regulus.regula
 
 import java.time.LocalDateTime
-import no.nav.tsm.regulus.regula.dsl.Juridisk
 import no.nav.tsm.regulus.regula.dsl.TreeOutput
 import no.nav.tsm.regulus.regula.dsl.printRulePath
+import no.nav.tsm.regulus.regula.executor.Juridisk
 import no.nav.tsm.regulus.regula.executor.RuleResult
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
