@@ -13,5 +13,5 @@ data class RuleInfo(
     val ruleName: String,
     val messageForSender: String,
     val messageForUser: String,
-    val ruleStatus: RuleStatus
+    val ruleStatus: RuleStatus,
 )

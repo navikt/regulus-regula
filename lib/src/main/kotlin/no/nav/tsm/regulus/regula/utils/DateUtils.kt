@@ -1,8 +1,8 @@
 package no.nav.tsm.regulus.regula.utils
 
-import no.nav.tsm.regulus.regula.trees.validation.FomTom
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+import no.nav.tsm.regulus.regula.trees.validation.FomTom
 
 fun daysBetween(fom: LocalDate, tom: LocalDate): Long = ChronoUnit.DAYS.between(fom, tom)
 

@@ -16,11 +16,9 @@ class ValidationRulesExecution(
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     override fun runRules(): Pair<ValidationTreeOutput, Juridisk> =
-        validationRuleTree.first
-            .evaluate(validationRulePayload)
-            .also { validationRulePath ->
-                logger.info("Rules ${sykmeldingId}, ${validationRulePath.printRulePath()}")
-            } to validationRuleTree.second
+        validationRuleTree.first.evaluate(validationRulePayload).also { validationRulePath ->
+            logger.info("Rules ${sykmeldingId}, ${validationRulePath.printRulePath()}")
+        } to validationRuleTree.second
 }
 
 private fun ValidationTreeNode.evaluate(

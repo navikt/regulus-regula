@@ -9,22 +9,16 @@ typealias HPRTreeNode = TreeNode<HprRule, RuleResult>
 
 typealias HPRTreeOutput = TreeOutput<HprRule, RuleResult>
 
-class HprRulesExecution(
-    private val hprRulePayload: HprRulePayload,
-) : RuleExecution<HprRule> {
+class HprRulesExecution(private val hprRulePayload: HprRulePayload) : RuleExecution<HprRule> {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     override fun runRules(): Pair<HPRTreeOutput, Juridisk> =
-        hprRuleTree.first
-            .evaluate(hprRulePayload)
-            .also { hprRulePath ->
-                logger.info("Rules ${hprRulePayload.sykmeldingId}, ${hprRulePath.printRulePath()}")
-            } to hprRuleTree.second
+        hprRuleTree.first.evaluate(hprRulePayload).also { hprRulePath ->
+            logger.info("Rules ${hprRulePayload.sykmeldingId}, ${hprRulePath.printRulePath()}")
+        } to hprRuleTree.second
 }
 
-private fun HPRTreeNode.evaluate(
-    payload: HprRulePayload,
-): HPRTreeOutput =
+private fun HPRTreeNode.evaluate(payload: HprRulePayload): HPRTreeOutput =
     when (this) {
         is ResultNode -> HPRTreeOutput(treeResult = result)
         is RuleNode -> {

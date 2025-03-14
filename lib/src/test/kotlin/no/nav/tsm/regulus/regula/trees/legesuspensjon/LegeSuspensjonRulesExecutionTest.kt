@@ -1,8 +1,8 @@
 package no.nav.tsm.regulus.regula.trees.legesuspensjon
 
+import kotlin.test.Test
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import org.junit.jupiter.api.Assertions.*
-import kotlin.test.Test
 
 class LegeSuspensjonRulesExecutionTest {
     @Test
@@ -14,15 +14,9 @@ class LegeSuspensjonRulesExecutionTest {
 
         assertEquals(
             result.first.rulePath.map { it.rule to it.ruleResult },
-            listOf(
-                LegeSuspensjonRule.BEHANDLER_SUSPENDERT to false,
-            )
+            listOf(LegeSuspensjonRule.BEHANDLER_SUSPENDERT to false),
         )
-        assertEquals(
-            result.first.ruleInputs,
-            mapOf("suspendert" to false)
-        )
-
+        assertEquals(result.first.ruleInputs, mapOf("suspendert" to false))
     }
 
     @Test
@@ -30,18 +24,15 @@ class LegeSuspensjonRulesExecutionTest {
         val result = LegeSuspensjonRulesExecution("foo-bar", true).runRules()
 
         assertEquals(result.first.treeResult.status, RuleStatus.INVALID)
-        assertEquals(result.first.treeResult.ruleOutcome, LegeSuspensjonRule.Outcomes.BEHANDLER_SUSPENDERT)
+        assertEquals(
+            result.first.treeResult.ruleOutcome,
+            LegeSuspensjonRule.Outcomes.BEHANDLER_SUSPENDERT,
+        )
 
         assertEquals(
             result.first.rulePath.map { it.rule to it.ruleResult },
-            listOf(
-                LegeSuspensjonRule.BEHANDLER_SUSPENDERT to true,
-            )
+            listOf(LegeSuspensjonRule.BEHANDLER_SUSPENDERT to true),
         )
-        assertEquals(
-            result.first.ruleInputs,
-            mapOf("suspendert" to true)
-        )
-
+        assertEquals(result.first.ruleInputs, mapOf("suspendert" to true))
     }
 }

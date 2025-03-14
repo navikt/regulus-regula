@@ -3,6 +3,7 @@ import java.io.ByteArrayOutputStream
 plugins {
     alias(libs.plugins.kotlin.jvm)
     `java-library`
+    id("com.diffplug.spotless") version "7.0.2"
 }
 
 repositories {
@@ -21,6 +22,12 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+}
+
+spotless {
+    kotlin { ktfmt("0.54").kotlinlangStyle().configure {
+
+    } }
 }
 
 tasks.named<Test>("test") {

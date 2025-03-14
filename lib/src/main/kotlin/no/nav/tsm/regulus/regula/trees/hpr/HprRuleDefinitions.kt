@@ -26,7 +26,6 @@ enum class HprRule {
                 "no.nav.tsm.regulus.regula.trees.hpr.Behandler er ikke gyldig i HPR på konsultasjonstidspunkt. Pasienten har fått beskjed.",
             messageForUser = "Den som skrev sykmeldingen manglet autorisasjon.",
         ),
-
         BEHANDLER_MANGLER_AUTORISASJON_I_HPR(
             rule = "BEHANDLER_MANGLER_AUTORISASJON_I_HPR",
             status = RuleStatus.INVALID,
@@ -34,26 +33,23 @@ enum class HprRule {
                 "no.nav.tsm.regulus.regula.trees.hpr.Behandler har ikke gyldig autorisasjon i HPR. Pasienten har fått beskjed.",
             messageForUser = "Den som skrev sykmeldingen manglet autorisasjon.",
         ),
-
         BEHANDLER_IKKE_LE_KI_MT_TL_FT_I_HPR(
             rule = "BEHANDLER_IKKE_LE_KI_MT_TL_FT_I_HPR",
             status = RuleStatus.INVALID,
             messageForSender =
                 "no.nav.tsm.regulus.regula.trees.hpr.Behandler finnes i HPR, men er ikke lege, kiropraktor, fysioterapeut, " +
-                        "manuellterapeut eller tannlege. Pasienten har fått beskjed.",
+                    "manuellterapeut eller tannlege. Pasienten har fått beskjed.",
             messageForUser = "Den som skrev sykmeldingen manglet autorisasjon.",
         ),
-
         BEHANDLER_MT_FT_KI_OVER_12_UKER(
             rule = "BEHANDLER_MT_FT_KI_OVER_12_UKER",
             status = RuleStatus.INVALID,
             messageForSender =
                 "Sykmeldingen er avvist fordi det totale sykefraværet overstiger 12 uker (du som KI/MT/FT " +
-                        "kan ikke sykmelde utover 12 uker). Pasienten har fått beskjed.",
+                    "kan ikke sykmelde utover 12 uker). Pasienten har fått beskjed.",
             messageForUser =
                 "Sykmeldingen din er avvist fordi den som sykmeldte deg ikke kan skrive en sykmelding som " +
-                        "gjør at sykefraværet ditt overstiger 12 uker",
+                    "gjør at sykefraværet ditt overstiger 12 uker",
         ),
-
     }
 }

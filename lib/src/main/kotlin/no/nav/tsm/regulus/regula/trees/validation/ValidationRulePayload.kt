@@ -8,10 +8,7 @@ data class ValidationRulePayload(
     val legekontorOrgnr: String,
     val behandlerFnr: String,
     val avsenderFnr: String,
-    val patientPersonNumber: String
+    val patientPersonNumber: String,
 )
 
-data class FomTom(
-    val fom: LocalDate,
-    val tom: LocalDate
-)
+data class FomTom(val fom: LocalDate, val tom: LocalDate)

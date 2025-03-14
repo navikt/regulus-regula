@@ -15,8 +15,9 @@ enum class LegeSuspensjonRule {
         BEHANDLER_SUSPENDERT(
             rule = "BEHANDLER_SUSPENDERT",
             status = RuleStatus.INVALID,
-            messageForSender = "no.nav.tsm.regulus.regula.trees.hpr.Behandler er suspendert av NAV på konsultasjonstidspunkt. Pasienten har fått beskjed.",
-            messageForUser = "Den som sykmeldte deg har mistet retten til å skrive sykmeldinger."
+            messageForSender =
+                "no.nav.tsm.regulus.regula.trees.hpr.Behandler er suspendert av NAV på konsultasjonstidspunkt. Pasienten har fått beskjed.",
+            messageForUser = "Den som sykmeldte deg har mistet retten til å skrive sykmeldinger.",
         )
     }
 }
