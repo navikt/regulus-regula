@@ -5,7 +5,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 
-class HprRulesExecutionTest {
+class HprRulesTest {
     @Test
     fun `har ikke aktiv autorisasjon, Status INVALID`() {
         val behandler = testBehandler(BehandlerScenarios.INAKTIV_LEGE)

@@ -13,8 +13,6 @@ class HprRulesExecution(hprRulePayload: HprRulePayload) :
     override fun getRule(rule: HprRule) = getHprRule(rule)
 }
 
-private typealias HprRuleFn = (payload: HprRulePayload) -> RuleOutput<HprRule>
-
 fun getHprRule(rules: HprRule): HprRuleFn {
     return when (rules) {
         HprRule.BEHANDLER_GYLIDG_I_HPR -> Rules.behanderGyldigHPR
@@ -29,6 +27,8 @@ fun getHprRule(rules: HprRule): HprRuleFn {
         HprRule.SYKEFRAVAR_OVER_12_UKER -> Rules.sykefravarOver12Uker
     }
 }
+
+private typealias HprRuleFn = (payload: HprRulePayload) -> RuleOutput<HprRule>
 
 private val Rules =
     object {

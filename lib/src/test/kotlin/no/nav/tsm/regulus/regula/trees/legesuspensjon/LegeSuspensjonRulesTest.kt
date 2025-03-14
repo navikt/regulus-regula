@@ -4,7 +4,7 @@ import kotlin.test.Test
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import org.junit.jupiter.api.Assertions.*
 
-class LegeSuspensjonRulesExecutionTest {
+class LegeSuspensjonRulesTest {
     @Test
     fun `Er ikkje suspendert, Status OK`() {
         val result =

@@ -11,13 +11,13 @@ class LegeSuspensjonRulesExecution(legeSuspensjonPayload: LegeSuspensjonPayload)
     override fun getRule(rule: LegeSuspensjonRule) = getLegeSuspensjonRule(rule)
 }
 
-private typealias LegeSuspensjonRuleFn =
-    (behandlerSuspendert: LegeSuspensjonPayload) -> RuleOutput<LegeSuspensjonRule>
-
 fun getLegeSuspensjonRule(rule: LegeSuspensjonRule): LegeSuspensjonRuleFn =
     when (rule) {
         LegeSuspensjonRule.BEHANDLER_SUSPENDERT -> Rules.behandlerSuspendert
     }
+
+private typealias LegeSuspensjonRuleFn =
+    (behandlerSuspendert: LegeSuspensjonPayload) -> RuleOutput<LegeSuspensjonRule>
 
 private val Rules =
     object {

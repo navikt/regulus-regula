@@ -33,6 +33,7 @@ fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
                     behandlerFnr = "08201023912",
                     avsenderFnr = "01912391932",
                     patientPersonNumber = "92102931803",
+                    utdypendeOpplysninger = emptyMap(),
                 )
             ),
             // PeriodLogicRulesExecution(periodLogicRuleTree),

@@ -9,8 +9,6 @@ class ValidationRulesExecutor(validationRulePayload: ValidationRulePayload) :
     override fun getRule(rule: ValidationRule) = getValidationRule(rule)
 }
 
-private typealias ValidationRuleFn = (payload: ValidationRulePayload) -> RuleOutput<ValidationRule>
-
 fun getValidationRule(rules: ValidationRule): ValidationRuleFn =
     when (rules) {
         ValidationRule.UGYLDIG_REGELSETTVERSJON -> Rules.ugyldigRegelsettversjon
@@ -20,6 +18,8 @@ fun getValidationRule(rules: ValidationRule): ValidationRuleFn =
         ValidationRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR -> Rules.avsenderSammeSomPasient
         ValidationRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR -> Rules.behandlerSammeSomPasient
     }
+
+private typealias ValidationRuleFn = (payload: ValidationRulePayload) -> RuleOutput<ValidationRule>
 
 private val Rules =
     object {
@@ -36,12 +36,17 @@ private val Rules =
         val manglendeDynamiskesporsmaalversjon2uke39: ValidationRuleFn = { payload ->
             val rulesetVersion = payload.rulesetVersion
             val sykmeldingPerioder = payload.perioder
-            // val utdypendeOpplysinger = payload.utdypendeOpplysninger
+            val utdypendeOpplysinger = payload.utdypendeOpplysninger
+
+            val shouldHaveAllSporsmals =
+                rulesetVersion == "2" &&
+                    sykmeldingPerioder.any { daysBetween(it.fom, it.tom) > 273 }
 
             val manglendeDynamiskesporsmaalversjon2uke39 =
-                if (rulesetVersion == "2") {
-                    sykmeldingPerioder.any { daysBetween(it.fom, it.tom) > 273 }
-                    // && !utdypendeOpplysinger.containsAnswersFor(QuestionGroup.GROUP_6_5)
+                if (shouldHaveAllSporsmals) {
+                    val group65Answers = utdypendeOpplysinger["6.5"]?.map { it.key } ?: emptyList()
+
+                    group65Answers.containsAll(listOf("6.5.1", "6.5.2", "6.5.3", "6.5.4"))
                 } else false
 
             RuleOutput(
@@ -49,7 +54,7 @@ private val Rules =
                     mapOf(
                         "rulesetVersion" to rulesetVersion,
                         "sykmeldingPerioder" to sykmeldingPerioder,
-                        // "utdypendeOpplysninger" to payload.utdypendeOpplysninger,
+                        "utdypendeOpplysninger" to payload.utdypendeOpplysninger,
                     ),
                 rule = ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39,
                 ruleResult = manglendeDynamiskesporsmaalversjon2uke39,
@@ -102,10 +107,3 @@ private val Rules =
             )
         }
     }
-
-/*
-fun Map<String, Map<String, SporsmalSvar>>.containsAnswersFor(questionGroup: QuestionGroup) =
-    this[questionGroup.spmGruppeId]?.all { (spmId, _) ->
-        spmId in questionGroup.spmsvar.map { it.spmId }
-    }
-*/
