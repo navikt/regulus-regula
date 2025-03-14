@@ -101,13 +101,16 @@ Regeleksekveringsmotoren forventer at reglene består av:
 
 ### Eksekveringsspesifikt
 
+* Et enum som definerer alle regrene, samt alle utfall
+  * `enum class FooBarRule { ... }`
 * En data-klasse som definerer hvilke verdier dette regel-treet trenger
   * `data class FooBarPayload(...)`
 * En klasse som implementerer binder sammen regel-treet og payload
-  * `class FooBarRuleEvaluator(...): RuleExecution<FooBarRules> { ... }`
+  * `class FooBarRuleExecutor(...): TreeExecutor<FooBarRule, FooBarPayload> { ... }`
 * Reglene!
   * En funksjon som sørger for at alle funksjonene er implementert
-    * `fun getRule(rules: ValidationRules): ValidationRuleFn = when { ... }`
+    * `fun getFooBarRule(rules: FooBarRule): FooBarRuleRuleFn = when { ... }`
   * Et sett med pure functions som implementerer hver regel
     * `typealias FooBarRuleFn = (payload: FooBarPayload) -> RuleOutput<FooBarRules>`
     * `val fooBarRule1: FooBarRuleFn = { payload -> ... }`
+    * `val fooBarRule2: FooBarRuleFn = { payload -> ... }`

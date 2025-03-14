@@ -1,11 +1,17 @@
 package no.nav.tsm.regulus.regula.trees.validation
 
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
+import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.utils.daysBetween
+
+class ValidationRulesExecutor(validationRulePayload: ValidationRulePayload) :
+    TreeExecutor<ValidationRule, ValidationRulePayload>(validationRuleTree, validationRulePayload) {
+    override fun getRule(rule: ValidationRule) = getValidationRule(rule)
+}
 
 private typealias ValidationRuleFn = (payload: ValidationRulePayload) -> RuleOutput<ValidationRule>
 
-fun getRule(rules: ValidationRule): ValidationRuleFn =
+fun getValidationRule(rules: ValidationRule): ValidationRuleFn =
     when (rules) {
         ValidationRule.UGYLDIG_REGELSETTVERSJON -> Rules.ugyldigRegelsettversjon
         ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 ->

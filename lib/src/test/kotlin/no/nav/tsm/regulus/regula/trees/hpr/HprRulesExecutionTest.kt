@@ -19,7 +19,7 @@ class HprRulesExecutionTest {
                         signaturDato = LocalDateTime.now(),
                     )
                 )
-                .runRules()
+                .execute()
 
         assertEquals(result.first.treeResult.status, RuleStatus.INVALID)
         assertEquals(

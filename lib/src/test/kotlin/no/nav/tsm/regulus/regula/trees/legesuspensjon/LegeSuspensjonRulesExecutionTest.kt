@@ -7,7 +7,11 @@ import org.junit.jupiter.api.Assertions.*
 class LegeSuspensjonRulesExecutionTest {
     @Test
     fun `Er ikkje suspendert, Status OK`() {
-        val result = LegeSuspensjonRulesExecution("foo-bar", false).runRules()
+        val result =
+            LegeSuspensjonRulesExecution(
+                    LegeSuspensjonPayload(sykmeldingId = "foo-bar", behandlerSuspendert = false)
+                )
+                .execute()
 
         assertEquals(result.first.treeResult.status, RuleStatus.OK)
         assertNull(result.first.treeResult.ruleOutcome)
@@ -21,7 +25,11 @@ class LegeSuspensjonRulesExecutionTest {
 
     @Test
     fun `Er suspendert, Status INVALID`() {
-        val result = LegeSuspensjonRulesExecution("foo-bar", true).runRules()
+        val result =
+            LegeSuspensjonRulesExecution(
+                    LegeSuspensjonPayload(sykmeldingId = "foo-bar", behandlerSuspendert = true)
+                )
+                .execute()
 
         assertEquals(result.first.treeResult.status, RuleStatus.INVALID)
         assertEquals(

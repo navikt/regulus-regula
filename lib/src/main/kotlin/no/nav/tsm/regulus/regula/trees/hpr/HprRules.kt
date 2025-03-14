@@ -2,14 +2,20 @@ package no.nav.tsm.regulus.regula.trees.hpr
 
 import java.time.LocalDateTime
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
+import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.trees.hpr.extras.HelsepersonellKategori
 import no.nav.tsm.regulus.regula.utils.daysBetween
 import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.latestTom
 
+class HprRulesExecution(hprRulePayload: HprRulePayload) :
+    TreeExecutor<HprRule, HprRulePayload>(hprRuleTree, hprRulePayload) {
+    override fun getRule(rule: HprRule) = getHprRule(rule)
+}
+
 private typealias HprRuleFn = (payload: HprRulePayload) -> RuleOutput<HprRule>
 
-fun getRule(rules: HprRule): HprRuleFn {
+fun getHprRule(rules: HprRule): HprRuleFn {
     return when (rules) {
         HprRule.BEHANDLER_GYLIDG_I_HPR -> Rules.behanderGyldigHPR
         HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR -> Rules.behandlerHarAutorisasjon

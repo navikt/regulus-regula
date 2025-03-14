@@ -2,15 +2,16 @@ package no.nav.tsm.regulus.regula.trees.hpr
 
 import java.time.LocalDate
 import java.time.LocalDateTime
+import no.nav.tsm.regulus.regula.executor.BasePayload
 import no.nav.tsm.regulus.regula.trees.validation.FomTom
 
 data class HprRulePayload(
-    val sykmeldingId: String,
+    override val sykmeldingId: String,
     val behandler: Behandler,
     val perioder: List<FomTom>,
     val startdato: LocalDate?,
     val signaturDato: LocalDateTime,
-)
+) : BasePayload
 
 data class Behandler(val godkjenninger: List<Godkjenning>)
 

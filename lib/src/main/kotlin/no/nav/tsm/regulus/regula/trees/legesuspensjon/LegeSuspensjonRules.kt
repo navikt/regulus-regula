@@ -1,18 +1,29 @@
 package no.nav.tsm.regulus.regula.trees.legesuspensjon
 
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
+import no.nav.tsm.regulus.regula.executor.TreeExecutor
+
+class LegeSuspensjonRulesExecution(legeSuspensjonPayload: LegeSuspensjonPayload) :
+    TreeExecutor<LegeSuspensjonRule, LegeSuspensjonPayload>(
+        legeSuspensjonRuleTree,
+        legeSuspensjonPayload,
+    ) {
+    override fun getRule(rule: LegeSuspensjonRule) = getLegeSuspensjonRule(rule)
+}
 
 private typealias LegeSuspensjonRuleFn =
-    (behandlerSuspendert: Boolean) -> RuleOutput<LegeSuspensjonRule>
+    (behandlerSuspendert: LegeSuspensjonPayload) -> RuleOutput<LegeSuspensjonRule>
 
-fun getRule(rule: LegeSuspensjonRule): LegeSuspensjonRuleFn =
+fun getLegeSuspensjonRule(rule: LegeSuspensjonRule): LegeSuspensjonRuleFn =
     when (rule) {
         LegeSuspensjonRule.BEHANDLER_SUSPENDERT -> Rules.behandlerSuspendert
     }
 
 private val Rules =
     object {
-        val behandlerSuspendert: LegeSuspensjonRuleFn = { behandlerSuspendert ->
+        val behandlerSuspendert: LegeSuspensjonRuleFn = { payload ->
+            val behandlerSuspendert = payload.behandlerSuspendert
+
             RuleOutput(
                 ruleInputs = mapOf("suspendert" to behandlerSuspendert),
                 rule = LegeSuspensjonRule.BEHANDLER_SUSPENDERT,
