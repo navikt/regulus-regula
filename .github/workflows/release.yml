@@ -2,6 +2,7 @@ name: Build, test, release
 on:
   push:
     paths:
+      - .github/workflows/release.yml
       - 'lib/**'
 
 jobs:
@@ -23,7 +24,3 @@ jobs:
 
       - name: Test and build lib
         run: ./gradlew build
-
-      - name: Summarize tests results
-        uses: jeantessier/test-summary-action@v1
-        if: ${{ always() }}
