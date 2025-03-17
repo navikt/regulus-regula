@@ -5,6 +5,7 @@ import kotlin.test.*
 import kotlin.test.Test
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.trees.assertPath
+import no.nav.tsm.regulus.regula.trees.debugPath
 import no.nav.tsm.regulus.regula.trees.generatePersonNumber
 
 class ValidationRulesTest {
@@ -58,9 +59,6 @@ class ValidationRulesTest {
 
     @Test
     fun `Ugyldig regelsettversjon, Status INVALID`() {
-        val person14Years = LocalDate.now().minusYears(14)
-        val pasientFnr = generatePersonNumber(person14Years)
-
         val (result) =
             ValidationRules(
                     ValidationRulePayload(
@@ -70,7 +68,7 @@ class ValidationRulesTest {
                         legekontorOrgnr = "123123123",
                         behandlerFnr = "08201023912",
                         avsenderFnr = "01912391932",
-                        patientPersonNumber = pasientFnr,
+                        patientPersonNumber = "07091912345",
                         utdypendeOpplysninger = emptyMap(),
                     )
                 )
@@ -87,7 +85,49 @@ class ValidationRulesTest {
         )
     }
 
-    @Test fun `Mangelde dynamiske sporsmaal versjon 2 uke39, Status INVALID`() {}
+    @Test
+    fun `Mangelde dynamiske sporsmaal versjon 2 uke39, Status INVALID`() {
+        val perioderMedFomForDritlengesiden =
+            listOf(FomTom(fom = LocalDate.now().minusDays(274), tom = LocalDate.now()))
+        val (result) =
+            ValidationRules(
+                    ValidationRulePayload(
+                        sykmeldingId = "sykmeldingId",
+                        rulesetVersion = "2",
+                        perioder = perioderMedFomForDritlengesiden,
+                        legekontorOrgnr = "123123123",
+                        behandlerFnr = "08201023912",
+                        avsenderFnr = "01912391932",
+                        patientPersonNumber = "07091912345",
+                        utdypendeOpplysninger = emptyMap(),
+                    )
+                )
+                .execute()
+
+        result.debugPath()
+
+        assertEquals(result.treeResult.status, RuleStatus.INVALID)
+        assertPath(
+            result.rulePath,
+            listOf(
+                ValidationRule.UGYLDIG_REGELSETTVERSJON to false,
+                ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to true,
+            ),
+        )
+        assertEquals(
+            result.ruleInputs,
+            mapOf(
+                "rulesetVersion" to "2",
+                "sykmeldingPerioder" to perioderMedFomForDritlengesiden,
+                "utdypendeOpplysninger" to emptyMap<String, Any>(),
+            ),
+        )
+
+        assertEquals(
+            result.treeResult.ruleOutcome,
+            ValidationRule.Outcomes.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39,
+        )
+    }
 
     @Test fun `Ugyldig orgnummer lengede, Status INVALID`() {}
 

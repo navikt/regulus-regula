@@ -23,14 +23,8 @@ class HprRulesTest {
                 .execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
-        assertPath(
-            result.rulePath,
-            listOf(HprRule.BEHANDLER_GYLIDG_I_HPR to false),
-        )
+        assertPath(result.rulePath, listOf(HprRule.BEHANDLER_GYLIDG_I_HPR to false))
 
-        assertEquals(
-            result.ruleInputs,
-            mapOf("behandlerGodkjenninger" to behandler.godkjenninger),
-        )
+        assertEquals(result.ruleInputs, mapOf("behandlerGodkjenninger" to behandler.godkjenninger))
     }
 }

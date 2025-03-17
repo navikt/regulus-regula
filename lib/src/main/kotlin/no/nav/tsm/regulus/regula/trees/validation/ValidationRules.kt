@@ -47,7 +47,7 @@ private val Rules =
                 if (shouldHaveAllSporsmals) {
                     val group65Answers = utdypendeOpplysinger["6.5"]?.map { it.key } ?: emptyList()
 
-                    group65Answers.containsAll(listOf("6.5.1", "6.5.2", "6.5.3", "6.5.4"))
+                    !group65Answers.containsAll(listOf("6.5.1", "6.5.2", "6.5.3", "6.5.4"))
                 } else {
                     false
                 }

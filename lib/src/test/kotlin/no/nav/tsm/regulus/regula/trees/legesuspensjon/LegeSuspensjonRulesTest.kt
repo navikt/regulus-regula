@@ -18,10 +18,7 @@ class LegeSuspensjonRulesTest {
         assertEquals(result.treeResult.status, RuleStatus.OK)
         assertNull(result.treeResult.ruleOutcome)
 
-        assertPath(
-            result.rulePath,
-            listOf(LegeSuspensjonRule.BEHANDLER_SUSPENDERT to false),
-        )
+        assertPath(result.rulePath, listOf(LegeSuspensjonRule.BEHANDLER_SUSPENDERT to false))
         assertEquals(result.ruleInputs, mapOf("suspendert" to false))
     }
 
@@ -39,10 +36,7 @@ class LegeSuspensjonRulesTest {
             LegeSuspensjonRule.Outcomes.BEHANDLER_SUSPENDERT,
         )
 
-        assertPath(
-            result.rulePath,
-            listOf(LegeSuspensjonRule.BEHANDLER_SUSPENDERT to true),
-        )
+        assertPath(result.rulePath, listOf(LegeSuspensjonRule.BEHANDLER_SUSPENDERT to true))
         assertEquals(result.ruleInputs, mapOf("suspendert" to true))
     }
 }
