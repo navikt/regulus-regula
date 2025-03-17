@@ -129,9 +129,144 @@ class ValidationRulesTest {
         )
     }
 
-    @Test fun `Ugyldig orgnummer lengede, Status INVALID`() {}
+    @Test
+    fun `Ugyldig orgnummer lengde, Status INVALID`() {
+        val person31Years = LocalDate.now().minusYears(31)
+        val pasientFnr = generatePersonNumber(person31Years, false)
 
-    @Test fun `Avsender samme som pasient, Status INVALID`() {}
+        val (result) =
+            ValidationRules(
+                    ValidationRulePayload(
+                        sykmeldingId = "sykmeldingId",
+                        rulesetVersion = "2",
+                        perioder = emptyList(),
+                        legekontorOrgnr = "1232344",
+                        behandlerFnr = "08201023912",
+                        avsenderFnr = "2",
+                        pasientIdent = pasientFnr,
+                        utdypendeOpplysninger = emptyMap(),
+                    )
+                )
+                .execute()
 
-    @Test fun `Behandler samme som pasient, Status INVALID`() {}
+        assertEquals(result.treeResult.status, RuleStatus.INVALID)
+        assertPath(
+            result.rulePath,
+            listOf(
+                ValidationRule.UGYLDIG_REGELSETTVERSJON to false,
+                ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
+                ValidationRule.UGYLDIG_ORGNR_LENGDE to true,
+            ),
+        )
+
+        assertEquals(
+            result.ruleInputs,
+            mapOf(
+                "rulesetVersion" to "2",
+                "sykmeldingPerioder" to emptyList<Any>(),
+                "utdypendeOpplysninger" to emptyMap<String, Any>(),
+                "legekontorOrgnr" to "1232344",
+            ),
+        )
+
+        assertEquals(result.treeResult.ruleOutcome, ValidationRule.Outcomes.UGYLDIG_ORGNR_LENGDE)
+    }
+
+    @Test
+    fun `Avsender samme som pasient, Status INVALID`() {
+        val pasientFnr = generatePersonNumber(LocalDate.now().minusYears(31), false)
+
+        val (result) =
+            ValidationRules(
+                    ValidationRulePayload(
+                        sykmeldingId = "sykmeldingId",
+                        rulesetVersion = "3",
+                        perioder = emptyList(),
+                        legekontorOrgnr = null,
+                        behandlerFnr = "08201023912",
+                        avsenderFnr = pasientFnr,
+                        pasientIdent = pasientFnr,
+                        utdypendeOpplysninger = emptyMap(),
+                    )
+                )
+                .execute()
+
+        assertEquals(result.treeResult.status, RuleStatus.INVALID)
+        assertPath(
+            result.rulePath,
+            listOf(
+                ValidationRule.UGYLDIG_REGELSETTVERSJON to false,
+                ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
+                ValidationRule.UGYLDIG_ORGNR_LENGDE to false,
+                ValidationRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR to true,
+            ),
+        )
+
+        assertEquals(
+            result.ruleInputs,
+            mapOf(
+                "rulesetVersion" to "3",
+                "sykmeldingPerioder" to emptyList<Any>(),
+                "utdypendeOpplysninger" to emptyMap<String, Any>(),
+                "legekontorOrgnr" to "",
+                "avsenderFnr" to "17039411121",
+                "pasientIdent" to "17039411121",
+            ),
+        )
+
+        assertEquals(
+            result.treeResult.ruleOutcome,
+            ValidationRule.Outcomes.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR,
+        )
+    }
+
+    @Test
+    fun `Behandler samme som pasient, Status INVALID`() {
+        val pasientFnr = generatePersonNumber(LocalDate.now().minusYears(31), false)
+
+        val (result) =
+            ValidationRules(
+                    ValidationRulePayload(
+                        sykmeldingId = "sykmeldingId",
+                        rulesetVersion = "2",
+                        perioder = emptyList(),
+                        legekontorOrgnr = null,
+                        behandlerFnr = pasientFnr,
+                        pasientIdent = pasientFnr,
+                        avsenderFnr = "08201023912",
+                        utdypendeOpplysninger = emptyMap(),
+                    )
+                )
+                .execute()
+
+        assertEquals(result.treeResult.status, RuleStatus.INVALID)
+        assertPath(
+            result.rulePath,
+            listOf(
+                ValidationRule.UGYLDIG_REGELSETTVERSJON to false,
+                ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
+                ValidationRule.UGYLDIG_ORGNR_LENGDE to false,
+                ValidationRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR to false,
+                ValidationRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR to true,
+            ),
+        )
+
+        assertEquals(
+            result.ruleInputs,
+            mapOf(
+                "rulesetVersion" to "2",
+                "sykmeldingPerioder" to emptyList<Any>(),
+                "utdypendeOpplysninger" to emptyMap<String, Any>(),
+                "legekontorOrgnr" to "",
+                "avsenderFnr" to "08201023912",
+                "pasientIdent" to pasientFnr,
+                "behandlerFnr" to pasientFnr,
+            ),
+        )
+
+        assertEquals(
+            result.treeResult.ruleOutcome,
+            ValidationRule.Outcomes.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR,
+        )
+    }
 }
