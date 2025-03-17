@@ -3,7 +3,7 @@ package no.nav.tsm.regulus.regula.trees.legesuspensjon
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 
-class LegeSuspensjonRulesExecution(legeSuspensjonPayload: LegeSuspensjonPayload) :
+class LegeSuspensjonRules(legeSuspensjonPayload: LegeSuspensjonPayload) :
     TreeExecutor<LegeSuspensjonRule, LegeSuspensjonPayload>(
         legeSuspensjonRuleTree,
         legeSuspensjonPayload,

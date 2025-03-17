@@ -9,11 +9,11 @@ import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.trees.hpr.Behandler
 import no.nav.tsm.regulus.regula.trees.hpr.HprRulePayload
-import no.nav.tsm.regulus.regula.trees.hpr.HprRulesExecution
+import no.nav.tsm.regulus.regula.trees.hpr.HprRules
 import no.nav.tsm.regulus.regula.trees.legesuspensjon.LegeSuspensjonPayload
-import no.nav.tsm.regulus.regula.trees.legesuspensjon.LegeSuspensjonRulesExecution
+import no.nav.tsm.regulus.regula.trees.legesuspensjon.LegeSuspensjonRules
 import no.nav.tsm.regulus.regula.trees.validation.ValidationRulePayload
-import no.nav.tsm.regulus.regula.trees.validation.ValidationRulesExecutor
+import no.nav.tsm.regulus.regula.trees.validation.ValidationRules
 
 typealias RuleExecutionResult = List<Pair<TreeOutput<*, RuleResult>, Juridisk>>
 
@@ -23,8 +23,8 @@ fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
 
     val ruleSequence =
         sequenceOf(
-            LegeSuspensjonRulesExecution(LegeSuspensjonPayload(sykmeldingId, false)),
-            ValidationRulesExecutor(
+            LegeSuspensjonRules(LegeSuspensjonPayload(sykmeldingId, false)),
+            ValidationRules(
                 ValidationRulePayload(
                     sykmeldingId,
                     rulesetVersion = "2",
@@ -37,7 +37,7 @@ fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
                 )
             ),
             // PeriodLogicRulesExecution(periodLogicRuleTree),
-            HprRulesExecution(
+            HprRules(
                 HprRulePayload(
                     sykmeldingId = sykmeldingId,
                     behandler = Behandler(godkjenninger = emptyList()),

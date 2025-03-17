@@ -12,11 +12,10 @@ data class TreeOutput<T, S>(
     val treeResult: S,
 )
 
-fun <T, S> TreeOutput<T, S>.printRulePath(): String {
-    return rulePath
+fun <T, S> TreeOutput<T, S>.printRulePath(): String =
+    rulePath
         .joinToString(separator = "->") { "${it.rule}(${if (it.ruleResult) "yes" else "no"})" }
         .plus("->$treeResult")
-}
 
 infix fun <T, S> RuleOutput<T>.join(rulesOutput: TreeOutput<T, S>) =
     TreeOutput(

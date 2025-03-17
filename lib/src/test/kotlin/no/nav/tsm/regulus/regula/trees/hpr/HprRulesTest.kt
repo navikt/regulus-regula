@@ -10,7 +10,7 @@ class HprRulesTest {
     fun `har ikke aktiv autorisasjon, Status INVALID`() {
         val behandler = testBehandler(BehandlerScenarios.INAKTIV_LEGE)
         val result =
-            HprRulesExecution(
+            HprRules(
                     HprRulePayload(
                         sykmeldingId = "foo-bar",
                         behandler = behandler,

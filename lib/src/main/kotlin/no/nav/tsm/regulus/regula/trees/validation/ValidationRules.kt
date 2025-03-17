@@ -4,7 +4,7 @@ import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.utils.daysBetween
 
-class ValidationRulesExecutor(validationRulePayload: ValidationRulePayload) :
+class ValidationRules(validationRulePayload: ValidationRulePayload) :
     TreeExecutor<ValidationRule, ValidationRulePayload>(validationRuleTree, validationRulePayload) {
     override fun getRule(rule: ValidationRule) = getValidationRule(rule)
 }
@@ -14,6 +14,7 @@ fun getValidationRule(rules: ValidationRule): ValidationRuleFn =
         ValidationRule.UGYLDIG_REGELSETTVERSJON -> Rules.ugyldigRegelsettversjon
         ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 ->
             Rules.manglendeDynamiskesporsmaalversjon2uke39
+
         ValidationRule.UGYLDIG_ORGNR_LENGDE -> Rules.ugyldingOrgNummerLengde
         ValidationRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR -> Rules.avsenderSammeSomPasient
         ValidationRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR -> Rules.behandlerSammeSomPasient
@@ -47,7 +48,9 @@ private val Rules =
                     val group65Answers = utdypendeOpplysinger["6.5"]?.map { it.key } ?: emptyList()
 
                     group65Answers.containsAll(listOf("6.5.1", "6.5.2", "6.5.3", "6.5.4"))
-                } else false
+                } else {
+                    false
+                }
 
             RuleOutput(
                 ruleInputs =
@@ -67,7 +70,7 @@ private val Rules =
             val ugyldingOrgNummerLengde = legekontorOrgnr != null && legekontorOrgnr.length != 9
 
             RuleOutput(
-                ruleInputs = mapOf("ugyldingOrgNummerLengde" to ugyldingOrgNummerLengde),
+                ruleInputs = mapOf("legekontorOrgnr" to legekontorOrgnr),
                 rule = ValidationRule.UGYLDIG_ORGNR_LENGDE,
                 ruleResult = ugyldingOrgNummerLengde,
             )
@@ -81,10 +84,7 @@ private val Rules =
 
             RuleOutput(
                 ruleInputs =
-                    mapOf(
-                        "avsenderFnr" to avsenderFnr,
-                        "patientPersonNumber" to patientPersonNumber,
-                    ),
+                    mapOf("avsenderFnr" to avsenderFnr, "pasientIdent" to patientPersonNumber),
                 rule = ValidationRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR,
                 ruleResult = avsenderSammeSomPasient,
             )
@@ -98,10 +98,7 @@ private val Rules =
 
             RuleOutput(
                 ruleInputs =
-                    mapOf(
-                        "behandlerFnr" to behandlerFnr,
-                        "pasientFodselsNummer" to pasientFodselsNummer,
-                    ),
+                    mapOf("behandlerFnr" to behandlerFnr, "pasientIdent" to pasientFodselsNummer),
                 rule = ValidationRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR,
                 ruleResult = behandlerSammeSomPasient,
             )

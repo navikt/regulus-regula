@@ -16,9 +16,8 @@ interface RuleOutcome {
 }
 
 data class RuleResult(val status: RuleStatus, val ruleOutcome: RuleOutcome?) {
-    override fun toString(): String {
-        return status.name + (ruleOutcome?.let { "->${ruleOutcome.rule}" } ?: "")
-    }
+    override fun toString(): String =
+        status.name + (ruleOutcome?.let { "->${ruleOutcome.rule}" } ?: "")
 }
 
 fun <T> RuleNode<T, RuleResult>.yes(status: RuleStatus) = yes(RuleResult(status, null))

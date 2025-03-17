@@ -1,14 +1,15 @@
 package no.nav.tsm.regulus.regula.trees.legesuspensjon
 
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import no.nav.tsm.regulus.regula.executor.RuleStatus
-import org.junit.jupiter.api.Assertions.*
 
 class LegeSuspensjonRulesTest {
     @Test
     fun `Er ikkje suspendert, Status OK`() {
         val result =
-            LegeSuspensjonRulesExecution(
+            LegeSuspensjonRules(
                     LegeSuspensjonPayload(sykmeldingId = "foo-bar", behandlerSuspendert = false)
                 )
                 .execute()
@@ -26,7 +27,7 @@ class LegeSuspensjonRulesTest {
     @Test
     fun `Er suspendert, Status INVALID`() {
         val result =
-            LegeSuspensjonRulesExecution(
+            LegeSuspensjonRules(
                     LegeSuspensjonPayload(sykmeldingId = "foo-bar", behandlerSuspendert = true)
                 )
                 .execute()
