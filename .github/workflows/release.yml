@@ -24,3 +24,7 @@ jobs:
 
       - name: Test and build lib
         run: ./gradlew build
+
+      - name: Summarize tests results
+        uses: navikt/gradle-tests-summary@v1
+        if: ${{ always() }}
