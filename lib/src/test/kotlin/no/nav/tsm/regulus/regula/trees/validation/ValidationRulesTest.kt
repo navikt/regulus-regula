@@ -4,6 +4,7 @@ import java.time.LocalDate
 import kotlin.test.*
 import kotlin.test.Test
 import no.nav.tsm.regulus.regula.executor.RuleStatus
+import no.nav.tsm.regulus.regula.trees.assertPath
 import no.nav.tsm.regulus.regula.trees.generatePersonNumber
 
 class ValidationRulesTest {
@@ -28,8 +29,8 @@ class ValidationRulesTest {
                 .execute()
 
         assertEquals(result.treeResult.status, RuleStatus.OK)
-        assertEquals(
-            result.rulePath.map { it.rule to it.ruleResult },
+        assertPath(
+            result.rulePath,
             listOf(
                 ValidationRule.UGYLDIG_REGELSETTVERSJON to false,
                 ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
@@ -55,7 +56,36 @@ class ValidationRulesTest {
         assertNull(result.treeResult.ruleOutcome)
     }
 
-    @Test fun `Ugyldig regelsettversjon, Status INVALID`() {}
+    @Test
+    fun `Ugyldig regelsettversjon, Status INVALID`() {
+        val person14Years = LocalDate.now().minusYears(14)
+        val pasientFnr = generatePersonNumber(person14Years)
+
+        val (result) =
+            ValidationRules(
+                    ValidationRulePayload(
+                        sykmeldingId = "sykmeldingId",
+                        rulesetVersion = "69",
+                        perioder = emptyList(),
+                        legekontorOrgnr = "123123123",
+                        behandlerFnr = "08201023912",
+                        avsenderFnr = "01912391932",
+                        patientPersonNumber = pasientFnr,
+                        utdypendeOpplysninger = emptyMap(),
+                    )
+                )
+                .execute()
+
+        assertEquals(result.treeResult.status, RuleStatus.INVALID)
+        assertPath(result.rulePath, listOf(ValidationRule.UGYLDIG_REGELSETTVERSJON to true))
+
+        assertEquals(result.ruleInputs, mapOf("rulesetVersion" to "69"))
+
+        assertEquals(
+            result.treeResult.ruleOutcome,
+            ValidationRule.Outcomes.UGYLDIG_REGELSETTVERSJON,
+        )
+    }
 
     @Test fun `Mangelde dynamiske sporsmaal versjon 2 uke39, Status INVALID`() {}
 

@@ -4,44 +4,45 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import no.nav.tsm.regulus.regula.executor.RuleStatus
+import no.nav.tsm.regulus.regula.trees.assertPath
 
 class LegeSuspensjonRulesTest {
     @Test
     fun `Er ikkje suspendert, Status OK`() {
-        val result =
+        val (result) =
             LegeSuspensjonRules(
                     LegeSuspensjonPayload(sykmeldingId = "foo-bar", behandlerSuspendert = false)
                 )
                 .execute()
 
-        assertEquals(result.first.treeResult.status, RuleStatus.OK)
-        assertNull(result.first.treeResult.ruleOutcome)
+        assertEquals(result.treeResult.status, RuleStatus.OK)
+        assertNull(result.treeResult.ruleOutcome)
 
-        assertEquals(
-            result.first.rulePath.map { it.rule to it.ruleResult },
+        assertPath(
+            result.rulePath,
             listOf(LegeSuspensjonRule.BEHANDLER_SUSPENDERT to false),
         )
-        assertEquals(result.first.ruleInputs, mapOf("suspendert" to false))
+        assertEquals(result.ruleInputs, mapOf("suspendert" to false))
     }
 
     @Test
     fun `Er suspendert, Status INVALID`() {
-        val result =
+        val (result) =
             LegeSuspensjonRules(
                     LegeSuspensjonPayload(sykmeldingId = "foo-bar", behandlerSuspendert = true)
                 )
                 .execute()
 
-        assertEquals(result.first.treeResult.status, RuleStatus.INVALID)
+        assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertEquals(
-            result.first.treeResult.ruleOutcome,
+            result.treeResult.ruleOutcome,
             LegeSuspensjonRule.Outcomes.BEHANDLER_SUSPENDERT,
         )
 
-        assertEquals(
-            result.first.rulePath.map { it.rule to it.ruleResult },
+        assertPath(
+            result.rulePath,
             listOf(LegeSuspensjonRule.BEHANDLER_SUSPENDERT to true),
         )
-        assertEquals(result.first.ruleInputs, mapOf("suspendert" to true))
+        assertEquals(result.ruleInputs, mapOf("suspendert" to true))
     }
 }

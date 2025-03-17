@@ -4,12 +4,13 @@ import java.time.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import no.nav.tsm.regulus.regula.executor.RuleStatus
+import no.nav.tsm.regulus.regula.trees.assertPath
 
 class HprRulesTest {
     @Test
     fun `har ikke aktiv autorisasjon, Status INVALID`() {
         val behandler = testBehandler(BehandlerScenarios.INAKTIV_LEGE)
-        val result =
+        val (result) =
             HprRules(
                     HprRulePayload(
                         sykmeldingId = "foo-bar",
@@ -21,14 +22,14 @@ class HprRulesTest {
                 )
                 .execute()
 
-        assertEquals(result.first.treeResult.status, RuleStatus.INVALID)
-        assertEquals(
-            result.first.rulePath.map { it.rule to it.ruleResult },
+        assertEquals(result.treeResult.status, RuleStatus.INVALID)
+        assertPath(
+            result.rulePath,
             listOf(HprRule.BEHANDLER_GYLIDG_I_HPR to false),
         )
 
         assertEquals(
-            result.first.ruleInputs,
+            result.ruleInputs,
             mapOf("behandlerGodkjenninger" to behandler.godkjenninger),
         )
     }
