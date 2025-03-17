@@ -66,11 +66,10 @@ private val Rules =
 
         val ugyldingOrgNummerLengde: ValidationRuleFn = { payload ->
             val legekontorOrgnr = payload.legekontorOrgnr
-
             val ugyldingOrgNummerLengde = legekontorOrgnr != null && legekontorOrgnr.length != 9
 
             RuleOutput(
-                ruleInputs = mapOf("legekontorOrgnr" to legekontorOrgnr),
+                ruleInputs = mapOf("legekontorOrgnr" to (legekontorOrgnr ?: "")),
                 rule = ValidationRule.UGYLDIG_ORGNR_LENGDE,
                 ruleResult = ugyldingOrgNummerLengde,
             )
@@ -78,13 +77,12 @@ private val Rules =
 
         val avsenderSammeSomPasient: ValidationRuleFn = { payload ->
             val avsenderFnr = payload.avsenderFnr
-            val patientPersonNumber = payload.patientPersonNumber
+            val pasientIdent = payload.pasientIdent
 
-            val avsenderSammeSomPasient = avsenderFnr == patientPersonNumber
+            val avsenderSammeSomPasient = avsenderFnr == pasientIdent
 
             RuleOutput(
-                ruleInputs =
-                    mapOf("avsenderFnr" to avsenderFnr, "pasientIdent" to patientPersonNumber),
+                ruleInputs = mapOf("avsenderFnr" to avsenderFnr, "pasientIdent" to pasientIdent),
                 rule = ValidationRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR,
                 ruleResult = avsenderSammeSomPasient,
             )
@@ -92,7 +90,7 @@ private val Rules =
 
         val behandlerSammeSomPasient: ValidationRuleFn = { payload ->
             val behandlerFnr = payload.behandlerFnr
-            val pasientFodselsNummer = payload.patientPersonNumber
+            val pasientFodselsNummer = payload.pasientIdent
 
             val behandlerSammeSomPasient = behandlerFnr == pasientFodselsNummer
 

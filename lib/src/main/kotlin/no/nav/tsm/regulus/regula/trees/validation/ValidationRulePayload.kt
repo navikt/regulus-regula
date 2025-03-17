@@ -7,10 +7,10 @@ data class ValidationRulePayload(
     override val sykmeldingId: String,
     val rulesetVersion: String,
     val perioder: List<FomTom>,
-    val legekontorOrgnr: String,
+    val legekontorOrgnr: String?,
     val behandlerFnr: String,
     val avsenderFnr: String,
-    val patientPersonNumber: String,
+    val pasientIdent: String,
     val utdypendeOpplysninger: Map<String, Map<String, SporsmalSvar>>,
 ) : BasePayload
 

@@ -17,7 +17,7 @@ class HprRulesTest {
                         behandler = behandler,
                         perioder = emptyList(),
                         startdato = null,
-                        signaturDato = LocalDateTime.now(),
+                        signaturdato = LocalDateTime.now(),
                     )
                 )
                 .execute()

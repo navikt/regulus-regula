@@ -32,7 +32,7 @@ fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
                     legekontorOrgnr = "123",
                     behandlerFnr = "08201023912",
                     avsenderFnr = "01912391932",
-                    patientPersonNumber = "92102931803",
+                    pasientIdent = "92102931803",
                     utdypendeOpplysninger = emptyMap(),
                 )
             ),
@@ -43,7 +43,7 @@ fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
                     behandler = Behandler(godkjenninger = emptyList()),
                     perioder = emptyList(),
                     startdato = null,
-                    signaturDato = LocalDateTime.now(),
+                    signaturdato = LocalDateTime.now(),
                 )
             ),
             // ArbeidsuforhetRulesExecution(arbeidsuforhetRuleTree),

@@ -106,7 +106,7 @@ private val Rules =
 
         val behandlerErFTMedTilligskompetanseSykmelding: HprRuleFn = { payload ->
             val behandlerGodkjenninger = payload.behandler.godkjenninger
-            val genereringsTidspunkt = payload.signaturDato
+            val genereringsTidspunkt = payload.signaturdato
 
             val erFtMedTilleggskompetanse =
                 erHelsepersonellKategoriMedTilleggskompetanse(
@@ -130,7 +130,7 @@ private val Rules =
 
         val behandlerErKIMedTilligskompetanseSykmelding: HprRuleFn = { payload ->
             val behandlerGodkjenninger = payload.behandler.godkjenninger
-            val genereringsTidspunkt = payload.signaturDato
+            val genereringsTidspunkt = payload.signaturdato
 
             val erKIMedTilleggskompetanse =
                 erHelsepersonellKategoriMedTilleggskompetanse(

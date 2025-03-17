@@ -23,7 +23,7 @@ class ValidationRulesTest {
                         legekontorOrgnr = "123123123",
                         behandlerFnr = "08201023912",
                         avsenderFnr = "01912391932",
-                        patientPersonNumber = pasientFnr,
+                        pasientIdent = pasientFnr,
                         utdypendeOpplysninger = emptyMap(),
                     )
                 )
@@ -68,7 +68,7 @@ class ValidationRulesTest {
                         legekontorOrgnr = "123123123",
                         behandlerFnr = "08201023912",
                         avsenderFnr = "01912391932",
-                        patientPersonNumber = "07091912345",
+                        pasientIdent = "07091912345",
                         utdypendeOpplysninger = emptyMap(),
                     )
                 )
@@ -98,7 +98,7 @@ class ValidationRulesTest {
                         legekontorOrgnr = "123123123",
                         behandlerFnr = "08201023912",
                         avsenderFnr = "01912391932",
-                        patientPersonNumber = "07091912345",
+                        pasientIdent = "07091912345",
                         utdypendeOpplysninger = emptyMap(),
                     )
                 )

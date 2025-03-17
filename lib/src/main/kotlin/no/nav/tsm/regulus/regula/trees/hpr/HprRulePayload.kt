@@ -10,7 +10,7 @@ data class HprRulePayload(
     val behandler: Behandler,
     val perioder: List<FomTom>,
     val startdato: LocalDate?,
-    val signaturDato: LocalDateTime,
+    val signaturdato: LocalDateTime,
 ) : BasePayload
 
 data class Behandler(val godkjenninger: List<Godkjenning>)
