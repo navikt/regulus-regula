@@ -209,8 +209,8 @@ class ValidationRulesTest {
                 "sykmeldingPerioder" to emptyList<Any>(),
                 "utdypendeOpplysninger" to emptyMap<String, Any>(),
                 "legekontorOrgnr" to "",
-                "avsenderFnr" to "17039411121",
-                "pasientIdent" to "17039411121",
+                "avsenderFnr" to pasientFnr,
+                "pasientIdent" to pasientFnr,
             ),
         )
 
