@@ -7,6 +7,7 @@ import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.executor.UtenJuridisk
 import no.nav.tsm.regulus.regula.trees.hpr.hprRuleTree
 import no.nav.tsm.regulus.regula.trees.legesuspensjon.legeSuspensjonRuleTree
+import no.nav.tsm.regulus.regula.trees.periode.periodeRuleTree
 import no.nav.tsm.regulus.regula.trees.validation.validationRuleTree
 
 fun main() {
@@ -18,7 +19,7 @@ fun main() {
             "HPR" to hprRuleTree,
             // "Arbeidsuforhet" to arbeidsuforhetRuleTree,
             // "Pasient under 13" to patientAgeUnder13RuleTree,
-            // "Periode" to periodeRuleTree,
+            "Periode" to periodeRuleTree,
             // "Tilbakedatering" to tilbakedateringRuleTree,
         )
 
