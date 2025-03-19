@@ -213,7 +213,7 @@ private fun harAktivHelsepersonellAutorisasjonsSom(
             godkjenning.helsepersonellkategori.let { it.aktiv && it.verdi == helsepersonerVerdi }
     }
 
-private fun Tillegskompetanse.gyldigPeriode(genereringsTidspunkt: LocalDateTime): Boolean {
+private fun Tilleggskompetanse.gyldigPeriode(genereringsTidspunkt: LocalDateTime): Boolean {
     val fom = gyldig?.fra?.toLocalDate()
     val tom = gyldig?.til?.toLocalDate()
     val genDate = genereringsTidspunkt.toLocalDate()

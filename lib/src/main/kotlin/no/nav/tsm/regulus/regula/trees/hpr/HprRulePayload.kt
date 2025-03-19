@@ -18,10 +18,10 @@ data class Behandler(val godkjenninger: List<Godkjenning>)
 data class Godkjenning(
     val autorisasjon: Kode?,
     val helsepersonellkategori: Kode?,
-    val tillegskompetanse: List<Tillegskompetanse>?,
+    val tillegskompetanse: List<Tilleggskompetanse>?,
 )
 
-data class Tillegskompetanse(
+data class Tilleggskompetanse(
     val avsluttetStatus: Kode?,
     val eTag: String?,
     val gyldig: Periode?,
