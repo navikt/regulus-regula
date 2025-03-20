@@ -14,6 +14,8 @@ import no.nav.tsm.regulus.regula.trees.hpr.HprRulePayload
 import no.nav.tsm.regulus.regula.trees.hpr.HprRules
 import no.nav.tsm.regulus.regula.trees.legesuspensjon.LegeSuspensjonPayload
 import no.nav.tsm.regulus.regula.trees.legesuspensjon.LegeSuspensjonRules
+import no.nav.tsm.regulus.regula.trees.pasientunder13.PasientUnder13RulePayload
+import no.nav.tsm.regulus.regula.trees.pasientunder13.PasientUnder13Rules
 import no.nav.tsm.regulus.regula.trees.periode.PeriodeRulePayload
 import no.nav.tsm.regulus.regula.trees.periode.PeriodeRules
 import no.nav.tsm.regulus.regula.trees.periodvalidering.PeriodLogicRulePayload
@@ -67,7 +69,13 @@ fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
                     annenFraversArsak = null,
                 )
             ),
-            // PatientAgeUnder13RulesExecution(patientAgeUnder13RuleTree),
+            PasientUnder13Rules(
+                PasientUnder13RulePayload(
+                    sykmeldingId = sykmeldingId,
+                    perioder = emptyList(),
+                    pasientFodselsdato = LocalDateTime.now().toLocalDate(),
+                )
+            ),
             PeriodeRules(
                 PeriodeRulePayload(
                     sykmeldingId = sykmeldingId,

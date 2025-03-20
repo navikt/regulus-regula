@@ -8,6 +8,7 @@ import no.nav.tsm.regulus.regula.executor.UtenJuridisk
 import no.nav.tsm.regulus.regula.trees.arbeidsuforhet.arbeidsuforhetRuleTree
 import no.nav.tsm.regulus.regula.trees.hpr.hprRuleTree
 import no.nav.tsm.regulus.regula.trees.legesuspensjon.legeSuspensjonRuleTree
+import no.nav.tsm.regulus.regula.trees.pasientunder13.pasientUnder13RuleTree
 import no.nav.tsm.regulus.regula.trees.periode.periodeRuleTree
 import no.nav.tsm.regulus.regula.trees.periodvalidering.periodLogicRuleTree
 import no.nav.tsm.regulus.regula.trees.validation.validationRuleTree
@@ -20,7 +21,7 @@ fun main() {
             "Periode validering" to periodLogicRuleTree,
             "HPR" to hprRuleTree,
             "Arbeidsuforhet" to arbeidsuforhetRuleTree,
-            // "Pasient under 13" to patientAgeUnder13RuleTree,
+            "Pasient under 13" to pasientUnder13RuleTree,
             "Periode" to periodeRuleTree,
             // "Tilbakedatering" to tilbakedateringRuleTree,
         )
