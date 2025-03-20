@@ -7,6 +7,8 @@ import no.nav.tsm.regulus.regula.executor.Juridisk
 import no.nav.tsm.regulus.regula.executor.RuleResult
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
+import no.nav.tsm.regulus.regula.trees.arbeidsuforhet.ArbeidsuforhetRulePayload
+import no.nav.tsm.regulus.regula.trees.arbeidsuforhet.ArbeidsuforhetRules
 import no.nav.tsm.regulus.regula.trees.hpr.Behandler
 import no.nav.tsm.regulus.regula.trees.hpr.HprRulePayload
 import no.nav.tsm.regulus.regula.trees.hpr.HprRules
@@ -57,7 +59,14 @@ fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
                     signaturdato = LocalDateTime.now(),
                 )
             ),
-            // ArbeidsuforhetRulesExecution(arbeidsuforhetRuleTree),
+            ArbeidsuforhetRules(
+                ArbeidsuforhetRulePayload(
+                    sykmeldingId = sykmeldingId,
+                    hoveddiagnose = null,
+                    bidiagnoser = emptyList(),
+                    annenFraversArsak = null,
+                )
+            ),
             // PatientAgeUnder13RulesExecution(patientAgeUnder13RuleTree),
             PeriodeRules(
                 PeriodeRulePayload(

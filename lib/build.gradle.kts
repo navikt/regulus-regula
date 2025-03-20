@@ -6,13 +6,17 @@ plugins {
     id("com.diffplug.spotless") version "7.0.2"
 }
 
-repositories { mavenCentral() }
+repositories {
+    mavenCentral()
+    maven { url = uri("https://github-package-registry-mirror.gc.nav.no/cached/maven-release") }
+}
 
 dependencies {
     testImplementation(libs.junit.jupiter.engine)
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+    api(libs.diagnosekoder)
     api(libs.slf4j)
 }
 
