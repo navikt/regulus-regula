@@ -14,6 +14,8 @@ import no.nav.tsm.regulus.regula.trees.legesuspensjon.LegeSuspensjonPayload
 import no.nav.tsm.regulus.regula.trees.legesuspensjon.LegeSuspensjonRules
 import no.nav.tsm.regulus.regula.trees.periode.PeriodeRulePayload
 import no.nav.tsm.regulus.regula.trees.periode.PeriodeRules
+import no.nav.tsm.regulus.regula.trees.periodvalidering.PeriodLogicRulePayload
+import no.nav.tsm.regulus.regula.trees.periodvalidering.PeriodLogicRules
 import no.nav.tsm.regulus.regula.trees.validation.ValidationRulePayload
 import no.nav.tsm.regulus.regula.trees.validation.ValidationRules
 
@@ -38,7 +40,14 @@ fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
                     utdypendeOpplysninger = emptyMap(),
                 )
             ),
-            // PeriodLogicRulesExecution(periodLogicRuleTree),
+            PeriodLogicRules(
+                PeriodLogicRulePayload(
+                    sykmeldingId,
+                    perioder = emptyList(),
+                    behandletTidspunkt = LocalDateTime.now(),
+                    receivedDate = LocalDateTime.now(),
+                )
+            ),
             HprRules(
                 HprRulePayload(
                     sykmeldingId = sykmeldingId,

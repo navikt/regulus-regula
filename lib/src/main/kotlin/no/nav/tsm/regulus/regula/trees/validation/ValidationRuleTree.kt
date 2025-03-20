@@ -1,7 +1,6 @@
 package no.nav.tsm.regulus.regula.trees.validation
 
 import no.nav.tsm.regulus.regula.dsl.tree
-import no.nav.tsm.regulus.regula.executor.RuleResult
 import no.nav.tsm.regulus.regula.executor.RuleStatus.INVALID
 import no.nav.tsm.regulus.regula.executor.RuleStatus.OK
 import no.nav.tsm.regulus.regula.executor.UtenJuridisk
@@ -9,7 +8,7 @@ import no.nav.tsm.regulus.regula.executor.no
 import no.nav.tsm.regulus.regula.executor.yes
 
 val validationRuleTree =
-    tree<ValidationRule, RuleResult>(ValidationRule.UGYLDIG_REGELSETTVERSJON) {
+    tree<ValidationRule>(ValidationRule.UGYLDIG_REGELSETTVERSJON) {
         yes(INVALID, ValidationRule.Outcomes.UGYLDIG_REGELSETTVERSJON)
         no(ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39) {
             yes(INVALID, ValidationRule.Outcomes.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39)

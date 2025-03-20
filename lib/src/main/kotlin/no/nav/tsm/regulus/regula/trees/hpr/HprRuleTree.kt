@@ -12,7 +12,7 @@ import no.nav.tsm.regulus.regula.juridisk.JuridiskHenvisning
 import no.nav.tsm.regulus.regula.juridisk.Lovverk
 
 val hprRuleTree =
-    tree<HprRule, RuleResult>(HprRule.BEHANDLER_GYLIDG_I_HPR) {
+    tree<HprRule>(HprRule.BEHANDLER_GYLIDG_I_HPR) {
         no(INVALID, HprRule.Outcomes.BEHANDLER_IKKE_GYLDIG_I_HPR)
         yes(HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR) {
             no(INVALID, HprRule.Outcomes.BEHANDLER_MANGLER_AUTORISASJON_I_HPR)

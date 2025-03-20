@@ -4,8 +4,8 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.test.*
 import no.nav.tsm.regulus.regula.executor.RuleStatus
+import no.nav.tsm.regulus.regula.payload.FomTom
 import no.nav.tsm.regulus.regula.trees.assertPath
-import no.nav.tsm.regulus.regula.trees.validation.FomTom
 
 class PeriodeRulesTest {
 

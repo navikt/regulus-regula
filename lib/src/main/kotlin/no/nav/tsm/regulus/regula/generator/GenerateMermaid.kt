@@ -8,6 +8,7 @@ import no.nav.tsm.regulus.regula.executor.UtenJuridisk
 import no.nav.tsm.regulus.regula.trees.hpr.hprRuleTree
 import no.nav.tsm.regulus.regula.trees.legesuspensjon.legeSuspensjonRuleTree
 import no.nav.tsm.regulus.regula.trees.periode.periodeRuleTree
+import no.nav.tsm.regulus.regula.trees.periodvalidering.periodLogicRuleTree
 import no.nav.tsm.regulus.regula.trees.validation.validationRuleTree
 
 fun main() {
@@ -15,7 +16,7 @@ fun main() {
         listOf(
             "Lege suspensjon" to legeSuspensjonRuleTree,
             "Validation" to validationRuleTree,
-            // "Periode validering" to periodLogicRuleTree,
+            "Periode validering" to periodLogicRuleTree,
             "HPR" to hprRuleTree,
             // "Arbeidsuforhet" to arbeidsuforhetRuleTree,
             // "Pasient under 13" to patientAgeUnder13RuleTree,

@@ -5,8 +5,8 @@ import java.time.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import no.nav.tsm.regulus.regula.executor.RuleStatus
+import no.nav.tsm.regulus.regula.payload.FomTom
 import no.nav.tsm.regulus.regula.trees.assertPath
-import no.nav.tsm.regulus.regula.trees.validation.FomTom
 
 class HprRulesTest {
     private fun createHprRulePayload(

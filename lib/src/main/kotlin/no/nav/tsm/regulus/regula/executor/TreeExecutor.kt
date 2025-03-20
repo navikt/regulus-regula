@@ -7,6 +7,7 @@ import no.nav.tsm.regulus.regula.dsl.TreeNode
 import no.nav.tsm.regulus.regula.dsl.TreeOutput
 import no.nav.tsm.regulus.regula.dsl.join
 import no.nav.tsm.regulus.regula.dsl.printRulePath
+import no.nav.tsm.regulus.regula.payload.BasePayload
 import org.slf4j.LoggerFactory
 
 /**
@@ -40,8 +41,4 @@ abstract class TreeExecutor<RuleEnum, Payload : BasePayload>(
                 result join childNode.evaluate(payload)
             }
         }
-}
-
-interface BasePayload {
-    val sykmeldingId: String
 }

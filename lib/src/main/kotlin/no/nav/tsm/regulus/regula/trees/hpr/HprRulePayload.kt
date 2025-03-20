@@ -2,8 +2,8 @@ package no.nav.tsm.regulus.regula.trees.hpr
 
 import java.time.LocalDate
 import java.time.LocalDateTime
-import no.nav.tsm.regulus.regula.executor.BasePayload
-import no.nav.tsm.regulus.regula.trees.validation.FomTom
+import no.nav.tsm.regulus.regula.payload.BasePayload
+import no.nav.tsm.regulus.regula.payload.FomTom
 
 data class HprRulePayload(
     override val sykmeldingId: String,

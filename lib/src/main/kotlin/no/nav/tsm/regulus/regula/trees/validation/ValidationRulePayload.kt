@@ -1,7 +1,7 @@
 package no.nav.tsm.regulus.regula.trees.validation
 
-import java.time.LocalDate
-import no.nav.tsm.regulus.regula.executor.BasePayload
+import no.nav.tsm.regulus.regula.payload.BasePayload
+import no.nav.tsm.regulus.regula.payload.FomTom
 
 data class ValidationRulePayload(
     override val sykmeldingId: String,
@@ -13,8 +13,6 @@ data class ValidationRulePayload(
     val pasientIdent: String,
     val utdypendeOpplysninger: Map<String, Map<String, SporsmalSvar>>,
 ) : BasePayload
-
-data class FomTom(val fom: LocalDate, val tom: LocalDate)
 
 data class SporsmalSvar(
     val sporsmal: String,
