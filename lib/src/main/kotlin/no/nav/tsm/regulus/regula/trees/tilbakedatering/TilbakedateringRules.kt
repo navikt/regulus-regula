@@ -32,7 +32,7 @@ private fun getTilbakedateringRule(rules: TilbakedateringRule): TilbakedateringR
     }
 }
 
-typealias TilbakedateringRuleFn =
+private typealias TilbakedateringRuleFn =
     (payload: TilbakedateringRulePayload) -> RuleOutput<TilbakedateringRule>
 
 private val Rules =

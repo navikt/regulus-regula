@@ -16,7 +16,7 @@ fun getPasientUnder13Rule(rules: PasientUnder13Rule): PasientUnder13RuleFn {
     }
 }
 
-typealias PasientUnder13RuleFn =
+private typealias PasientUnder13RuleFn =
     (payload: PasientUnder13RulePayload) -> RuleOutput<PasientUnder13Rule>
 
 private val Rules =

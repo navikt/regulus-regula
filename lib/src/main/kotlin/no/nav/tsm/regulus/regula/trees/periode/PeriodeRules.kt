@@ -20,7 +20,7 @@ fun getPeriodeRule(rules: PeriodeRule): PeriodeRuleFn {
     }
 }
 
-typealias PeriodeRuleFn = (payload: PeriodeRulePayload) -> RuleOutput<PeriodeRule>
+private typealias PeriodeRuleFn = (payload: PeriodeRulePayload) -> RuleOutput<PeriodeRule>
 
 private val Rules =
     object {

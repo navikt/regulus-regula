@@ -14,9 +14,10 @@ class PeriodLogicRules(payload: PeriodLogicRulePayload) :
     ): (PeriodLogicRulePayload) -> RuleOutput<PeriodLogicRule> = getPeriodRule(rule)
 }
 
-typealias PeriodRuleFn = (payload: PeriodLogicRulePayload) -> RuleOutput<PeriodLogicRule>
+private typealias PeriodLogicRuleFn =
+    (payload: PeriodLogicRulePayload) -> RuleOutput<PeriodLogicRule>
 
-fun getPeriodRule(rules: PeriodLogicRule): PeriodRuleFn {
+fun getPeriodRule(rules: PeriodLogicRule): PeriodLogicRuleFn {
     return when (rules) {
         PeriodLogicRule.PERIODER_MANGLER -> Rules.periodeMangler
         PeriodLogicRule.FRADATO_ETTER_TILDATO -> Rules.fraDatoEtterTilDato
@@ -35,7 +36,7 @@ fun getPeriodRule(rules: PeriodLogicRule): PeriodRuleFn {
 
 private val Rules =
     object {
-        val periodeMangler: PeriodRuleFn = { payload ->
+        val periodeMangler: PeriodLogicRuleFn = { payload ->
             val perioder = payload.perioder
             val periodeMangler = perioder.isEmpty()
 
@@ -46,7 +47,7 @@ private val Rules =
             )
         }
 
-        val fraDatoEtterTilDato: PeriodRuleFn = { payload ->
+        val fraDatoEtterTilDato: PeriodLogicRuleFn = { payload ->
             val perioder = payload.perioder
 
             val fraDatoEtterTilDato = perioder.any { it.fom.isAfter(it.tom) }
@@ -58,7 +59,7 @@ private val Rules =
             )
         }
 
-        val overlappendePerioder: PeriodRuleFn = { payload ->
+        val overlappendePerioder: PeriodLogicRuleFn = { payload ->
             val perioder = payload.perioder
 
             val overlappendePerioder =
@@ -75,7 +76,7 @@ private val Rules =
             )
         }
 
-        val oppholdMellomPerioder: PeriodRuleFn = { payload ->
+        val oppholdMellomPerioder: PeriodLogicRuleFn = { payload ->
             val periodeRanges = payload.perioder.sortedBy { it.fom }.map { it.fom to it.tom }
 
             var oppholdMellomPerioder = false
@@ -94,7 +95,7 @@ private val Rules =
             )
         }
 
-        val ikkeDefinertPeriode: PeriodRuleFn = { payload ->
+        val ikkeDefinertPeriode: PeriodLogicRuleFn = { payload ->
             val perioder = payload.perioder
 
             val ikkeDefinertPeriode =
@@ -113,7 +114,7 @@ private val Rules =
             )
         }
 
-        val behandslingsDatoEtterMottatDato: PeriodRuleFn = { payload ->
+        val behandslingsDatoEtterMottatDato: PeriodLogicRuleFn = { payload ->
             val behandletTidspunkt = payload.behandletTidspunkt
             val receivedDate = payload.receivedDate
 
@@ -127,7 +128,7 @@ private val Rules =
             )
         }
 
-        val avventendeKombinert: PeriodRuleFn = { payload ->
+        val avventendeKombinert: PeriodLogicRuleFn = { payload ->
             val perioder = payload.perioder
 
             val avventendeKombinert =
@@ -141,7 +142,7 @@ private val Rules =
             )
         }
 
-        val manglendeInnspillArbeidsgiver: PeriodRuleFn = { payload ->
+        val manglendeInnspillArbeidsgiver: PeriodLogicRuleFn = { payload ->
             val perioder = payload.perioder
 
             val manglendeInnspillArbeidsgiver =
@@ -158,7 +159,7 @@ private val Rules =
             )
         }
 
-        val avventendeOver16Dager: PeriodRuleFn = { payload ->
+        val avventendeOver16Dager: PeriodLogicRuleFn = { payload ->
             val perioder = payload.perioder
 
             val avventendeOver16Dager =
@@ -173,7 +174,7 @@ private val Rules =
             )
         }
 
-        val forMangeBehandlingsDagerPrUke: PeriodRuleFn = { payload ->
+        val forMangeBehandlingsDagerPrUke: PeriodLogicRuleFn = { payload ->
             val perioder = payload.perioder
 
             val forMangeBehandlingsDagerPrUke =
@@ -189,7 +190,7 @@ private val Rules =
             )
         }
 
-        val gradertOver99Prosent: PeriodRuleFn = { payload ->
+        val gradertOver99Prosent: PeriodLogicRuleFn = { payload ->
             val perioder = payload.perioder
 
             val gradertOver99Prosent = perioder.mapNotNull { it.gradert }.any { it.grad > 99 }
@@ -201,7 +202,7 @@ private val Rules =
             )
         }
 
-        val inneholderBehandlingsDager: PeriodRuleFn = { payload ->
+        val inneholderBehandlingsDager: PeriodLogicRuleFn = { payload ->
             val perioder = payload.perioder
 
             val inneholderBehandlingsDager = perioder.any { it.behandlingsdager != null }

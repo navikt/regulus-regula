@@ -20,7 +20,7 @@ fun getArbeidsuforhetRule(rules: ArbeidsuforhetRule): ArbeidsuforhetRuleFn {
     }
 }
 
-typealias ArbeidsuforhetRuleFn =
+private typealias ArbeidsuforhetRuleFn =
     (payload: ArbeidsuforhetRulePayload) -> RuleOutput<ArbeidsuforhetRule>
 
 private val Rules =
