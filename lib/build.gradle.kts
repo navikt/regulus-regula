@@ -26,6 +26,15 @@ spotless { kotlin { ktfmt("0.54").kotlinlangStyle() } }
 
 tasks.named<Test>("test") { useJUnitPlatform() }
 
+tasks.register<JavaExec>("validate-trees") {
+    logging.captureStandardOutput(LogLevel.LIFECYCLE)
+
+    mainClass.set("no.nav.tsm.regulus.regula.generator.ValidateTreesKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    group = "documentation"
+    description = "Validate tree implementation structure"
+}
+
 tasks.register<JavaExec>("generate-mermaid") {
     val output = ByteArrayOutputStream()
     mainClass.set("no.nav.tsm.regulus.regula.generator.GenerateMermaidKt")
@@ -51,4 +60,9 @@ tasks.register<JavaExec>("generate-mermaid") {
                 lines.subList(end + 1, lines.size)
         readme.writeText(newLines.joinToString("\n"))
     }
+}
+
+tasks.named("build") {
+    dependsOn("validate-trees")
+    dependsOn("generate-mermaid")
 }

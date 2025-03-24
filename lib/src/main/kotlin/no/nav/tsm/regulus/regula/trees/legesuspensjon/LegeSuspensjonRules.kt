@@ -3,8 +3,8 @@ package no.nav.tsm.regulus.regula.trees.legesuspensjon
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 
-class LegeSuspensjonRules(legeSuspensjonPayload: LegeSuspensjonPayload) :
-    TreeExecutor<LegeSuspensjonRule, LegeSuspensjonPayload>(
+class LegeSuspensjonRules(legeSuspensjonPayload: LegeSuspensjonRulePayload) :
+    TreeExecutor<LegeSuspensjonRule, LegeSuspensjonRulePayload>(
         legeSuspensjonRuleTree,
         legeSuspensjonPayload,
     ) {
@@ -17,7 +17,7 @@ fun getLegeSuspensjonRule(rule: LegeSuspensjonRule): LegeSuspensjonRuleFn =
     }
 
 private typealias LegeSuspensjonRuleFn =
-    (behandlerSuspendert: LegeSuspensjonPayload) -> RuleOutput<LegeSuspensjonRule>
+    (behandlerSuspendert: LegeSuspensjonRulePayload) -> RuleOutput<LegeSuspensjonRule>
 
 private val Rules =
     object {

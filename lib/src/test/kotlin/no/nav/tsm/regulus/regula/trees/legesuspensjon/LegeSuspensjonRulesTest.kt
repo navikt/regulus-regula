@@ -11,7 +11,7 @@ class LegeSuspensjonRulesTest {
     fun `Er ikkje suspendert, Status OK`() {
         val (result) =
             LegeSuspensjonRules(
-                    LegeSuspensjonPayload(sykmeldingId = "foo-bar", behandlerSuspendert = false)
+                    LegeSuspensjonRulePayload(sykmeldingId = "foo-bar", behandlerSuspendert = false)
                 )
                 .execute()
 
@@ -26,7 +26,7 @@ class LegeSuspensjonRulesTest {
     fun `Er suspendert, Status INVALID`() {
         val (result) =
             LegeSuspensjonRules(
-                    LegeSuspensjonPayload(sykmeldingId = "foo-bar", behandlerSuspendert = true)
+                    LegeSuspensjonRulePayload(sykmeldingId = "foo-bar", behandlerSuspendert = true)
                 )
                 .execute()
 

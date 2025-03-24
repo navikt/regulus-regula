@@ -9,7 +9,7 @@ import no.nav.tsm.regulus.regula.trees.arbeidsuforhet.ArbeidsuforhetRules
 import no.nav.tsm.regulus.regula.trees.hpr.Behandler
 import no.nav.tsm.regulus.regula.trees.hpr.HprRulePayload
 import no.nav.tsm.regulus.regula.trees.hpr.HprRules
-import no.nav.tsm.regulus.regula.trees.legesuspensjon.LegeSuspensjonPayload
+import no.nav.tsm.regulus.regula.trees.legesuspensjon.LegeSuspensjonRulePayload
 import no.nav.tsm.regulus.regula.trees.legesuspensjon.LegeSuspensjonRules
 import no.nav.tsm.regulus.regula.trees.pasientunder13.PasientUnder13RulePayload
 import no.nav.tsm.regulus.regula.trees.pasientunder13.PasientUnder13Rules
@@ -28,7 +28,7 @@ fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
 
     val ruleSequence =
         sequenceOf(
-            LegeSuspensjonRules(LegeSuspensjonPayload(sykmeldingId, false)),
+            LegeSuspensjonRules(LegeSuspensjonRulePayload(sykmeldingId, false)),
             ValidationRules(
                 ValidationRulePayload(
                     sykmeldingId,
