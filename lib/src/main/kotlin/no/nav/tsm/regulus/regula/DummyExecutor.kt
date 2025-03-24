@@ -20,6 +20,8 @@ import no.nav.tsm.regulus.regula.trees.periode.PeriodeRulePayload
 import no.nav.tsm.regulus.regula.trees.periode.PeriodeRules
 import no.nav.tsm.regulus.regula.trees.periodvalidering.PeriodLogicRulePayload
 import no.nav.tsm.regulus.regula.trees.periodvalidering.PeriodLogicRules
+import no.nav.tsm.regulus.regula.trees.tilbakedatering.TilbakedateringRulePayload
+import no.nav.tsm.regulus.regula.trees.tilbakedatering.TilbakedateringRules
 import no.nav.tsm.regulus.regula.trees.validation.ValidationRulePayload
 import no.nav.tsm.regulus.regula.trees.validation.ValidationRules
 
@@ -83,8 +85,19 @@ fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
                     signaturdato = LocalDateTime.now(),
                 )
             ),
-
-            // TilbakedateringRulesExecution(tilbakedateringRuleTree),
+            TilbakedateringRules(
+                TilbakedateringRulePayload(
+                    sykmeldingId = sykmeldingId,
+                    signaturdato = LocalDateTime.now(),
+                    perioder = emptyList(),
+                    startdato = null,
+                    hoveddiagnoseSystem = null,
+                    begrunnelseIkkeKontakt = null,
+                    ettersendingAv = null,
+                    dagerForArbeidsgiverperiodeCheck = emptyList(),
+                    forlengelse = null,
+                )
+            ),
         )
 
     return runRules(ruleSequence)

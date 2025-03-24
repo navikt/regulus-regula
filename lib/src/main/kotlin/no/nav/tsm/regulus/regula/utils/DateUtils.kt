@@ -12,6 +12,9 @@ fun workdaysBetween(a: LocalDate, b: LocalDate): Int =
         .map { a.plusDays(it) }
         .count { it.dayOfWeek !in arrayOf(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY) }
 
+fun allDaysBetween(fom: LocalDate, tom: LocalDate): List<LocalDate> =
+    (0..ChronoUnit.DAYS.between(fom, tom)).map { fom.plusDays(it) }
+
 fun List<FomTom>.earliestFom(): LocalDate = map { it.fom }.sorted().first()
 
 fun List<FomTom>.latestTom(): LocalDate = map { it.tom }.sorted().last()

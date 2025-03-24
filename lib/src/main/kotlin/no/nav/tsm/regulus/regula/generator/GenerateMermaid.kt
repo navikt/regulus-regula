@@ -11,6 +11,7 @@ import no.nav.tsm.regulus.regula.trees.legesuspensjon.legeSuspensjonRuleTree
 import no.nav.tsm.regulus.regula.trees.pasientunder13.pasientUnder13RuleTree
 import no.nav.tsm.regulus.regula.trees.periode.periodeRuleTree
 import no.nav.tsm.regulus.regula.trees.periodvalidering.periodLogicRuleTree
+import no.nav.tsm.regulus.regula.trees.tilbakedatering.tilbakedateringRuleTree
 import no.nav.tsm.regulus.regula.trees.validation.validationRuleTree
 
 fun main() {
@@ -23,7 +24,7 @@ fun main() {
             "Arbeidsuforhet" to arbeidsuforhetRuleTree,
             "Pasient under 13" to pasientUnder13RuleTree,
             "Periode" to periodeRuleTree,
-            // "Tilbakedatering" to tilbakedateringRuleTree,
+            "Tilbakedatering" to tilbakedateringRuleTree,
         )
 
     ruleTrees.forEachIndexed { idx, (name, ruleTree) -> // add index to differentiate each loop
