@@ -14,7 +14,7 @@ Disse grafene er generert opp av samme kode-struktur som selve reglene er define
 Endringer i regel-implementasjonene vil derfor også reflekteres i disse grafene.
 
 <!-- RULE_MARKER_START -->
-## 0. Lege suspensjon
+## 0. Suspendert lege
 
 ```mermaid
 graph TD
@@ -26,7 +26,7 @@ graph TD
 ```
 
 
-## 1. Validation
+## 1. Strukturell validering
 
 ```mermaid
 graph TD
@@ -46,7 +46,7 @@ graph TD
 ```
 
 
-## 2. Periode validering
+## 2. Sykmeldingsperioder
 
 ```mermaid
 graph TD
@@ -80,7 +80,7 @@ graph TD
 ```
 
 
-## 3. HPR
+## 3. Behandler i HPR
 
 ---
 
@@ -119,7 +119,7 @@ graph TD
 ```
 
 
-## 4. Arbeidsuforhet
+## 4. Arbeidsuførhet
 
 ---
 
@@ -171,7 +171,7 @@ graph TD
 ```
 
 
-## 6. Periode
+## 6. Dato
 
 ```mermaid
 graph TD

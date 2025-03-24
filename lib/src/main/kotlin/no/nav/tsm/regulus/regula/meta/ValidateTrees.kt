@@ -1,4 +1,4 @@
-package no.nav.tsm.regulus.regula.generator
+package no.nav.tsm.regulus.regula.meta
 
 import java.io.File
 

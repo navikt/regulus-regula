@@ -29,7 +29,7 @@ tasks.named<Test>("test") { useJUnitPlatform() }
 tasks.register<JavaExec>("validate-trees") {
     logging.captureStandardOutput(LogLevel.LIFECYCLE)
 
-    mainClass.set("no.nav.tsm.regulus.regula.generator.ValidateTreesKt")
+    mainClass.set("no.nav.tsm.regulus.regula.meta.ValidateTreesKt")
     classpath = sourceSets["main"].runtimeClasspath
     group = "documentation"
     description = "Validate tree implementation structure"
@@ -39,7 +39,7 @@ tasks.register<JavaExec>("validate-trees") {
 
 tasks.register<JavaExec>("generate-mermaid") {
     val output = ByteArrayOutputStream()
-    mainClass.set("no.nav.tsm.regulus.regula.generator.GenerateMermaidKt")
+    mainClass.set("no.nav.tsm.regulus.regula.meta.GenerateMermaidKt")
     classpath = sourceSets["main"].runtimeClasspath
     group = "documentation"
     description = "Generates mermaid diagram source of rules"
