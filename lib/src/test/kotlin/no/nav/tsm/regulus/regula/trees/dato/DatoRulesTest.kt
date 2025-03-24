@@ -1,4 +1,4 @@
-package no.nav.tsm.regulus.regula.trees.periode
+package no.nav.tsm.regulus.regula.trees.dato
 
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -7,7 +7,7 @@ import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.payload.FomTom
 import no.nav.tsm.regulus.regula.trees.assertPath
 
-class PeriodeRulesTest {
+class DatoRulesTest {
 
     @Test
     fun `Alt ok, Status OK`() {
@@ -15,8 +15,8 @@ class PeriodeRulesTest {
         val perioder = listOf(FomTom(fom = LocalDate.now(), tom = LocalDate.now().plusDays(7)))
 
         val (result) =
-            PeriodeRules(
-                    PeriodeRulePayload(
+            DatoRules(
+                    DatoRulePayload(
                         sykmeldingId = "sykmeldingId",
                         perioder = perioder,
                         signaturdato = now,
@@ -28,9 +28,9 @@ class PeriodeRulesTest {
         assertPath(
             result.rulePath,
             listOf(
-                PeriodeRule.FREMDATERT to false,
-                PeriodeRule.TILBAKEDATERT_MER_ENN_3_AR to false,
-                PeriodeRule.TOTAL_VARIGHET_OVER_ETT_AAR to false,
+                DatoRule.FREMDATERT to false,
+                DatoRule.TILBAKEDATERT_MER_ENN_3_AR to false,
+                DatoRule.TOTAL_VARIGHET_OVER_ETT_AAR to false,
             ),
         )
 
@@ -56,8 +56,8 @@ class PeriodeRulesTest {
             listOf(FomTom(fom = LocalDate.now().plusDays(31), tom = LocalDate.now().plusDays(37)))
 
         val (result) =
-            PeriodeRules(
-                    PeriodeRulePayload(
+            DatoRules(
+                    DatoRulePayload(
                         sykmeldingId = "sykmeldingId",
                         perioder = perioder,
                         signaturdato = now,
@@ -66,7 +66,7 @@ class PeriodeRulesTest {
                 .execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
-        assertPath(result.rulePath, listOf(PeriodeRule.FREMDATERT to true))
+        assertPath(result.rulePath, listOf(DatoRule.FREMDATERT to true))
 
         assertEquals(
             mapOf(
@@ -77,7 +77,7 @@ class PeriodeRulesTest {
             result.ruleInputs,
         )
 
-        assertEquals(result.treeResult.ruleOutcome, PeriodeRule.Outcomes.FREMDATERT)
+        assertEquals(result.treeResult.ruleOutcome, DatoRule.Outcomes.FREMDATERT)
     }
 
     @Test
@@ -90,8 +90,8 @@ class PeriodeRulesTest {
             )
 
         val (result) =
-            PeriodeRules(
-                    PeriodeRulePayload(
+            DatoRules(
+                    DatoRulePayload(
                         sykmeldingId = "sykmeldingId",
                         perioder = perioder,
                         signaturdato = now,
@@ -103,9 +103,9 @@ class PeriodeRulesTest {
         assertPath(
             result.rulePath,
             listOf(
-                PeriodeRule.FREMDATERT to false,
-                PeriodeRule.TILBAKEDATERT_MER_ENN_3_AR to false,
-                PeriodeRule.TOTAL_VARIGHET_OVER_ETT_AAR to true,
+                DatoRule.FREMDATERT to false,
+                DatoRule.TILBAKEDATERT_MER_ENN_3_AR to false,
+                DatoRule.TOTAL_VARIGHET_OVER_ETT_AAR to true,
             ),
         )
 
@@ -121,9 +121,6 @@ class PeriodeRulesTest {
             result.ruleInputs,
         )
 
-        assertEquals(
-            result.treeResult.ruleOutcome,
-            PeriodeRule.Outcomes.TOTAL_VARIGHET_OVER_ETT_AAR,
-        )
+        assertEquals(result.treeResult.ruleOutcome, DatoRule.Outcomes.TOTAL_VARIGHET_OVER_ETT_AAR)
     }
 }

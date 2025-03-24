@@ -6,24 +6,23 @@ import no.nav.tsm.regulus.regula.executor.RuleResult
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.executor.UtenJuridisk
 import no.nav.tsm.regulus.regula.trees.arbeidsuforhet.arbeidsuforhetRuleTree
+import no.nav.tsm.regulus.regula.trees.dato.datoRuleTree
 import no.nav.tsm.regulus.regula.trees.hpr.hprRuleTree
-import no.nav.tsm.regulus.regula.trees.legesuspensjon.legeSuspensjonRuleTree
-import no.nav.tsm.regulus.regula.trees.pasientunder13.pasientUnder13RuleTree
-import no.nav.tsm.regulus.regula.trees.periode.periodeRuleTree
-import no.nav.tsm.regulus.regula.trees.periodvalidering.periodLogicRuleTree
+import no.nav.tsm.regulus.regula.trees.legeSuspensjon.legeSuspensjonRuleTree
+import no.nav.tsm.regulus.regula.trees.pasientUnder13.pasientUnder13RuleTree
 import no.nav.tsm.regulus.regula.trees.tilbakedatering.tilbakedateringRuleTree
-import no.nav.tsm.regulus.regula.trees.validation.validationRuleTree
+import no.nav.tsm.regulus.regula.trees.validering.valideringRuleTree
 
 fun main() {
     val ruleTrees =
         listOf(
             "Lege suspensjon" to legeSuspensjonRuleTree,
-            "Validation" to validationRuleTree,
-            "Periode validering" to periodLogicRuleTree,
+            "Validation" to valideringRuleTree,
+            "Periode validering" to no.nav.tsm.regulus.regula.trees.periode.periodeRuleTree,
             "HPR" to hprRuleTree,
             "Arbeidsuforhet" to arbeidsuforhetRuleTree,
             "Pasient under 13" to pasientUnder13RuleTree,
-            "Periode" to periodeRuleTree,
+            "Periode" to datoRuleTree,
             "Tilbakedatering" to tilbakedateringRuleTree,
         )
 

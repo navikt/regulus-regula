@@ -1,4 +1,4 @@
-package no.nav.tsm.regulus.regula.trees.legesuspensjon
+package no.nav.tsm.regulus.regula.trees.legeSuspensjon
 
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor

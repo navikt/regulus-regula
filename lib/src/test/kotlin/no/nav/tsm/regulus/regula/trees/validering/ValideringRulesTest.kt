@@ -1,4 +1,4 @@
-package no.nav.tsm.regulus.regula.trees.validation
+package no.nav.tsm.regulus.regula.trees.validering
 
 import java.time.LocalDate
 import kotlin.test.*
@@ -9,15 +9,15 @@ import no.nav.tsm.regulus.regula.trees.assertPath
 import no.nav.tsm.regulus.regula.trees.debugPath
 import no.nav.tsm.regulus.regula.trees.generatePersonNumber
 
-class ValidationRulesTest {
+class ValideringRulesTest {
     @Test
     fun `Alt ok, Status OK`() {
         val person14Years = LocalDate.now().minusYears(14)
         val pasientFnr = generatePersonNumber(person14Years)
 
         val (result) =
-            ValidationRules(
-                    ValidationRulePayload(
+            ValideringRules(
+                    ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
                         rulesetVersion = "2",
                         perioder = emptyList(),
@@ -34,11 +34,11 @@ class ValidationRulesTest {
         assertPath(
             result.rulePath,
             listOf(
-                ValidationRule.UGYLDIG_REGELSETTVERSJON to false,
-                ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
-                ValidationRule.UGYLDIG_ORGNR_LENGDE to false,
-                ValidationRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR to false,
-                ValidationRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR to false,
+                ValideringRule.UGYLDIG_REGELSETTVERSJON to false,
+                ValideringRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
+                ValideringRule.UGYLDIG_ORGNR_LENGDE to false,
+                ValideringRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR to false,
+                ValideringRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR to false,
             ),
         )
 
@@ -61,8 +61,8 @@ class ValidationRulesTest {
     @Test
     fun `Ugyldig regelsettversjon, Status INVALID`() {
         val (result) =
-            ValidationRules(
-                    ValidationRulePayload(
+            ValideringRules(
+                    ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
                         rulesetVersion = "69",
                         perioder = emptyList(),
@@ -76,13 +76,13 @@ class ValidationRulesTest {
                 .execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
-        assertPath(result.rulePath, listOf(ValidationRule.UGYLDIG_REGELSETTVERSJON to true))
+        assertPath(result.rulePath, listOf(ValideringRule.UGYLDIG_REGELSETTVERSJON to true))
 
         assertEquals(result.ruleInputs, mapOf("rulesetVersion" to "69"))
 
         assertEquals(
             result.treeResult.ruleOutcome,
-            ValidationRule.Outcomes.UGYLDIG_REGELSETTVERSJON,
+            ValideringRule.Outcomes.UGYLDIG_REGELSETTVERSJON,
         )
     }
 
@@ -91,8 +91,8 @@ class ValidationRulesTest {
         val perioderMedFomForDritlengesiden =
             listOf(FomTom(fom = LocalDate.now().minusDays(274), tom = LocalDate.now()))
         val (result) =
-            ValidationRules(
-                    ValidationRulePayload(
+            ValideringRules(
+                    ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
                         rulesetVersion = "2",
                         perioder = perioderMedFomForDritlengesiden,
@@ -111,8 +111,8 @@ class ValidationRulesTest {
         assertPath(
             result.rulePath,
             listOf(
-                ValidationRule.UGYLDIG_REGELSETTVERSJON to false,
-                ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to true,
+                ValideringRule.UGYLDIG_REGELSETTVERSJON to false,
+                ValideringRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to true,
             ),
         )
         assertEquals(
@@ -126,7 +126,7 @@ class ValidationRulesTest {
 
         assertEquals(
             result.treeResult.ruleOutcome,
-            ValidationRule.Outcomes.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39,
+            ValideringRule.Outcomes.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39,
         )
     }
 
@@ -136,8 +136,8 @@ class ValidationRulesTest {
         val pasientFnr = generatePersonNumber(person31Years, false)
 
         val (result) =
-            ValidationRules(
-                    ValidationRulePayload(
+            ValideringRules(
+                    ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
                         rulesetVersion = "2",
                         perioder = emptyList(),
@@ -154,9 +154,9 @@ class ValidationRulesTest {
         assertPath(
             result.rulePath,
             listOf(
-                ValidationRule.UGYLDIG_REGELSETTVERSJON to false,
-                ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
-                ValidationRule.UGYLDIG_ORGNR_LENGDE to true,
+                ValideringRule.UGYLDIG_REGELSETTVERSJON to false,
+                ValideringRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
+                ValideringRule.UGYLDIG_ORGNR_LENGDE to true,
             ),
         )
 
@@ -170,7 +170,7 @@ class ValidationRulesTest {
             ),
         )
 
-        assertEquals(result.treeResult.ruleOutcome, ValidationRule.Outcomes.UGYLDIG_ORGNR_LENGDE)
+        assertEquals(result.treeResult.ruleOutcome, ValideringRule.Outcomes.UGYLDIG_ORGNR_LENGDE)
     }
 
     @Test
@@ -178,8 +178,8 @@ class ValidationRulesTest {
         val pasientFnr = generatePersonNumber(LocalDate.now().minusYears(31), false)
 
         val (result) =
-            ValidationRules(
-                    ValidationRulePayload(
+            ValideringRules(
+                    ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
                         rulesetVersion = "3",
                         perioder = emptyList(),
@@ -196,10 +196,10 @@ class ValidationRulesTest {
         assertPath(
             result.rulePath,
             listOf(
-                ValidationRule.UGYLDIG_REGELSETTVERSJON to false,
-                ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
-                ValidationRule.UGYLDIG_ORGNR_LENGDE to false,
-                ValidationRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR to true,
+                ValideringRule.UGYLDIG_REGELSETTVERSJON to false,
+                ValideringRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
+                ValideringRule.UGYLDIG_ORGNR_LENGDE to false,
+                ValideringRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR to true,
             ),
         )
 
@@ -217,7 +217,7 @@ class ValidationRulesTest {
 
         assertEquals(
             result.treeResult.ruleOutcome,
-            ValidationRule.Outcomes.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR,
+            ValideringRule.Outcomes.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR,
         )
     }
 
@@ -226,8 +226,8 @@ class ValidationRulesTest {
         val pasientFnr = generatePersonNumber(LocalDate.now().minusYears(31), false)
 
         val (result) =
-            ValidationRules(
-                    ValidationRulePayload(
+            ValideringRules(
+                    ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
                         rulesetVersion = "2",
                         perioder = emptyList(),
@@ -244,11 +244,11 @@ class ValidationRulesTest {
         assertPath(
             result.rulePath,
             listOf(
-                ValidationRule.UGYLDIG_REGELSETTVERSJON to false,
-                ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
-                ValidationRule.UGYLDIG_ORGNR_LENGDE to false,
-                ValidationRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR to false,
-                ValidationRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR to true,
+                ValideringRule.UGYLDIG_REGELSETTVERSJON to false,
+                ValideringRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
+                ValideringRule.UGYLDIG_ORGNR_LENGDE to false,
+                ValideringRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR to false,
+                ValideringRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR to true,
             ),
         )
 
@@ -267,7 +267,7 @@ class ValidationRulesTest {
 
         assertEquals(
             result.treeResult.ruleOutcome,
-            ValidationRule.Outcomes.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR,
+            ValideringRule.Outcomes.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR,
         )
     }
 }

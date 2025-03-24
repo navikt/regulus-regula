@@ -1,11 +1,11 @@
-package no.nav.tsm.regulus.regula.trees.pasientunder13
+package no.nav.tsm.regulus.regula.trees.dato
 
-import java.time.LocalDate
+import java.time.LocalDateTime
 import no.nav.tsm.regulus.regula.payload.BasePayload
 import no.nav.tsm.regulus.regula.payload.FomTom
 
-data class PasientUnder13RulePayload(
+data class DatoRulePayload(
     override val sykmeldingId: String,
     val perioder: List<FomTom>,
-    val pasientFodselsdato: LocalDate,
+    val signaturdato: LocalDateTime,
 ) : BasePayload

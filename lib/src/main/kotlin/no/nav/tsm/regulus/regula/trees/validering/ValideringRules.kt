@@ -1,40 +1,40 @@
-package no.nav.tsm.regulus.regula.trees.validation
+package no.nav.tsm.regulus.regula.trees.validering
 
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.utils.daysBetween
 
-class ValidationRules(validationRulePayload: ValidationRulePayload) :
-    TreeExecutor<ValidationRule, ValidationRulePayload>(validationRuleTree, validationRulePayload) {
-    override fun getRule(rule: ValidationRule) = getValidationRule(rule)
+class ValideringRules(validationRulePayload: ValideringRulePayload) :
+    TreeExecutor<ValideringRule, ValideringRulePayload>(valideringRuleTree, validationRulePayload) {
+    override fun getRule(rule: ValideringRule) = getValideringRule(rule)
 }
 
-fun getValidationRule(rules: ValidationRule): ValidationRuleFn =
+fun getValideringRule(rules: ValideringRule): ValideringRuleFn =
     when (rules) {
-        ValidationRule.UGYLDIG_REGELSETTVERSJON -> Rules.ugyldigRegelsettversjon
-        ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 ->
+        ValideringRule.UGYLDIG_REGELSETTVERSJON -> Rules.ugyldigRegelsettversjon
+        ValideringRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 ->
             Rules.manglendeDynamiskesporsmaalversjon2uke39
 
-        ValidationRule.UGYLDIG_ORGNR_LENGDE -> Rules.ugyldingOrgNummerLengde
-        ValidationRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR -> Rules.avsenderSammeSomPasient
-        ValidationRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR -> Rules.behandlerSammeSomPasient
+        ValideringRule.UGYLDIG_ORGNR_LENGDE -> Rules.ugyldingOrgNummerLengde
+        ValideringRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR -> Rules.avsenderSammeSomPasient
+        ValideringRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR -> Rules.behandlerSammeSomPasient
     }
 
-private typealias ValidationRuleFn = (payload: ValidationRulePayload) -> RuleOutput<ValidationRule>
+private typealias ValideringRuleFn = (payload: ValideringRulePayload) -> RuleOutput<ValideringRule>
 
 private val Rules =
     object {
-        val ugyldigRegelsettversjon: ValidationRuleFn = { payload ->
+        val ugyldigRegelsettversjon: ValideringRuleFn = { payload ->
             val rulesetVersion = payload.rulesetVersion
 
             RuleOutput(
                 ruleInputs = mapOf("rulesetVersion" to rulesetVersion),
-                rule = ValidationRule.UGYLDIG_REGELSETTVERSJON,
+                rule = ValideringRule.UGYLDIG_REGELSETTVERSJON,
                 ruleResult = rulesetVersion !in arrayOf(null, "", "1", "2", "3"),
             )
         }
 
-        val manglendeDynamiskesporsmaalversjon2uke39: ValidationRuleFn = { payload ->
+        val manglendeDynamiskesporsmaalversjon2uke39: ValideringRuleFn = { payload ->
             val rulesetVersion = payload.rulesetVersion
             val sykmeldingPerioder = payload.perioder
             val utdypendeOpplysinger = payload.utdypendeOpplysninger
@@ -59,23 +59,23 @@ private val Rules =
                         "sykmeldingPerioder" to sykmeldingPerioder,
                         "utdypendeOpplysninger" to payload.utdypendeOpplysninger,
                     ),
-                rule = ValidationRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39,
+                rule = ValideringRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39,
                 ruleResult = manglendeDynamiskesporsmaalversjon2uke39,
             )
         }
 
-        val ugyldingOrgNummerLengde: ValidationRuleFn = { payload ->
+        val ugyldingOrgNummerLengde: ValideringRuleFn = { payload ->
             val legekontorOrgnr = payload.legekontorOrgnr
             val ugyldingOrgNummerLengde = legekontorOrgnr != null && legekontorOrgnr.length != 9
 
             RuleOutput(
                 ruleInputs = mapOf("legekontorOrgnr" to (legekontorOrgnr ?: "")),
-                rule = ValidationRule.UGYLDIG_ORGNR_LENGDE,
+                rule = ValideringRule.UGYLDIG_ORGNR_LENGDE,
                 ruleResult = ugyldingOrgNummerLengde,
             )
         }
 
-        val avsenderSammeSomPasient: ValidationRuleFn = { payload ->
+        val avsenderSammeSomPasient: ValideringRuleFn = { payload ->
             val avsenderFnr = payload.avsenderFnr
             val pasientIdent = payload.pasientIdent
 
@@ -83,12 +83,12 @@ private val Rules =
 
             RuleOutput(
                 ruleInputs = mapOf("avsenderFnr" to avsenderFnr, "pasientIdent" to pasientIdent),
-                rule = ValidationRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR,
+                rule = ValideringRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR,
                 ruleResult = avsenderSammeSomPasient,
             )
         }
 
-        val behandlerSammeSomPasient: ValidationRuleFn = { payload ->
+        val behandlerSammeSomPasient: ValideringRuleFn = { payload ->
             val behandlerFnr = payload.behandlerFnr
             val pasientFodselsNummer = payload.pasientIdent
 
@@ -97,7 +97,7 @@ private val Rules =
             RuleOutput(
                 ruleInputs =
                     mapOf("behandlerFnr" to behandlerFnr, "pasientIdent" to pasientFodselsNummer),
-                rule = ValidationRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR,
+                rule = ValideringRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR,
                 ruleResult = behandlerSammeSomPasient,
             )
         }

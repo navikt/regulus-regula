@@ -1,4 +1,4 @@
-package no.nav.tsm.regulus.regula.trees.periodvalidering
+package no.nav.tsm.regulus.regula.trees.periode
 
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -8,7 +8,7 @@ import kotlin.test.assertNull
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.trees.assertPath
 
-class PeriodLogicRulesTest {
+class DatoRulesTest {
     @Test
     fun `Alt er ok, Status OK`() {
         val perioder =
@@ -21,24 +21,24 @@ class PeriodLogicRulesTest {
 
         val payload = testPeriodLogicRulePayload(perioder = perioder)
 
-        val (result) = PeriodLogicRules(payload).execute()
+        val (result) = PeriodeRules(payload).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.OK)
         assertPath(
             result.rulePath,
             listOf(
-                PeriodLogicRule.PERIODER_MANGLER to false,
-                PeriodLogicRule.FRADATO_ETTER_TILDATO to false,
-                PeriodLogicRule.OVERLAPPENDE_PERIODER to false,
-                PeriodLogicRule.OPPHOLD_MELLOM_PERIODER to false,
-                PeriodLogicRule.IKKE_DEFINERT_PERIODE to false,
-                PeriodLogicRule.BEHANDLINGSDATO_ETTER_MOTTATTDATO to false,
-                PeriodLogicRule.AVVENTENDE_SYKMELDING_KOMBINERT to false,
-                PeriodLogicRule.MANGLENDE_INNSPILL_TIL_ARBEIDSGIVER to false,
-                PeriodLogicRule.AVVENTENDE_SYKMELDING_OVER_16_DAGER to false,
-                PeriodLogicRule.FOR_MANGE_BEHANDLINGSDAGER_PER_UKE to false,
-                PeriodLogicRule.GRADERT_SYKMELDING_OVER_99_PROSENT to false,
-                PeriodLogicRule.SYKMELDING_MED_BEHANDLINGSDAGER to false,
+                PeriodeRule.PERIODER_MANGLER to false,
+                PeriodeRule.FRADATO_ETTER_TILDATO to false,
+                PeriodeRule.OVERLAPPENDE_PERIODER to false,
+                PeriodeRule.OPPHOLD_MELLOM_PERIODER to false,
+                PeriodeRule.IKKE_DEFINERT_PERIODE to false,
+                PeriodeRule.BEHANDLINGSDATO_ETTER_MOTTATTDATO to false,
+                PeriodeRule.AVVENTENDE_SYKMELDING_KOMBINERT to false,
+                PeriodeRule.MANGLENDE_INNSPILL_TIL_ARBEIDSGIVER to false,
+                PeriodeRule.AVVENTENDE_SYKMELDING_OVER_16_DAGER to false,
+                PeriodeRule.FOR_MANGE_BEHANDLINGSDAGER_PER_UKE to false,
+                PeriodeRule.GRADERT_SYKMELDING_OVER_99_PROSENT to false,
+                PeriodeRule.SYKMELDING_MED_BEHANDLINGSDAGER to false,
             ),
         )
         assertEquals(
@@ -60,14 +60,14 @@ class PeriodLogicRulesTest {
     @Test
     fun `Periode mangler, Status INVALID`() {
         val payload = testPeriodLogicRulePayload(perioder = listOf())
-        val (result) = PeriodLogicRules(payload).execute()
+        val (result) = PeriodeRules(payload).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
-        assertPath(result.rulePath, listOf(PeriodLogicRule.PERIODER_MANGLER to true))
+        assertPath(result.rulePath, listOf(PeriodeRule.PERIODER_MANGLER to true))
 
         assertEquals(result.ruleInputs, mapOf("perioder" to emptyList<Periode>()))
 
-        assertEquals(result.treeResult.ruleOutcome, PeriodLogicRule.Outcomes.PERIODER_MANGLER)
+        assertEquals(result.treeResult.ruleOutcome, PeriodeRule.Outcomes.PERIODER_MANGLER)
     }
 
     @Test
@@ -82,20 +82,17 @@ class PeriodLogicRulesTest {
 
         val payload = testPeriodLogicRulePayload(perioder = perioder)
 
-        val (result) = PeriodLogicRules(payload).execute()
+        val (result) = PeriodeRules(payload).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
             result.rulePath,
-            listOf(
-                PeriodLogicRule.PERIODER_MANGLER to false,
-                PeriodLogicRule.FRADATO_ETTER_TILDATO to true,
-            ),
+            listOf(PeriodeRule.PERIODER_MANGLER to false, PeriodeRule.FRADATO_ETTER_TILDATO to true),
         )
 
         assertEquals(result.ruleInputs, mapOf("perioder" to perioder))
 
-        assertEquals(result.treeResult.ruleOutcome, PeriodLogicRule.Outcomes.FRADATO_ETTER_TILDATO)
+        assertEquals(result.treeResult.ruleOutcome, PeriodeRule.Outcomes.FRADATO_ETTER_TILDATO)
     }
 
     @Test
@@ -114,21 +111,21 @@ class PeriodLogicRulesTest {
 
         val payload = testPeriodLogicRulePayload(perioder = perioder)
 
-        val (result) = PeriodLogicRules(payload).execute()
+        val (result) = PeriodeRules(payload).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
             result.rulePath,
             listOf(
-                PeriodLogicRule.PERIODER_MANGLER to false,
-                PeriodLogicRule.FRADATO_ETTER_TILDATO to false,
-                PeriodLogicRule.OVERLAPPENDE_PERIODER to true,
+                PeriodeRule.PERIODER_MANGLER to false,
+                PeriodeRule.FRADATO_ETTER_TILDATO to false,
+                PeriodeRule.OVERLAPPENDE_PERIODER to true,
             ),
         )
 
         assertEquals(result.ruleInputs, mapOf("perioder" to perioder))
 
-        assertEquals(result.treeResult.ruleOutcome, PeriodLogicRule.Outcomes.OVERLAPPENDE_PERIODER)
+        assertEquals(result.treeResult.ruleOutcome, PeriodeRule.Outcomes.OVERLAPPENDE_PERIODER)
     }
 
     @Test
@@ -155,25 +152,22 @@ class PeriodLogicRulesTest {
 
         val payload = testPeriodLogicRulePayload(perioder = perioder)
 
-        val (result) = PeriodLogicRules(payload).execute()
+        val (result) = PeriodeRules(payload).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
             result.rulePath,
             listOf(
-                PeriodLogicRule.PERIODER_MANGLER to false,
-                PeriodLogicRule.FRADATO_ETTER_TILDATO to false,
-                PeriodLogicRule.OVERLAPPENDE_PERIODER to false,
-                PeriodLogicRule.OPPHOLD_MELLOM_PERIODER to true,
+                PeriodeRule.PERIODER_MANGLER to false,
+                PeriodeRule.FRADATO_ETTER_TILDATO to false,
+                PeriodeRule.OVERLAPPENDE_PERIODER to false,
+                PeriodeRule.OPPHOLD_MELLOM_PERIODER to true,
             ),
         )
 
         assertEquals(result.ruleInputs, mapOf("perioder" to perioder))
 
-        assertEquals(
-            result.treeResult.ruleOutcome,
-            PeriodLogicRule.Outcomes.OPPHOLD_MELLOM_PERIODER,
-        )
+        assertEquals(result.treeResult.ruleOutcome, PeriodeRule.Outcomes.OPPHOLD_MELLOM_PERIODER)
     }
 
     @Test
@@ -193,23 +187,23 @@ class PeriodLogicRulesTest {
 
         val payload = testPeriodLogicRulePayload(perioder = perioder)
 
-        val (result) = PeriodLogicRules(payload).execute()
+        val (result) = PeriodeRules(payload).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
             result.rulePath,
             listOf(
-                PeriodLogicRule.PERIODER_MANGLER to false,
-                PeriodLogicRule.FRADATO_ETTER_TILDATO to false,
-                PeriodLogicRule.OVERLAPPENDE_PERIODER to false,
-                PeriodLogicRule.OPPHOLD_MELLOM_PERIODER to false,
-                PeriodLogicRule.IKKE_DEFINERT_PERIODE to true,
+                PeriodeRule.PERIODER_MANGLER to false,
+                PeriodeRule.FRADATO_ETTER_TILDATO to false,
+                PeriodeRule.OVERLAPPENDE_PERIODER to false,
+                PeriodeRule.OPPHOLD_MELLOM_PERIODER to false,
+                PeriodeRule.IKKE_DEFINERT_PERIODE to true,
             ),
         )
 
         assertEquals(result.ruleInputs, mapOf("perioder" to perioder))
 
-        assertEquals(result.treeResult.ruleOutcome, PeriodLogicRule.Outcomes.IKKE_DEFINERT_PERIODE)
+        assertEquals(result.treeResult.ruleOutcome, PeriodeRule.Outcomes.IKKE_DEFINERT_PERIODE)
     }
 
     @Test
@@ -229,18 +223,18 @@ class PeriodLogicRulesTest {
                     ),
             )
 
-        val (result) = PeriodLogicRules(payload).execute()
+        val (result) = PeriodeRules(payload).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
             result.rulePath,
             listOf(
-                PeriodLogicRule.PERIODER_MANGLER to false,
-                PeriodLogicRule.FRADATO_ETTER_TILDATO to false,
-                PeriodLogicRule.OVERLAPPENDE_PERIODER to false,
-                PeriodLogicRule.OPPHOLD_MELLOM_PERIODER to false,
-                PeriodLogicRule.IKKE_DEFINERT_PERIODE to false,
-                PeriodLogicRule.BEHANDLINGSDATO_ETTER_MOTTATTDATO to true,
+                PeriodeRule.PERIODER_MANGLER to false,
+                PeriodeRule.FRADATO_ETTER_TILDATO to false,
+                PeriodeRule.OVERLAPPENDE_PERIODER to false,
+                PeriodeRule.OPPHOLD_MELLOM_PERIODER to false,
+                PeriodeRule.IKKE_DEFINERT_PERIODE to false,
+                PeriodeRule.BEHANDLINGSDATO_ETTER_MOTTATTDATO to true,
             ),
         )
 
@@ -251,7 +245,7 @@ class PeriodLogicRulesTest {
 
         assertEquals(
             result.treeResult.ruleOutcome,
-            PeriodLogicRule.Outcomes.BEHANDLINGSDATO_ETTER_MOTTATTDATO,
+            PeriodeRule.Outcomes.BEHANDLINGSDATO_ETTER_MOTTATTDATO,
         )
     }
 
@@ -272,19 +266,19 @@ class PeriodLogicRulesTest {
 
         val payload = testPeriodLogicRulePayload(perioder = perioder)
 
-        val (result) = PeriodLogicRules(payload).execute()
+        val (result) = PeriodeRules(payload).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
             result.rulePath,
             listOf(
-                PeriodLogicRule.PERIODER_MANGLER to false,
-                PeriodLogicRule.FRADATO_ETTER_TILDATO to false,
-                PeriodLogicRule.OVERLAPPENDE_PERIODER to false,
-                PeriodLogicRule.OPPHOLD_MELLOM_PERIODER to false,
-                PeriodLogicRule.IKKE_DEFINERT_PERIODE to false,
-                PeriodLogicRule.BEHANDLINGSDATO_ETTER_MOTTATTDATO to false,
-                PeriodLogicRule.AVVENTENDE_SYKMELDING_KOMBINERT to true,
+                PeriodeRule.PERIODER_MANGLER to false,
+                PeriodeRule.FRADATO_ETTER_TILDATO to false,
+                PeriodeRule.OVERLAPPENDE_PERIODER to false,
+                PeriodeRule.OPPHOLD_MELLOM_PERIODER to false,
+                PeriodeRule.IKKE_DEFINERT_PERIODE to false,
+                PeriodeRule.BEHANDLINGSDATO_ETTER_MOTTATTDATO to false,
+                PeriodeRule.AVVENTENDE_SYKMELDING_KOMBINERT to true,
             ),
         )
 
@@ -299,7 +293,7 @@ class PeriodLogicRulesTest {
 
         assertEquals(
             result.treeResult.ruleOutcome,
-            PeriodLogicRule.Outcomes.AVVENTENDE_SYKMELDING_KOMBINERT,
+            PeriodeRule.Outcomes.AVVENTENDE_SYKMELDING_KOMBINERT,
         )
     }
 
@@ -316,20 +310,20 @@ class PeriodLogicRulesTest {
 
         val payload = testPeriodLogicRulePayload(perioder = perioder)
 
-        val (result) = PeriodLogicRules(payload).execute()
+        val (result) = PeriodeRules(payload).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
             result.rulePath,
             listOf(
-                PeriodLogicRule.PERIODER_MANGLER to false,
-                PeriodLogicRule.FRADATO_ETTER_TILDATO to false,
-                PeriodLogicRule.OVERLAPPENDE_PERIODER to false,
-                PeriodLogicRule.OPPHOLD_MELLOM_PERIODER to false,
-                PeriodLogicRule.IKKE_DEFINERT_PERIODE to false,
-                PeriodLogicRule.BEHANDLINGSDATO_ETTER_MOTTATTDATO to false,
-                PeriodLogicRule.AVVENTENDE_SYKMELDING_KOMBINERT to false,
-                PeriodLogicRule.MANGLENDE_INNSPILL_TIL_ARBEIDSGIVER to true,
+                PeriodeRule.PERIODER_MANGLER to false,
+                PeriodeRule.FRADATO_ETTER_TILDATO to false,
+                PeriodeRule.OVERLAPPENDE_PERIODER to false,
+                PeriodeRule.OPPHOLD_MELLOM_PERIODER to false,
+                PeriodeRule.IKKE_DEFINERT_PERIODE to false,
+                PeriodeRule.BEHANDLINGSDATO_ETTER_MOTTATTDATO to false,
+                PeriodeRule.AVVENTENDE_SYKMELDING_KOMBINERT to false,
+                PeriodeRule.MANGLENDE_INNSPILL_TIL_ARBEIDSGIVER to true,
             ),
         )
 
@@ -345,7 +339,7 @@ class PeriodLogicRulesTest {
 
         assertEquals(
             result.treeResult.ruleOutcome,
-            PeriodLogicRule.Outcomes.MANGLENDE_INNSPILL_TIL_ARBEIDSGIVER,
+            PeriodeRule.Outcomes.MANGLENDE_INNSPILL_TIL_ARBEIDSGIVER,
         )
     }
 
@@ -361,21 +355,21 @@ class PeriodLogicRulesTest {
             )
         val payload = testPeriodLogicRulePayload(perioder = perioder)
 
-        val (result) = PeriodLogicRules(payload).execute()
+        val (result) = PeriodeRules(payload).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
             result.rulePath,
             listOf(
-                PeriodLogicRule.PERIODER_MANGLER to false,
-                PeriodLogicRule.FRADATO_ETTER_TILDATO to false,
-                PeriodLogicRule.OVERLAPPENDE_PERIODER to false,
-                PeriodLogicRule.OPPHOLD_MELLOM_PERIODER to false,
-                PeriodLogicRule.IKKE_DEFINERT_PERIODE to false,
-                PeriodLogicRule.BEHANDLINGSDATO_ETTER_MOTTATTDATO to false,
-                PeriodLogicRule.AVVENTENDE_SYKMELDING_KOMBINERT to false,
-                PeriodLogicRule.MANGLENDE_INNSPILL_TIL_ARBEIDSGIVER to false,
-                PeriodLogicRule.AVVENTENDE_SYKMELDING_OVER_16_DAGER to true,
+                PeriodeRule.PERIODER_MANGLER to false,
+                PeriodeRule.FRADATO_ETTER_TILDATO to false,
+                PeriodeRule.OVERLAPPENDE_PERIODER to false,
+                PeriodeRule.OPPHOLD_MELLOM_PERIODER to false,
+                PeriodeRule.IKKE_DEFINERT_PERIODE to false,
+                PeriodeRule.BEHANDLINGSDATO_ETTER_MOTTATTDATO to false,
+                PeriodeRule.AVVENTENDE_SYKMELDING_KOMBINERT to false,
+                PeriodeRule.MANGLENDE_INNSPILL_TIL_ARBEIDSGIVER to false,
+                PeriodeRule.AVVENTENDE_SYKMELDING_OVER_16_DAGER to true,
             ),
         )
 
@@ -392,7 +386,7 @@ class PeriodLogicRulesTest {
 
         assertEquals(
             result.treeResult.ruleOutcome,
-            PeriodLogicRule.Outcomes.AVVENTENDE_SYKMELDING_OVER_16_DAGER,
+            PeriodeRule.Outcomes.AVVENTENDE_SYKMELDING_OVER_16_DAGER,
         )
     }
 
@@ -409,22 +403,22 @@ class PeriodLogicRulesTest {
 
         val payload = testPeriodLogicRulePayload(perioder = perioder)
 
-        val (result) = PeriodLogicRules(payload).execute()
+        val (result) = PeriodeRules(payload).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
             result.rulePath,
             listOf(
-                PeriodLogicRule.PERIODER_MANGLER to false,
-                PeriodLogicRule.FRADATO_ETTER_TILDATO to false,
-                PeriodLogicRule.OVERLAPPENDE_PERIODER to false,
-                PeriodLogicRule.OPPHOLD_MELLOM_PERIODER to false,
-                PeriodLogicRule.IKKE_DEFINERT_PERIODE to false,
-                PeriodLogicRule.BEHANDLINGSDATO_ETTER_MOTTATTDATO to false,
-                PeriodLogicRule.AVVENTENDE_SYKMELDING_KOMBINERT to false,
-                PeriodLogicRule.MANGLENDE_INNSPILL_TIL_ARBEIDSGIVER to false,
-                PeriodLogicRule.AVVENTENDE_SYKMELDING_OVER_16_DAGER to false,
-                PeriodLogicRule.FOR_MANGE_BEHANDLINGSDAGER_PER_UKE to true,
+                PeriodeRule.PERIODER_MANGLER to false,
+                PeriodeRule.FRADATO_ETTER_TILDATO to false,
+                PeriodeRule.OVERLAPPENDE_PERIODER to false,
+                PeriodeRule.OPPHOLD_MELLOM_PERIODER to false,
+                PeriodeRule.IKKE_DEFINERT_PERIODE to false,
+                PeriodeRule.BEHANDLINGSDATO_ETTER_MOTTATTDATO to false,
+                PeriodeRule.AVVENTENDE_SYKMELDING_KOMBINERT to false,
+                PeriodeRule.MANGLENDE_INNSPILL_TIL_ARBEIDSGIVER to false,
+                PeriodeRule.AVVENTENDE_SYKMELDING_OVER_16_DAGER to false,
+                PeriodeRule.FOR_MANGE_BEHANDLINGSDAGER_PER_UKE to true,
             ),
         )
 
@@ -442,7 +436,7 @@ class PeriodLogicRulesTest {
 
         assertEquals(
             result.treeResult.ruleOutcome,
-            PeriodLogicRule.Outcomes.FOR_MANGE_BEHANDLINGSDAGER_PER_UKE,
+            PeriodeRule.Outcomes.FOR_MANGE_BEHANDLINGSDAGER_PER_UKE,
         )
     }
 
@@ -453,23 +447,23 @@ class PeriodLogicRulesTest {
 
         val payload = testPeriodLogicRulePayload(perioder = perioder)
 
-        val (result) = PeriodLogicRules(payload).execute()
+        val (result) = PeriodeRules(payload).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
             result.rulePath,
             listOf(
-                PeriodLogicRule.PERIODER_MANGLER to false,
-                PeriodLogicRule.FRADATO_ETTER_TILDATO to false,
-                PeriodLogicRule.OVERLAPPENDE_PERIODER to false,
-                PeriodLogicRule.OPPHOLD_MELLOM_PERIODER to false,
-                PeriodLogicRule.IKKE_DEFINERT_PERIODE to false,
-                PeriodLogicRule.BEHANDLINGSDATO_ETTER_MOTTATTDATO to false,
-                PeriodLogicRule.AVVENTENDE_SYKMELDING_KOMBINERT to false,
-                PeriodLogicRule.MANGLENDE_INNSPILL_TIL_ARBEIDSGIVER to false,
-                PeriodLogicRule.AVVENTENDE_SYKMELDING_OVER_16_DAGER to false,
-                PeriodLogicRule.FOR_MANGE_BEHANDLINGSDAGER_PER_UKE to false,
-                PeriodLogicRule.GRADERT_SYKMELDING_OVER_99_PROSENT to true,
+                PeriodeRule.PERIODER_MANGLER to false,
+                PeriodeRule.FRADATO_ETTER_TILDATO to false,
+                PeriodeRule.OVERLAPPENDE_PERIODER to false,
+                PeriodeRule.OPPHOLD_MELLOM_PERIODER to false,
+                PeriodeRule.IKKE_DEFINERT_PERIODE to false,
+                PeriodeRule.BEHANDLINGSDATO_ETTER_MOTTATTDATO to false,
+                PeriodeRule.AVVENTENDE_SYKMELDING_KOMBINERT to false,
+                PeriodeRule.MANGLENDE_INNSPILL_TIL_ARBEIDSGIVER to false,
+                PeriodeRule.AVVENTENDE_SYKMELDING_OVER_16_DAGER to false,
+                PeriodeRule.FOR_MANGE_BEHANDLINGSDAGER_PER_UKE to false,
+                PeriodeRule.GRADERT_SYKMELDING_OVER_99_PROSENT to true,
             ),
         )
 
@@ -488,7 +482,7 @@ class PeriodLogicRulesTest {
 
         assertEquals(
             result.treeResult.ruleOutcome,
-            PeriodLogicRule.Outcomes.GRADERT_SYKMELDING_OVER_99_PROSENT,
+            PeriodeRule.Outcomes.GRADERT_SYKMELDING_OVER_99_PROSENT,
         )
     }
 
@@ -505,24 +499,24 @@ class PeriodLogicRulesTest {
 
         val payload = testPeriodLogicRulePayload(perioder = perioder)
 
-        val (result) = PeriodLogicRules(payload).execute()
+        val (result) = PeriodeRules(payload).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
         assertPath(
             result.rulePath,
             listOf(
-                PeriodLogicRule.PERIODER_MANGLER to false,
-                PeriodLogicRule.FRADATO_ETTER_TILDATO to false,
-                PeriodLogicRule.OVERLAPPENDE_PERIODER to false,
-                PeriodLogicRule.OPPHOLD_MELLOM_PERIODER to false,
-                PeriodLogicRule.IKKE_DEFINERT_PERIODE to false,
-                PeriodLogicRule.BEHANDLINGSDATO_ETTER_MOTTATTDATO to false,
-                PeriodLogicRule.AVVENTENDE_SYKMELDING_KOMBINERT to false,
-                PeriodLogicRule.MANGLENDE_INNSPILL_TIL_ARBEIDSGIVER to false,
-                PeriodLogicRule.AVVENTENDE_SYKMELDING_OVER_16_DAGER to false,
-                PeriodLogicRule.FOR_MANGE_BEHANDLINGSDAGER_PER_UKE to false,
-                PeriodLogicRule.GRADERT_SYKMELDING_OVER_99_PROSENT to false,
-                PeriodLogicRule.SYKMELDING_MED_BEHANDLINGSDAGER to true,
+                PeriodeRule.PERIODER_MANGLER to false,
+                PeriodeRule.FRADATO_ETTER_TILDATO to false,
+                PeriodeRule.OVERLAPPENDE_PERIODER to false,
+                PeriodeRule.OPPHOLD_MELLOM_PERIODER to false,
+                PeriodeRule.IKKE_DEFINERT_PERIODE to false,
+                PeriodeRule.BEHANDLINGSDATO_ETTER_MOTTATTDATO to false,
+                PeriodeRule.AVVENTENDE_SYKMELDING_KOMBINERT to false,
+                PeriodeRule.MANGLENDE_INNSPILL_TIL_ARBEIDSGIVER to false,
+                PeriodeRule.AVVENTENDE_SYKMELDING_OVER_16_DAGER to false,
+                PeriodeRule.FOR_MANGE_BEHANDLINGSDAGER_PER_UKE to false,
+                PeriodeRule.GRADERT_SYKMELDING_OVER_99_PROSENT to false,
+                PeriodeRule.SYKMELDING_MED_BEHANDLINGSDAGER to true,
             ),
         )
 
@@ -542,7 +536,7 @@ class PeriodLogicRulesTest {
 
         assertEquals(
             result.treeResult.ruleOutcome,
-            PeriodLogicRule.Outcomes.SYKMELDING_MED_BEHANDLINGSDAGER,
+            PeriodeRule.Outcomes.SYKMELDING_MED_BEHANDLINGSDAGER,
         )
     }
 }

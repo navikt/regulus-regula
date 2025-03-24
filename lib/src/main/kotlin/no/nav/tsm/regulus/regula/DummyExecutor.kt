@@ -6,21 +6,21 @@ import no.nav.tsm.regulus.regula.executor.RuleExecutionResult
 import no.nav.tsm.regulus.regula.executor.runRules
 import no.nav.tsm.regulus.regula.trees.arbeidsuforhet.ArbeidsuforhetRulePayload
 import no.nav.tsm.regulus.regula.trees.arbeidsuforhet.ArbeidsuforhetRules
+import no.nav.tsm.regulus.regula.trees.dato.DatoRulePayload
+import no.nav.tsm.regulus.regula.trees.dato.DatoRules
 import no.nav.tsm.regulus.regula.trees.hpr.Behandler
 import no.nav.tsm.regulus.regula.trees.hpr.HprRulePayload
 import no.nav.tsm.regulus.regula.trees.hpr.HprRules
-import no.nav.tsm.regulus.regula.trees.legesuspensjon.LegeSuspensjonRulePayload
-import no.nav.tsm.regulus.regula.trees.legesuspensjon.LegeSuspensjonRules
-import no.nav.tsm.regulus.regula.trees.pasientunder13.PasientUnder13RulePayload
-import no.nav.tsm.regulus.regula.trees.pasientunder13.PasientUnder13Rules
+import no.nav.tsm.regulus.regula.trees.legeSuspensjon.LegeSuspensjonRulePayload
+import no.nav.tsm.regulus.regula.trees.legeSuspensjon.LegeSuspensjonRules
+import no.nav.tsm.regulus.regula.trees.pasientUnder13.PasientUnder13RulePayload
+import no.nav.tsm.regulus.regula.trees.pasientUnder13.PasientUnder13Rules
 import no.nav.tsm.regulus.regula.trees.periode.PeriodeRulePayload
 import no.nav.tsm.regulus.regula.trees.periode.PeriodeRules
-import no.nav.tsm.regulus.regula.trees.periodvalidering.PeriodLogicRulePayload
-import no.nav.tsm.regulus.regula.trees.periodvalidering.PeriodLogicRules
 import no.nav.tsm.regulus.regula.trees.tilbakedatering.TilbakedateringRulePayload
 import no.nav.tsm.regulus.regula.trees.tilbakedatering.TilbakedateringRules
-import no.nav.tsm.regulus.regula.trees.validation.ValidationRulePayload
-import no.nav.tsm.regulus.regula.trees.validation.ValidationRules
+import no.nav.tsm.regulus.regula.trees.validering.ValideringRulePayload
+import no.nav.tsm.regulus.regula.trees.validering.ValideringRules
 
 fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
     // Dummy rule sequence for testing, TODO is to create an lib API that exposes this to consumers
@@ -29,8 +29,8 @@ fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
     val ruleSequence =
         sequenceOf(
             LegeSuspensjonRules(LegeSuspensjonRulePayload(sykmeldingId, false)),
-            ValidationRules(
-                ValidationRulePayload(
+            ValideringRules(
+                ValideringRulePayload(
                     sykmeldingId,
                     rulesetVersion = "2",
                     perioder = emptyList(),
@@ -41,8 +41,8 @@ fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
                     utdypendeOpplysninger = emptyMap(),
                 )
             ),
-            PeriodLogicRules(
-                PeriodLogicRulePayload(
+            PeriodeRules(
+                PeriodeRulePayload(
                     sykmeldingId,
                     perioder = emptyList(),
                     behandletTidspunkt = LocalDateTime.now(),
@@ -73,8 +73,8 @@ fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
                     pasientFodselsdato = LocalDateTime.now().toLocalDate(),
                 )
             ),
-            PeriodeRules(
-                PeriodeRulePayload(
+            DatoRules(
+                DatoRulePayload(
                     sykmeldingId = sykmeldingId,
                     perioder = emptyList(),
                     signaturdato = LocalDateTime.now(),

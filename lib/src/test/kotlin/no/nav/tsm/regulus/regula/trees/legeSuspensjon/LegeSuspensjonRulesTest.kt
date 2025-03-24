@@ -1,4 +1,4 @@
-package no.nav.tsm.regulus.regula.trees.legesuspensjon
+package no.nav.tsm.regulus.regula.trees.legeSuspensjon
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

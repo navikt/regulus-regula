@@ -1,9 +1,9 @@
-package no.nav.tsm.regulus.regula.trees.validation
+package no.nav.tsm.regulus.regula.trees.validering
 
 import no.nav.tsm.regulus.regula.payload.BasePayload
 import no.nav.tsm.regulus.regula.payload.FomTom
 
-data class ValidationRulePayload(
+data class ValideringRulePayload(
     override val sykmeldingId: String,
     val rulesetVersion: String,
     val perioder: List<FomTom>,

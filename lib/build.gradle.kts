@@ -33,6 +33,8 @@ tasks.register<JavaExec>("validate-trees") {
     classpath = sourceSets["main"].runtimeClasspath
     group = "documentation"
     description = "Validate tree implementation structure"
+
+    environment("ONLY_ERRORS", true)
 }
 
 tasks.register<JavaExec>("generate-mermaid") {

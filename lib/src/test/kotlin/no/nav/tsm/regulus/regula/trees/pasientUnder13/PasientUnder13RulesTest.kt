@@ -1,4 +1,4 @@
-package no.nav.tsm.regulus.regula.trees.pasientunder13
+package no.nav.tsm.regulus.regula.trees.pasientUnder13
 
 import java.time.LocalDate
 import kotlin.test.Test

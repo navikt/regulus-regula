@@ -1,4 +1,4 @@
-package no.nav.tsm.regulus.regula.trees.periodvalidering
+package no.nav.tsm.regulus.regula.trees.periode
 
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -67,7 +67,7 @@ fun testPeriodLogicRulePayload(
     behandletTidspunkt: LocalDateTime = LocalDateTime.now(),
     receivedDate: LocalDateTime = LocalDateTime.now(),
 ) =
-    PeriodLogicRulePayload(
+    PeriodeRulePayload(
         sykmeldingId = "sykmeldingId",
         perioder = perioder,
         behandletTidspunkt = behandletTidspunkt,
