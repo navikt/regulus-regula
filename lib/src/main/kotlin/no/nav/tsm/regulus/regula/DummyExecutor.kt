@@ -1,12 +1,9 @@
 package no.nav.tsm.regulus.regula
 
 import java.time.LocalDateTime
-import no.nav.tsm.regulus.regula.dsl.TreeOutput
 import no.nav.tsm.regulus.regula.dsl.printRulePath
-import no.nav.tsm.regulus.regula.executor.Juridisk
-import no.nav.tsm.regulus.regula.executor.RuleResult
-import no.nav.tsm.regulus.regula.executor.RuleStatus
-import no.nav.tsm.regulus.regula.executor.TreeExecutor
+import no.nav.tsm.regulus.regula.executor.RuleExecutionResult
+import no.nav.tsm.regulus.regula.executor.runRules
 import no.nav.tsm.regulus.regula.trees.arbeidsuforhet.ArbeidsuforhetRulePayload
 import no.nav.tsm.regulus.regula.trees.arbeidsuforhet.ArbeidsuforhetRules
 import no.nav.tsm.regulus.regula.trees.hpr.Behandler
@@ -24,8 +21,6 @@ import no.nav.tsm.regulus.regula.trees.tilbakedatering.TilbakedateringRulePayloa
 import no.nav.tsm.regulus.regula.trees.tilbakedatering.TilbakedateringRules
 import no.nav.tsm.regulus.regula.trees.validation.ValidationRulePayload
 import no.nav.tsm.regulus.regula.trees.validation.ValidationRules
-
-typealias RuleExecutionResult = List<Pair<TreeOutput<*, RuleResult>, Juridisk>>
 
 fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
     // Dummy rule sequence for testing, TODO is to create an lib API that exposes this to consumers
@@ -103,25 +98,11 @@ fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
     return runRules(ruleSequence)
 }
 
-private fun runRules(sequence: Sequence<TreeExecutor<*, *>>): RuleExecutionResult {
-    var lastStatus = RuleStatus.OK
-    val results =
-        sequence
-            .map { it.execute() }
-            .takeWhile {
-                if (lastStatus == RuleStatus.OK) {
-                    lastStatus = it.first.treeResult.status
-                    true
-                } else {
-                    false
-                }
-            }
-    return results.toList()
-}
-
 // TODO: Only for dev
 fun main() {
     val results = runSykmeldingRules("123")
+
+    println("RESULTS: ${results.size}")
 
     results.forEach { println(it.first.printRulePath()) }
 }
