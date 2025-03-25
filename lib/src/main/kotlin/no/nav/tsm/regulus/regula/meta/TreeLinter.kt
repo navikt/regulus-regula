@@ -13,46 +13,57 @@ fun main() {
     for (folder in folders) {
         val folderFiles = getFilesInFolder(folder)
         val treeName = folder.camelToPascal()
-
-        output(null, "Tree ${treeName.green()} (from /$folder)")
-
         val expectedFiles = getExpectedFiles(treeName, folderFiles)
 
+        // Execute all rules first
+        val ruleDefinitionResult = verifyExpectedRuleDefinitionsFileStructure(folder, treeName)
+        val payloadResult = verifyExpectedRulePayloadFileStructure(folder, treeName)
+        val ruleTreeResult = verifyExpectedRuleTreeFileStructure(folder, treeName)
+        val rulesResult = verifyExpectedRulesFileStructure(folder, treeName)
+
+        val thisTreeErrors =
+            ruleDefinitionResult.errorCount() +
+                (if (payloadResult) 0 else 1) +
+                ruleTreeResult.errorCount() +
+                rulesResult.errorCount()
+
+        if (thisTreeErrors == 0) {
+            output(null, " ${"✅".green()} Tree ${treeName.green()} (from /$folder) ${"OK".green()}")
+        } else {
+            output(
+                null,
+                " ${"❌".red()} Tree ${treeName.green()} (from /$folder) has ${"$thisTreeErrors errors".red()}",
+            )
+        }
+
         val ruleDefinitionsFileName = "${treeName}RuleDefinitions.kt"
-        output(expectedFiles.ruleDefinitions, ruleDefinitionsFileName)
-        val ruleDefinitions = verifyExpectedRuleDefinitionsFileStructure(folder, treeName)
-        output(ruleDefinitions.hasEnum, "Has enum ${treeName}Rule", level = 2)
-        output(ruleDefinitions.implementsOutcome, "Implements RuleOutcome", level = 2)
-        output(ruleDefinitions.hasOutcomesEnum, "Has enum Outcomes", level = 2)
+        output(
+            expectedFiles.ruleDefinitions && ruleDefinitionResult.errorCount() == 0,
+            ruleDefinitionsFileName,
+        )
+        output(ruleDefinitionResult.hasEnum, "Has enum ${treeName}Rule", level = 2)
+        output(ruleDefinitionResult.implementsOutcome, "Implements RuleOutcome", level = 2)
+        output(ruleDefinitionResult.hasOutcomesEnum, "Has enum Outcomes", level = 2)
 
-        totalErrors += ruleDefinitions.errorCount()
+        output(expectedFiles.rulePayload && payloadResult, "${treeName}RulePayload.kt")
+        output(payloadResult, "Has data class ${treeName}RulePayload", level = 2)
 
-        val payload = verifyExpectedRulePayloadFileStructure(folder, treeName)
-        output(expectedFiles.rulePayload, "${treeName}RulePayload.kt")
-        output(payload, "Has data class ${treeName}RulePayload", level = 2)
-
-        totalErrors += if (payload) 0 else 1
-
-        output(expectedFiles.ruleTree, "${treeName}RuleTree.kt")
-        val ruleTree = verifyExpectedRuleTreeFileStructure(folder, treeName)
-        output(ruleTree.correctName, "Has val ${treeName}RuleTree = ...", level = 2)
-        if (ruleTree.noOtherClassOrFun != null) {
+        output(expectedFiles.ruleTree && ruleTreeResult.errorCount() == 0, "${treeName}RuleTree.kt")
+        output(ruleTreeResult.correctName, "Has val ${treeName}RuleTree = ...", level = 2)
+        if (ruleTreeResult.noOtherClassOrFun != null) {
             output(false, "No other classes or functions in file:", level = 2)
-            output(false, ruleTree.noOtherClassOrFun, level = 3)
+            output(false, ruleTreeResult.noOtherClassOrFun, level = 3)
         } else {
             output(true, "No other classes or functions in file", level = 2)
         }
 
-        totalErrors += ruleTree.errorCount()
+        output(expectedFiles.rules && rulesResult.errorCount() == 0, "${treeName}Rules.kt")
+        output(rulesResult.correctName, "Has class ${treeName}Rules", level = 2)
+        output(rulesResult.hasExecutor, "Has implemented TreeExecutor abstract class", level = 2)
+        output(rulesResult.hasRulesObject, "Has private val Rules = ...", level = 2)
+        output(rulesResult.hasRuleFnAlias, "Has private typealias ${treeName}RuleFn", level = 2)
 
-        output(expectedFiles.rules, "${treeName}Rules.kt")
-        val rules = verifyExpectedRulesFileStructure(folder, treeName)
-        output(rules.correctName, "Has class ${treeName}Rules", level = 2)
-        output(rules.hasExecutor, "Has implemented TreeExecutor abstract class", level = 2)
-        output(rules.hasRulesObject, "Has private val Rules = ...", level = 2)
-        output(rules.hasRuleFnAlias, "Has private typealias ${treeName}RuleFn", level = 2)
-
-        totalErrors += rules.errorCount()
+        totalErrors += thisTreeErrors
     }
 
     if (totalErrors > 0) {

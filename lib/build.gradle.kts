@@ -26,10 +26,10 @@ spotless { kotlin { ktfmt("0.54").kotlinlangStyle() } }
 
 tasks.named<Test>("test") { useJUnitPlatform() }
 
-tasks.register<JavaExec>("validate-trees") {
+tasks.register<JavaExec>("lint-trees") {
     logging.captureStandardOutput(LogLevel.LIFECYCLE)
 
-    mainClass.set("no.nav.tsm.regulus.regula.meta.ValidateTreesKt")
+    mainClass.set("no.nav.tsm.regulus.regula.meta.TreeLinterKt")
     classpath = sourceSets["main"].runtimeClasspath
     group = "documentation"
     description = "Validate tree implementation structure"
@@ -65,6 +65,6 @@ tasks.register<JavaExec>("generate-mermaid") {
 }
 
 tasks.named("build") {
-    dependsOn("validate-trees")
+    dependsOn("lint-trees")
     dependsOn("generate-mermaid")
 }
