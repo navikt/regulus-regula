@@ -2,6 +2,7 @@ package no.nav.tsm.regulus.regula.trees.tilbakedatering
 
 import java.time.LocalDate
 import java.time.LocalDateTime
+import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 
 fun testTilbakedateringRulePayload(
@@ -13,11 +14,9 @@ fun testTilbakedateringRulePayload(
             )
         ),
     tidligereSykmeldinger: List<TidligereSykmelding> = listOf(),
-    hoveddiagnoseSystem: String? = null,
+    hoveddiagnose: Diagnose? = null,
     signaturdato: LocalDateTime = LocalDateTime.now(),
     begrunnelseIkkeKontakt: String? = null,
-    // Can't be bool, TODO fix it
-    forlengelse: Boolean? = null,
     dagerForArbeidsgiverperiodeCheck: List<LocalDate> = listOf(),
     startdato: LocalDate? = null,
 ) =
@@ -26,11 +25,10 @@ fun testTilbakedateringRulePayload(
         signaturdato = signaturdato,
         perioder = perioder,
         startdato = startdato,
-        hoveddiagnoseSystem = hoveddiagnoseSystem,
+        hoveddiagnose = hoveddiagnose,
         tidligereSykmeldinger = tidligereSykmeldinger,
         begrunnelseIkkeKontakt = begrunnelseIkkeKontakt,
         dagerForArbeidsgiverperiodeCheck = dagerForArbeidsgiverperiodeCheck,
-        forlengelse = forlengelse,
     )
 
 fun testPeriode(fomOffset: Long, tomOffset: Long): List<SykmeldingPeriode> {

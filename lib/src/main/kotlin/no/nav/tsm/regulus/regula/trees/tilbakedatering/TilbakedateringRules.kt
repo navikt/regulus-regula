@@ -4,7 +4,9 @@ import java.time.temporal.ChronoUnit
 import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
+import no.nav.tsm.regulus.regula.trees.tilbakedatering.extras.Forlengelse
 import no.nav.tsm.regulus.regula.trees.tilbakedatering.extras.isEttersending
+import no.nav.tsm.regulus.regula.trees.tilbakedatering.extras.isForlengelse
 import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.latestTom
 
@@ -125,7 +127,7 @@ private val Rules =
                 isEttersending(
                     sykmeldingId = payload.sykmeldingId,
                     perioder = payload.perioder,
-                    harMedisinskVurdering = payload.hoveddiagnoseSystem != null,
+                    harMedisinskVurdering = payload.hoveddiagnose != null,
                     tidligereSykmeldinger = payload.tidligereSykmeldinger,
                 )
 
@@ -142,13 +144,20 @@ private val Rules =
         }
 
         val forlengelse: TilbakedateringRuleFn = { payload ->
-            val forlengelse = payload.forlengelse
-            val result = forlengelse != null
-            val ruleInputs = mutableMapOf<String, Any>()
+            val forlengelseAv: Forlengelse? =
+                isForlengelse(
+                        perioder = payload.perioder,
+                        hoveddiagnose = payload.hoveddiagnose,
+                        tidligereSykmeldinger = payload.tidligereSykmeldinger,
+                    )
+                    .firstOrNull()
 
-            if (forlengelse != null) {
-                ruleInputs["forlengelse"] = forlengelse
+            val ruleInputs = mutableMapOf<String, Any>()
+            if (forlengelseAv != null) {
+                ruleInputs["forlengelse"] = forlengelseAv
             }
+
+            val result = forlengelseAv != null
             RuleOutput(
                 ruleInputs = ruleInputs,
                 rule = TilbakedateringRule.FORLENGELSE,
@@ -157,12 +166,12 @@ private val Rules =
         }
 
         val spesialisthelsetjenesten: TilbakedateringRuleFn = { payload ->
-            val spesialhelsetjenesten = payload.hoveddiagnoseSystem === Diagnosekoder.ICD10_CODE
+            val spesialhelsetjenesten = payload.hoveddiagnose?.system === Diagnosekoder.ICD10_CODE
 
             RuleOutput(
                 ruleInputs =
                     mapOf(
-                        "diagnosesystem" to (payload.hoveddiagnoseSystem ?: ""),
+                        "diagnosesystem" to (payload.hoveddiagnose?.system ?: ""),
                         "spesialisthelsetjenesten" to spesialhelsetjenesten,
                     ),
                 rule = TilbakedateringRule.SPESIALISTHELSETJENESTEN,

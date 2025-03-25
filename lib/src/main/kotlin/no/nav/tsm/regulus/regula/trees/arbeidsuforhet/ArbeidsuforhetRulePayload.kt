@@ -1,6 +1,7 @@
 package no.nav.tsm.regulus.regula.trees.arbeidsuforhet
 
 import no.nav.tsm.regulus.regula.payload.BasePayload
+import no.nav.tsm.regulus.regula.payload.Diagnose
 
 data class ArbeidsuforhetRulePayload(
     override val sykmeldingId: String,
@@ -8,7 +9,5 @@ data class ArbeidsuforhetRulePayload(
     val bidiagnoser: List<Diagnose>,
     val annenFraversArsak: AnnenFraversArsak?,
 ) : BasePayload
-
-data class Diagnose(val kode: String, val system: String)
 
 data class AnnenFraversArsak(val grunn: List<String>, val beskrivelse: String?)

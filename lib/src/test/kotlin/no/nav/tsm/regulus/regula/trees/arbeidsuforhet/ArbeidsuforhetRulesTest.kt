@@ -6,6 +6,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.executor.RuleStatus
+import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.trees.assertPath
 import no.nav.tsm.regulus.regula.trees.debugPath
 import org.junit.jupiter.api.Nested

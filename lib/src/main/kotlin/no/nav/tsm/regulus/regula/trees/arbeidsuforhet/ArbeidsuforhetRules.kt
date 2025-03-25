@@ -3,6 +3,7 @@ package no.nav.tsm.regulus.regula.trees.arbeidsuforhet
 import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
+import no.nav.tsm.regulus.regula.payload.Diagnose
 
 class ArbeidsuforhetRules(val payload: ArbeidsuforhetRulePayload) :
     TreeExecutor<ArbeidsuforhetRule, ArbeidsuforhetRulePayload>(arbeidsuforhetRuleTree, payload) {

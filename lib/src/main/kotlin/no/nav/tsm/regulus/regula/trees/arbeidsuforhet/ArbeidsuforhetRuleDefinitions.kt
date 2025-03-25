@@ -29,7 +29,7 @@ enum class ArbeidsuforhetRule {
             messageForSender =
                 "Sykmeldingen kan ikke rettes, det må skrives en ny. " +
                     "Pasienten har fått beskjed om å vente på ny sykmelding fra deg. Grunnet følgende:" +
-                    "Hoveddiagnose eller annen lovfestet fraværsgrunn mangler. ",
+                    "no.nav.tsm.regulus.regula.payload.Hoveddiagnose eller annen lovfestet fraværsgrunn mangler. ",
             messageForUser = "Den må ha en hoveddiagnose eller en annen gyldig fraværsgrunn.",
         ),
         UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE(

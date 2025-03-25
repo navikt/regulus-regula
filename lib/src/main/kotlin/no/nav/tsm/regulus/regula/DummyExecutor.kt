@@ -86,10 +86,9 @@ fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
                     signaturdato = LocalDateTime.now(),
                     perioder = emptyList(),
                     startdato = null,
-                    hoveddiagnoseSystem = null,
+                    hoveddiagnose = null,
                     begrunnelseIkkeKontakt = null,
                     dagerForArbeidsgiverperiodeCheck = emptyList(),
-                    forlengelse = null,
                     tidligereSykmeldinger = emptyList(),
                 )
             ),

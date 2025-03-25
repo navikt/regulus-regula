@@ -1,6 +1,7 @@
 package no.nav.tsm.regulus.regula.trees.arbeidsuforhet
 
 import no.nav.helse.diagnosekoder.Diagnosekoder
+import no.nav.tsm.regulus.regula.payload.Diagnose
 
 fun testArbeidsuforhetPayload(
     hoveddiagnose: Diagnose? = Diagnose(kode = "Y01", system = Diagnosekoder.ICPC2_CODE),

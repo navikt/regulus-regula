@@ -5,9 +5,9 @@ import kotlin.test.*
 import kotlin.test.Test
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.payload.FomTom
+import no.nav.tsm.regulus.regula.testutils.generatePersonNumber
 import no.nav.tsm.regulus.regula.trees.assertPath
 import no.nav.tsm.regulus.regula.trees.debugPath
-import no.nav.tsm.regulus.regula.trees.generatePersonNumber
 
 class ValideringRulesTest {
     @Test

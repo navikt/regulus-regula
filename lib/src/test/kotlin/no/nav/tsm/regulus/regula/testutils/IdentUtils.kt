@@ -1,4 +1,4 @@
-package no.nav.tsm.regulus.regula.trees
+package no.nav.tsm.regulus.regula.testutils
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
