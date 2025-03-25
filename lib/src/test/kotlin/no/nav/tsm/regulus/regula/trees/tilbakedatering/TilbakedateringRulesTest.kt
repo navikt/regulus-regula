@@ -7,10 +7,11 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.executor.RuleStatus
-import no.nav.tsm.regulus.regula.payload.FomTom
+import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 import no.nav.tsm.regulus.regula.trees.assertPath
 import no.nav.tsm.regulus.regula.trees.debugPath
 import no.nav.tsm.regulus.regula.trees.tilbakedatering.TilbakedateringRule.*
+import no.nav.tsm.regulus.regula.trees.tilbakedatering.extras.Ettersendelse
 import no.nav.tsm.regulus.regula.utils.allDaysBetween
 import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.latestTom
@@ -79,14 +80,24 @@ class TilbakedateringRulesTest {
 
         @Test
         fun `tilbakedatert forlengelse med ettersending`() {
+            // Re-create periods, to ensure that equality is not based on reference
+            val makePerioder = { testPeriode(-8, -7) }
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-8, -7),
+                    perioder = makePerioder(),
                     signaturdato = LocalDateTime.now(),
-                    ettersendingAv = "ettersendt-id",
+                    tidligereSykmeldinger =
+                        listOf(
+                            TidligereSykmelding(
+                                sykmeldingId = "dette-er-ettersendelse",
+                                perioder = makePerioder(),
+                            )
+                        ),
+                    hoveddiagnoseSystem = Diagnosekoder.ICPC2_CODE,
                 )
 
             val (result) = TilbakedateringRules(payload).execute()
+
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(result.rulePath, listOf(TILBAKEDATERING to true, ETTERSENDING to true))
 
@@ -95,7 +106,13 @@ class TilbakedateringRulesTest {
                 mapOf(
                     "fom" to payload.perioder.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
-                    "ettersending" to "ettersendt-id",
+                    "ettersending" to
+                        Ettersendelse(
+                            sykmeldingId = "dette-er-ettersendelse",
+                            fom = makePerioder().first().fom,
+                            tom = makePerioder().first().tom,
+                            gradert = null,
+                        ),
                 ),
             )
 
@@ -214,7 +231,6 @@ class TilbakedateringRulesTest {
                     testTilbakedateringRulePayload(
                         perioder = testPeriode(-5, 0),
                         signaturdato = LocalDateTime.now(),
-                        ettersendingAv = null,
                         begrunnelseIkkeKontakt = null,
                         forlengelse = true,
                     )
@@ -253,7 +269,6 @@ class TilbakedateringRulesTest {
                     testTilbakedateringRulePayload(
                         perioder = testPeriode(-5, 0),
                         signaturdato = LocalDateTime.now(),
-                        ettersendingAv = null,
                         begrunnelseIkkeKontakt = null,
                         forlengelse = null,
                     )
@@ -292,7 +307,6 @@ class TilbakedateringRulesTest {
                     testTilbakedateringRulePayload(
                         perioder = testPeriode(-5, 0),
                         signaturdato = LocalDateTime.now(),
-                        ettersendingAv = null,
                         begrunnelseIkkeKontakt = null,
                         forlengelse = null,
                         hoveddiagnoseSystem = Diagnosekoder.ICD10_CODE,
@@ -340,7 +354,6 @@ class TilbakedateringRulesTest {
                         testTilbakedateringRulePayload(
                             perioder = testPeriode(-9, 0),
                             signaturdato = LocalDateTime.now(),
-                            ettersendingAv = null,
                             begrunnelseIkkeKontakt = null,
                             forlengelse = null,
                             hoveddiagnoseSystem = Diagnosekoder.ICD10_CODE,
@@ -378,7 +391,6 @@ class TilbakedateringRulesTest {
                         testTilbakedateringRulePayload(
                             perioder = testPeriode(-9, 0),
                             signaturdato = LocalDateTime.now(),
-                            ettersendingAv = null,
                             begrunnelseIkkeKontakt = null,
                             forlengelse = null,
                         )
@@ -423,7 +435,6 @@ class TilbakedateringRulesTest {
                         testTilbakedateringRulePayload(
                             perioder = testPeriode(-9, 0),
                             signaturdato = LocalDateTime.now(),
-                            ettersendingAv = null,
                             begrunnelseIkkeKontakt = "12344123112341232....,,,..12",
                             forlengelse = null,
                         )
@@ -461,7 +472,6 @@ class TilbakedateringRulesTest {
                         testTilbakedateringRulePayload(
                             perioder = testPeriode(-9, 0),
                             signaturdato = LocalDateTime.now(),
-                            ettersendingAv = null,
                             begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                             forlengelse = true,
                         )
@@ -499,7 +509,6 @@ class TilbakedateringRulesTest {
                         testTilbakedateringRulePayload(
                             perioder = testPeriode(-9, 0),
                             signaturdato = LocalDateTime.now(),
-                            ettersendingAv = null,
                             begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                             forlengelse = null,
                             // TODO: Business logikk må fikses
@@ -544,7 +553,6 @@ class TilbakedateringRulesTest {
                         testTilbakedateringRulePayload(
                             perioder = testPeriode(-9, 0),
                             signaturdato = LocalDateTime.now(),
-                            ettersendingAv = null,
                             begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                             forlengelse = null,
                             // TODO: Business logikk må fikses
@@ -586,7 +594,6 @@ class TilbakedateringRulesTest {
                         testTilbakedateringRulePayload(
                             perioder = testPeriode(-9, 0),
                             signaturdato = LocalDateTime.now(),
-                            ettersendingAv = null,
                             begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                             forlengelse = null,
                             // TODO: Business logikk må fikses
@@ -629,7 +636,6 @@ class TilbakedateringRulesTest {
                         testTilbakedateringRulePayload(
                             perioder = testPeriode(-9, 0),
                             signaturdato = LocalDateTime.now(),
-                            ettersendingAv = null,
                             begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                             forlengelse = null,
                             // TODO: Business logikk må fikses
@@ -688,7 +694,6 @@ class TilbakedateringRulesTest {
                         testTilbakedateringRulePayload(
                             perioder = testPeriode(-9, 0),
                             signaturdato = LocalDateTime.now(),
-                            ettersendingAv = null,
                             begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                             forlengelse = null,
                             hoveddiagnoseSystem = Diagnosekoder.ICD10_CODE,
@@ -740,7 +745,6 @@ class TilbakedateringRulesTest {
                     testTilbakedateringRulePayload(
                         perioder = testPeriode(-31, 0),
                         signaturdato = LocalDateTime.now(),
-                        ettersendingAv = null,
                         begrunnelseIkkeKontakt = "Veldig bra begrunnels!",
                         forlengelse = null,
                     )
@@ -778,7 +782,6 @@ class TilbakedateringRulesTest {
                     testTilbakedateringRulePayload(
                         perioder = testPeriode(-31, 0),
                         signaturdato = LocalDateTime.now(),
-                        ettersendingAv = null,
                         begrunnelseIkkeKontakt = "Dårlig begrunnels>:(",
                         forlengelse = null,
                     )
@@ -816,7 +819,6 @@ class TilbakedateringRulesTest {
                     testTilbakedateringRulePayload(
                         perioder = testPeriode(-31, 0),
                         signaturdato = LocalDateTime.now(),
-                        ettersendingAv = null,
                         begrunnelseIkkeKontakt = "abcdefghijklmno",
                         forlengelse = null,
                         hoveddiagnoseSystem = Diagnosekoder.ICD10_CODE,
@@ -855,13 +857,12 @@ class TilbakedateringRulesTest {
                     testTilbakedateringRulePayload(
                         perioder =
                             listOf(
-                                FomTom(
+                                SykmeldingPeriode.AktivitetIkkeMulig(
                                     fom = LocalDate.of(2024, 7, 30),
                                     tom = LocalDate.of(2024, 7, 31),
                                 )
                             ),
                         signaturdato = LocalDate.of(2024, 8, 31).atStartOfDay(),
-                        ettersendingAv = null,
                         begrunnelseIkkeKontakt = "abcdefghijklmno",
                         forlengelse = null,
                         hoveddiagnoseSystem = Diagnosekoder.ICPC2_CODE,
@@ -901,7 +902,7 @@ class TilbakedateringRulesTest {
                     testTilbakedateringRulePayload(
                         perioder =
                             listOf(
-                                FomTom(
+                                SykmeldingPeriode.AktivitetIkkeMulig(
                                     fom = LocalDate.of(2024, 7, 30),
                                     tom = LocalDate.of(2024, 7, 31),
                                 )
@@ -946,7 +947,7 @@ class TilbakedateringRulesTest {
                     testTilbakedateringRulePayload(
                         perioder =
                             listOf(
-                                FomTom(
+                                SykmeldingPeriode.AktivitetIkkeMulig(
                                     fom = LocalDate.of(2024, 1, 28),
                                     tom = LocalDate.of(2024, 2, 1),
                                 )

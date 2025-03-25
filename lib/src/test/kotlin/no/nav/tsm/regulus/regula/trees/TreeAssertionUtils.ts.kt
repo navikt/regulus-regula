@@ -27,7 +27,10 @@ fun <T, S> TreeOutput<T, S>.debugPath(expectedPath: List<Pair<T, Boolean>>) {
     println(
         this.rulePath.joinToString(separator = "\n") {
             ruleIndex++
-            if (it.ruleResult == expectedPath[ruleIndex].second) {
+
+            if (ruleIndex >= expectedPath.size) {
+                "→ ${it.rule.toString().red()}(${(if (it.ruleResult) "got ${"nothing".red()}, expected ${"no".yellow()}" else "got ${"nothing".red()}, expected ${"yes".yellow()}")}) \n\t ${it.ruleInputs.map { (k, v) -> "$k: $v" }}"
+            } else if (it.ruleResult == expectedPath[ruleIndex].second) {
                 "→ ${it.rule}(${(if (it.ruleResult) "yes" else "no").green()}) \n\t ${it.ruleInputs.map { (k, v) -> "$k: $v" }}"
             } else {
                 "→ ${it.rule.toString().red()}(${(if (it.ruleResult) "got ${"yes".red()}, expected ${"no".yellow()}" else "got ${"no".red()}, expected ${"yes".yellow()}")}) \n\t ${it.ruleInputs.map { (k, v) -> "$k: $v" }}"

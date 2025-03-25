@@ -4,6 +4,7 @@ import java.time.temporal.ChronoUnit
 import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
+import no.nav.tsm.regulus.regula.trees.tilbakedatering.extras.isEttersending
 import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.latestTom
 
@@ -120,7 +121,14 @@ private val Rules =
         }
 
         val ettersending: TilbakedateringRuleFn = { payload ->
-            val ettersendingAv = payload.ettersendingAv
+            val ettersendingAv =
+                isEttersending(
+                    sykmeldingId = payload.sykmeldingId,
+                    perioder = payload.perioder,
+                    harMedisinskVurdering = payload.hoveddiagnoseSystem != null,
+                    tidligereSykmeldinger = payload.tidligereSykmeldinger,
+                )
+
             val result = ettersendingAv != null
             val ruleInputs = mutableMapOf<String, Any>()
             if (ettersendingAv != null) {

@@ -88,9 +88,9 @@ fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
                     startdato = null,
                     hoveddiagnoseSystem = null,
                     begrunnelseIkkeKontakt = null,
-                    ettersendingAv = null,
                     dagerForArbeidsgiverperiodeCheck = emptyList(),
                     forlengelse = null,
+                    tidligereSykmeldinger = emptyList(),
                 )
             ),
         )
