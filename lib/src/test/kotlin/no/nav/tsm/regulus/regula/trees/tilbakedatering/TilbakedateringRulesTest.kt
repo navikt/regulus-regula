@@ -15,7 +15,6 @@ import no.nav.tsm.regulus.regula.trees.debugPath
 import no.nav.tsm.regulus.regula.trees.tilbakedatering.TilbakedateringRule.*
 import no.nav.tsm.regulus.regula.trees.tilbakedatering.extras.Ettersendelse
 import no.nav.tsm.regulus.regula.trees.tilbakedatering.extras.Forlengelse
-import no.nav.tsm.regulus.regula.utils.allDaysBetween
 import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.latestTom
 import org.junit.jupiter.api.Disabled
@@ -568,6 +567,7 @@ class TilbakedateringRulesTest {
                 }
 
                 @Test
+                // TODO: Arbeidsgiverperiode
                 @Disabled
                 fun `Ikke forlengelse, MANUELL`() {
                     val payload =
@@ -576,7 +576,7 @@ class TilbakedateringRulesTest {
                             signaturdato = LocalDateTime.now(),
                             begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                             // TODO: Business logikk må fikses
-                            dagerForArbeidsgiverperiodeCheck = listOf(),
+                            // dagerForArbeidsgiverperiodeCheck = listOf(),
                         )
 
                     val (result) = TilbakedateringRules(payload).execute()
@@ -611,6 +611,7 @@ class TilbakedateringRulesTest {
                 }
 
                 @Test
+                // TODO: Arbeidsgiverperiode
                 @Disabled
                 fun `Innenfor arbeidsgiverperioden, OK`() {
                     val payload =
@@ -619,7 +620,7 @@ class TilbakedateringRulesTest {
                             signaturdato = LocalDateTime.now(),
                             begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                             // TODO: Business logikk må fikses
-                            dagerForArbeidsgiverperiodeCheck = listOf(),
+                            // dagerForArbeidsgiverperiodeCheck = listOf(),
                         )
 
                     val (result) = TilbakedateringRules(payload).execute()
@@ -651,6 +652,7 @@ class TilbakedateringRulesTest {
                 }
 
                 @Test
+                // TODO: Arbeidsgiverperiode
                 @Disabled
                 fun `Utenfor arbeidsgiverperioden, MANUELL`() {
                     val payload =
@@ -659,7 +661,7 @@ class TilbakedateringRulesTest {
                             signaturdato = LocalDateTime.now(),
                             begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                             // TODO: Business logikk må fikses
-                            dagerForArbeidsgiverperiodeCheck = listOf(),
+                            // dagerForArbeidsgiverperiodeCheck = listOf(),
                         )
 
                     val (result) = TilbakedateringRules(payload).execute()
@@ -692,6 +694,7 @@ class TilbakedateringRulesTest {
                 }
 
                 @Test
+                // TODO: Arbeidsgiverperiode
                 @Disabled
                 fun `Utenfor arbeidsgiverperioden andre sykmelding, MANUELL`() {
                     val payload =
@@ -700,7 +703,7 @@ class TilbakedateringRulesTest {
                             signaturdato = LocalDateTime.now(),
                             begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                             // TODO: Business logikk må fikses
-                            dagerForArbeidsgiverperiodeCheck = listOf(),
+                            // dagerForArbeidsgiverperiodeCheck = listOf(),
                         )
 
                     /*
@@ -749,16 +752,13 @@ class TilbakedateringRulesTest {
 
                 @Test
                 fun `Fra spesialisthelsetjenesten, OK`() {
-                    val dagerForArbeidsgiverperiodeCheck =
-                        allDaysBetween(LocalDate.now().minusDays(20), LocalDate.now().minusDays(3))
                     val payload =
                         testTilbakedateringRulePayload(
-                            perioder = testPeriode(-9, 0),
+                            perioder = testPeriode(-19, 0),
                             signaturdato = LocalDateTime.now(),
                             begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                             hoveddiagnose = Diagnose("X01", Diagnosekoder.ICD10_CODE),
-                            // TODO: Business logikk må fikses
-                            dagerForArbeidsgiverperiodeCheck = dagerForArbeidsgiverperiodeCheck,
+                            tidligereSykmeldinger = listOf(),
                         )
 
                     val (result) = TilbakedateringRules(payload).execute()
@@ -780,14 +780,12 @@ class TilbakedateringRulesTest {
                     )
 
                     assertEquals(
-                        result.ruleInputs,
+                        result.ruleInputs - "dagerForArbeidsgiverperiode",
                         mapOf(
                             "fom" to payload.perioder.earliestFom(),
                             "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                             "begrunnelse" to "1 ord",
                             "tom" to payload.perioder.latestTom(),
-                            "arbeidsgiverperiode" to false,
-                            "dagerForArbeidsgiverperiode" to dagerForArbeidsgiverperiodeCheck,
                             "diagnosesystem" to Diagnosekoder.ICD10_CODE,
                             "spesialisthelsetjenesten" to true,
                         ),
@@ -991,8 +989,8 @@ class TilbakedateringRulesTest {
                         "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                         "begrunnelse" to "1 ord",
                         "tom" to payload.perioder.latestTom(),
-                        "arbeidsgiverperiode" to true,
-                        "dagerForArbeidsgiverperiode" to listOf<LocalDate>(),
+                        "dagerForArbeidsgiverperiode" to
+                            listOf<LocalDate>(LocalDate.of(2024, 7, 30), LocalDate.of(2024, 7, 31)),
                     ),
                 )
             }

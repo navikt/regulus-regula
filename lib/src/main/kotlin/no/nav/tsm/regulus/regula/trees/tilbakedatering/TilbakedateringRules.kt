@@ -5,6 +5,7 @@ import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.trees.tilbakedatering.extras.Forlengelse
+import no.nav.tsm.regulus.regula.trees.tilbakedatering.extras.isArbeidsgiverperiode
 import no.nav.tsm.regulus.regula.trees.tilbakedatering.extras.isEttersending
 import no.nav.tsm.regulus.regula.trees.tilbakedatering.extras.isForlengelse
 import no.nav.tsm.regulus.regula.utils.earliestFom
@@ -84,19 +85,24 @@ private val Rules =
         }
 
         val arbeidsgiverperiode: TilbakedateringRuleFn = { payload ->
-            val tom = payload.perioder.latestTom()
-            val dager = payload.dagerForArbeidsgiverperiodeCheck
-            val arbeidsgiverperiodeNy = dager.size < 17
+            val earliestFom = payload.perioder.earliestFom()
+            val latestTom = payload.perioder.latestTom()
+            val arbeidsgiverperiode =
+                isArbeidsgiverperiode(
+                    earliestFom = earliestFom,
+                    latestTom = latestTom,
+                    tidligereSykmeldinger = payload.tidligereSykmeldinger,
+                )
 
             RuleOutput(
                 ruleInputs =
                     mapOf(
-                        "tom" to tom,
-                        "dagerForArbeidsgiverperiode" to dager.sorted(),
-                        "arbeidsgiverperiode" to arbeidsgiverperiodeNy,
+                        "fom" to earliestFom,
+                        "tom" to latestTom,
+                        "dagerForArbeidsgiverperiode" to arbeidsgiverperiode.dager.sorted(),
                     ),
                 rule = TilbakedateringRule.ARBEIDSGIVERPERIODE,
-                ruleResult = arbeidsgiverperiodeNy,
+                ruleResult = arbeidsgiverperiode.isArbeidsgiverperiode,
             )
         }
 

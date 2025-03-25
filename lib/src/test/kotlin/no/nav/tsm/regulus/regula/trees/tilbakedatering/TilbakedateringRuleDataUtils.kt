@@ -17,7 +17,6 @@ fun testTilbakedateringRulePayload(
     hoveddiagnose: Diagnose? = null,
     signaturdato: LocalDateTime = LocalDateTime.now(),
     begrunnelseIkkeKontakt: String? = null,
-    dagerForArbeidsgiverperiodeCheck: List<LocalDate> = listOf(),
     startdato: LocalDate? = null,
 ) =
     TilbakedateringRulePayload(
@@ -28,7 +27,6 @@ fun testTilbakedateringRulePayload(
         hoveddiagnose = hoveddiagnose,
         tidligereSykmeldinger = tidligereSykmeldinger,
         begrunnelseIkkeKontakt = begrunnelseIkkeKontakt,
-        dagerForArbeidsgiverperiodeCheck = dagerForArbeidsgiverperiodeCheck,
     )
 
 fun testPeriode(fomOffset: Long, tomOffset: Long): List<SykmeldingPeriode> {

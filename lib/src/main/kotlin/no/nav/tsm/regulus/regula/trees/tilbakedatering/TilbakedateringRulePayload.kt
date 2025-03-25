@@ -21,6 +21,4 @@ data class TilbakedateringRulePayload(
     val tidligereSykmeldinger: List<TidligereSykmelding>,
     // TODO: bedre strukturering?
     val begrunnelseIkkeKontakt: String?,
-    // TODO: Usikker på navn/type, kan inferres/regnes?
-    val dagerForArbeidsgiverperiodeCheck: List<LocalDate>,
 ) : BasePayload
