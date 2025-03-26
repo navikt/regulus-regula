@@ -25,6 +25,12 @@ jobs:
       - name: Test and build lib
         run: ./gradlew build
 
+      - name: Publish package
+        if: github.ref == 'refs/heads/main'
+        run: ./gradlew publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Summarize tests results
         uses: navikt/gradle-tests-summary@v1
         if: ${{ always() }}

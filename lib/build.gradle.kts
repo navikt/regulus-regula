@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     `java-library`
     id("com.diffplug.spotless") version "7.0.2"
+    id("maven-publish")
 }
 
 repositories {
@@ -23,7 +24,36 @@ dependencies {
 
 java { toolchain { languageVersion = JavaLanguageVersion.of(21) } }
 
+publishing {
+    publications {
+        create<MavenPublication>("gpr") {
+            from(components["kotlin"])
+            groupId = "no.nav.tsm.regulus"
+            artifactId = "regula"
+            version = file("version").readText().trim()
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/navikt/regulus-regula")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
+
 spotless { kotlin { ktfmt("0.54").kotlinlangStyle() } }
+
+tasks.register("bumpVersion") {
+    doLast {
+        val versionFile = file("version")
+        val current = versionFile.readText().trim().toInt()
+        versionFile.writeText((current + 1).toString())
+    }
+}
 
 tasks.named<Test>("test") { useJUnitPlatform() }
 
