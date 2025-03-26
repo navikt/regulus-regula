@@ -2,7 +2,7 @@ package no.nav.tsm.regulus.regula.trees.tilbakedatering
 
 import java.time.LocalDate
 import java.time.LocalDateTime
-import no.nav.tsm.regulus.regula.payload.BasePayload
+import no.nav.tsm.regulus.regula.executor.BasePayload
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 

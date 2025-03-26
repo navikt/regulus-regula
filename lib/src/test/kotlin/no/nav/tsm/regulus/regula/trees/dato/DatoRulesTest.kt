@@ -4,7 +4,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.test.*
 import no.nav.tsm.regulus.regula.executor.RuleStatus
-import no.nav.tsm.regulus.regula.payload.FomTom
+import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 import no.nav.tsm.regulus.regula.trees.assertPath
 
 class DatoRulesTest {
@@ -12,7 +12,13 @@ class DatoRulesTest {
     @Test
     fun `Alt ok, Status OK`() {
         val now = LocalDateTime.now()
-        val perioder = listOf(FomTom(fom = LocalDate.now(), tom = LocalDate.now().plusDays(7)))
+        val perioder =
+            listOf(
+                SykmeldingPeriode.AktivitetIkkeMulig(
+                    fom = LocalDate.now(),
+                    tom = LocalDate.now().plusDays(7),
+                )
+            )
 
         val (result) =
             DatoRules(
@@ -53,7 +59,12 @@ class DatoRulesTest {
     fun `Fremdater over 30 dager, Status INVALID`() {
         val now = LocalDateTime.now()
         val perioder =
-            listOf(FomTom(fom = LocalDate.now().plusDays(31), tom = LocalDate.now().plusDays(37)))
+            listOf(
+                SykmeldingPeriode.AktivitetIkkeMulig(
+                    fom = LocalDate.now().plusDays(31),
+                    tom = LocalDate.now().plusDays(37),
+                )
+            )
 
         val (result) =
             DatoRules(
@@ -85,8 +96,11 @@ class DatoRulesTest {
         val now = LocalDateTime.now()
         val perioder =
             listOf(
-                FomTom(fom = LocalDate.now(), tom = LocalDate.now()),
-                FomTom(fom = LocalDate.now().plusDays(1), tom = LocalDate.now().plusDays(366)),
+                SykmeldingPeriode.AktivitetIkkeMulig(fom = LocalDate.now(), tom = LocalDate.now()),
+                SykmeldingPeriode.AktivitetIkkeMulig(
+                    fom = LocalDate.now().plusDays(1),
+                    tom = LocalDate.now().plusDays(366),
+                ),
             )
 
         val (result) =

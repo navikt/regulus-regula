@@ -1,4 +1,4 @@
-package no.nav.tsm.regulus.regula.payload
+package no.nav.tsm.regulus.regula.executor
 
 internal interface BasePayload {
     val sykmeldingId: String

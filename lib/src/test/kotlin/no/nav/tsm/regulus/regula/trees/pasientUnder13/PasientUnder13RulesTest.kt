@@ -5,7 +5,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import no.nav.tsm.regulus.regula.executor.RuleStatus
-import no.nav.tsm.regulus.regula.payload.FomTom
+import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 import no.nav.tsm.regulus.regula.trees.assertPath
 
 class PasientUnder13RulesTest {
@@ -19,7 +19,7 @@ class PasientUnder13RulesTest {
                         sykmeldingId = "foo-bar-baz",
                         perioder =
                             listOf(
-                                FomTom(
+                                SykmeldingPeriode.AktivitetIkkeMulig(
                                     fom = LocalDate.now().minusDays(10),
                                     tom = LocalDate.now().plusDays(10),
                                 )
@@ -45,7 +45,7 @@ class PasientUnder13RulesTest {
                         sykmeldingId = "foo-bar-baz",
                         perioder =
                             listOf(
-                                FomTom(
+                                SykmeldingPeriode.AktivitetIkkeMulig(
                                     fom = LocalDate.now().minusDays(10),
                                     tom = LocalDate.now().plusDays(10),
                                 )

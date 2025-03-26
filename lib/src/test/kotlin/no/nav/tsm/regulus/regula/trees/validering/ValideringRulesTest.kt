@@ -4,7 +4,7 @@ import java.time.LocalDate
 import kotlin.test.*
 import kotlin.test.Test
 import no.nav.tsm.regulus.regula.executor.RuleStatus
-import no.nav.tsm.regulus.regula.payload.FomTom
+import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 import no.nav.tsm.regulus.regula.testutils.generatePersonNumber
 import no.nav.tsm.regulus.regula.trees.assertPath
 
@@ -88,7 +88,12 @@ class ValideringRulesTest {
     @Test
     fun `Mangelde dynamiske sporsmaal versjon 2 uke39, Status INVALID`() {
         val perioderMedFomForDritlengesiden =
-            listOf(FomTom(fom = LocalDate.now().minusDays(274), tom = LocalDate.now()))
+            listOf(
+                SykmeldingPeriode.AktivitetIkkeMulig(
+                    fom = LocalDate.now().minusDays(274),
+                    tom = LocalDate.now(),
+                )
+            )
         val (result) =
             ValideringRules(
                     ValideringRulePayload(

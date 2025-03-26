@@ -2,13 +2,13 @@ package no.nav.tsm.regulus.regula.trees.hpr
 
 import java.time.LocalDate
 import java.time.LocalDateTime
-import no.nav.tsm.regulus.regula.payload.BasePayload
-import no.nav.tsm.regulus.regula.payload.FomTom
+import no.nav.tsm.regulus.regula.executor.BasePayload
+import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 
 internal data class HprRulePayload(
     override val sykmeldingId: String,
     val behandler: Behandler,
-    val perioder: List<FomTom>,
+    val perioder: List<SykmeldingPeriode>,
     val startdato: LocalDate?,
     val signaturdato: LocalDateTime,
 ) : BasePayload
