@@ -22,7 +22,7 @@ import no.nav.tsm.regulus.regula.trees.tilbakedatering.TilbakedateringRules
 import no.nav.tsm.regulus.regula.trees.validering.ValideringRulePayload
 import no.nav.tsm.regulus.regula.trees.validering.ValideringRules
 
-fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
+private fun runSykmeldingRules(sykmeldingId: String): RuleExecutionResult {
     // Dummy rule sequence for testing, TODO is to create an lib API that exposes this to consumers
     // of the library with proper input/output types
 
