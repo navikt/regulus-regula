@@ -11,3 +11,12 @@ git push origin "$VERSION"
 
 # Create GitHub release
 gh release create "$VERSION" -t "Release $VERSION" -n "$COMMITS"
+
+# Write to GitHub Actions summary
+if [ -n "$GITHUB_STEP_SUMMARY" ]; then
+  {
+    echo "## Release $VERSION"
+    echo ""
+    echo "$COMMITS"
+  } >> "$GITHUB_STEP_SUMMARY"
+fi
