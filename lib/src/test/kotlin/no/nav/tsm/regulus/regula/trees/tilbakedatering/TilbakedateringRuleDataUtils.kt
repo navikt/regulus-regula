@@ -2,6 +2,7 @@ package no.nav.tsm.regulus.regula.trees.tilbakedatering
 
 import java.time.LocalDate
 import java.time.LocalDateTime
+import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 
@@ -14,7 +15,7 @@ fun testTilbakedateringRulePayload(
             )
         ),
     tidligereSykmeldinger: List<TidligereSykmelding> = listOf(),
-    hoveddiagnose: Diagnose? = null,
+    hoveddiagnose: Diagnose? = Diagnose(system = Diagnosekoder.ICPC2_CODE, kode = "X01"),
     signaturdato: LocalDateTime = LocalDateTime.now(),
     begrunnelseIkkeKontakt: String? = null,
     startdato: LocalDate? = null,

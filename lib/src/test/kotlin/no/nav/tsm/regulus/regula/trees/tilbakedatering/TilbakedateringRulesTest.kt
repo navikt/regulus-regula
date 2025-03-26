@@ -11,13 +11,11 @@ import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 import no.nav.tsm.regulus.regula.testutils.february
 import no.nav.tsm.regulus.regula.trees.assertPath
-import no.nav.tsm.regulus.regula.trees.debugPath
 import no.nav.tsm.regulus.regula.trees.tilbakedatering.TilbakedateringRule.*
 import no.nav.tsm.regulus.regula.trees.tilbakedatering.extras.Ettersendelse
 import no.nav.tsm.regulus.regula.trees.tilbakedatering.extras.Forlengelse
 import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.latestTom
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 
@@ -88,7 +86,7 @@ class TilbakedateringRulesTest {
                     signaturdato = LocalDateTime.now(),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute().debugPath()
+            val (result) = TilbakedateringRules(payload).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
@@ -219,7 +217,7 @@ class TilbakedateringRulesTest {
                         "fom" to payload.perioder.earliestFom(),
                         "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                         "begrunnelse" to "0 ord",
-                        "diagnosesystem" to "",
+                        "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
                         "spesialisthelsetjenesten" to false,
                     ),
                 )
@@ -323,7 +321,7 @@ class TilbakedateringRulesTest {
                         "fom" to payload.perioder.earliestFom(),
                         "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                         "begrunnelse" to "0 ord",
-                        "diagnosesystem" to "",
+                        "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
                         "spesialisthelsetjenesten" to false,
                     ),
                 )
@@ -443,7 +441,7 @@ class TilbakedateringRulesTest {
                             "fom" to payload.perioder.earliestFom(),
                             "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                             "begrunnelse" to "0 ord",
-                            "diagnosesystem" to "",
+                            "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
                             "spesialisthelsetjenesten" to false,
                         ),
                     )
@@ -485,7 +483,7 @@ class TilbakedateringRulesTest {
                             "fom" to payload.perioder.earliestFom(),
                             "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                             "begrunnelse" to "0 ord",
-                            "diagnosesystem" to "",
+                            "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
                             "spesialisthelsetjenesten" to false,
                         ),
                     )
@@ -520,20 +518,7 @@ class TilbakedateringRulesTest {
                             begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                             hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
                         )
-                    val (result) =
-                        TilbakedateringRules(payload)
-                            .execute()
-                            .debugPath(
-                                listOf(
-                                    TILBAKEDATERING to true,
-                                    ETTERSENDING to false,
-                                    TILBAKEDATERT_INNTIL_4_DAGER to false,
-                                    TILBAKEDATERT_INNTIL_8_DAGER to false,
-                                    TILBAKEDATERT_MINDRE_ENN_1_MAANED to true,
-                                    BEGRUNNELSE_MIN_1_ORD to true,
-                                    FORLENGELSE to true,
-                                )
-                            )
+                    val (result) = TilbakedateringRules(payload).execute()
 
                     assertEquals(result.treeResult.status, RuleStatus.OK)
                     assertPath(
@@ -567,21 +552,15 @@ class TilbakedateringRulesTest {
                 }
 
                 @Test
-                // TODO: Arbeidsgiverperiode
-                @Disabled
                 fun `Ikke forlengelse, MANUELL`() {
                     val payload =
                         testTilbakedateringRulePayload(
-                            perioder = testPeriode(-9, 0),
+                            perioder = testPeriode(-16, 0),
                             signaturdato = LocalDateTime.now(),
                             begrunnelseIkkeKontakt = "abcdefghijklmnopq",
-                            // TODO: Business logikk må fikses
-                            // dagerForArbeidsgiverperiodeCheck = listOf(),
                         )
 
                     val (result) = TilbakedateringRules(payload).execute()
-
-                    result.debugPath()
 
                     assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
                     assertPath(
@@ -600,27 +579,25 @@ class TilbakedateringRulesTest {
                     )
 
                     assertEquals(
-                        result.ruleInputs,
+                        result.ruleInputs - "dagerForArbeidsgiverperiode",
                         mapOf(
                             "fom" to payload.perioder.earliestFom(),
+                            "tom" to payload.perioder.latestTom(),
                             "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                             "begrunnelse" to "1 ord",
-                            "forlengelse" to false,
+                            "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                            "spesialisthelsetjenesten" to false,
                         ),
                     )
                 }
 
                 @Test
-                // TODO: Arbeidsgiverperiode
-                @Disabled
                 fun `Innenfor arbeidsgiverperioden, OK`() {
                     val payload =
                         testTilbakedateringRulePayload(
                             perioder = testPeriode(-9, 0),
                             signaturdato = LocalDateTime.now(),
                             begrunnelseIkkeKontakt = "abcdefghijklmnopq",
-                            // TODO: Business logikk må fikses
-                            // dagerForArbeidsgiverperiodeCheck = listOf(),
                         )
 
                     val (result) = TilbakedateringRules(payload).execute()
@@ -641,27 +618,23 @@ class TilbakedateringRulesTest {
                     )
 
                     assertEquals(
-                        result.ruleInputs,
+                        result.ruleInputs - "dagerForArbeidsgiverperiode",
                         mapOf(
                             "fom" to payload.perioder.earliestFom(),
+                            "tom" to payload.perioder.latestTom(),
                             "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                             "begrunnelse" to "1 ord",
-                            "forlengelse" to false,
                         ),
                     )
                 }
 
                 @Test
-                // TODO: Arbeidsgiverperiode
-                @Disabled
                 fun `Utenfor arbeidsgiverperioden, MANUELL`() {
                     val payload =
                         testTilbakedateringRulePayload(
-                            perioder = testPeriode(-9, 0),
+                            perioder = testPeriode(-19, 0),
                             signaturdato = LocalDateTime.now(),
                             begrunnelseIkkeKontakt = "abcdefghijklmnopq",
-                            // TODO: Business logikk må fikses
-                            // dagerForArbeidsgiverperiodeCheck = listOf(),
                         )
 
                     val (result) = TilbakedateringRules(payload).execute()
@@ -683,43 +656,42 @@ class TilbakedateringRulesTest {
                     )
 
                     assertEquals(
-                        result.ruleInputs,
+                        result.ruleInputs - "dagerForArbeidsgiverperiode",
                         mapOf(
                             "fom" to payload.perioder.earliestFom(),
+                            "tom" to payload.perioder.latestTom(),
                             "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                             "begrunnelse" to "1 ord",
-                            "forlengelse" to false,
+                            "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                            "spesialisthelsetjenesten" to false,
                         ),
                     )
                 }
 
                 @Test
-                // TODO: Arbeidsgiverperiode
-                @Disabled
                 fun `Utenfor arbeidsgiverperioden andre sykmelding, MANUELL`() {
+                    val hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE)
                     val payload =
                         testTilbakedateringRulePayload(
-                            perioder = testPeriode(-9, 0),
-                            signaturdato = LocalDateTime.now(),
+                            perioder = testPeriode(0, 2),
+                            signaturdato = LocalDateTime.now().plusDays(10),
                             begrunnelseIkkeKontakt = "abcdefghijklmnopq",
-                            // TODO: Business logikk må fikses
-                            // dagerForArbeidsgiverperiodeCheck = listOf(),
+                            hoveddiagnose = hoveddiagnose,
+                            tidligereSykmeldinger =
+                                listOf(
+                                    TidligereSykmelding(
+                                        sykmeldingId = "tidligere-sykmelding-1",
+                                        perioder =
+                                            listOf(
+                                                SykmeldingPeriode.AktivitetIkkeMulig(
+                                                    fom = LocalDate.now().minusDays(20),
+                                                    tom = LocalDate.now().minusDays(3),
+                                                )
+                                            ),
+                                        hoveddiagnose = hoveddiagnose,
+                                    )
+                                ),
                         )
-
-                    /*
-                    val dager =
-                        sykmeldingService.allDaysBetween(
-                            sykmelding.perioder.sortedFOMDate().first(),
-                            sykmelding.perioder.sortedTOMDate().last(),
-                        ) +
-                            sykmeldingService
-                                .allDaysBetween(
-                                    LocalDate.now().minusDays(20),
-                                    LocalDate.now().minusDays(3),
-                                )
-                                .sortedDescending()
-                                .take(17)
-                     */
 
                     val (result) = TilbakedateringRules(payload).execute()
 
@@ -740,12 +712,14 @@ class TilbakedateringRulesTest {
                     )
 
                     assertEquals(
-                        result.ruleInputs,
+                        result.ruleInputs - "dagerForArbeidsgiverperiode",
                         mapOf(
                             "fom" to payload.perioder.earliestFom(),
+                            "tom" to payload.perioder.latestTom(),
+                            "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
                             "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                             "begrunnelse" to "1 ord",
-                            "forlengelse" to false,
+                            "spesialisthelsetjenesten" to false,
                         ),
                     )
                 }
@@ -808,8 +782,6 @@ class TilbakedateringRulesTest {
 
                 val (result) = TilbakedateringRules(payload).execute()
 
-                result.debugPath()
-
                 assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
                 assertPath(
                     result.rulePath,
@@ -863,7 +835,7 @@ class TilbakedateringRulesTest {
                         "fom" to payload.perioder.earliestFom(),
                         "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                         "begrunnelse" to "2 ord",
-                        "diagnosesystem" to "",
+                        "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
                         "spesialisthelsetjenesten" to false,
                     ),
                 )

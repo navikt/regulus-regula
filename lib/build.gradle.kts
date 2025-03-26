@@ -14,6 +14,7 @@ repositories {
 dependencies {
     testImplementation(libs.junit.jupiter.engine)
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("org.slf4j:slf4j-nop:2.0.9")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     api(libs.diagnosekoder)

@@ -8,7 +8,6 @@ import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.trees.assertPath
-import no.nav.tsm.regulus.regula.trees.debugPath
 import org.junit.jupiter.api.Nested
 
 class ArbeidsuforhetRulesTest {
@@ -22,8 +21,6 @@ class ArbeidsuforhetRulesTest {
             val payload = testArbeidsuforhetPayload(hoveddiagnose = null, annenFraversArsak = null)
 
             val (result) = ArbeidsuforhetRules(payload).execute()
-
-            result.debugPath()
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
