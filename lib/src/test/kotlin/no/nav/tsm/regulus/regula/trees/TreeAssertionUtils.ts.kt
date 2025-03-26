@@ -5,13 +5,13 @@ import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.dsl.TreeOutput
 import no.nav.tsm.regulus.regula.executor.Juridisk
 
-fun <T> assertPath(result: List<RuleOutput<T>>, expectedPath: List<Pair<T, Boolean>>) {
+internal fun <T> assertPath(result: List<RuleOutput<T>>, expectedPath: List<Pair<T, Boolean>>) {
     val pathMap = result.map { it.rule to it.ruleResult }
 
     assertEquals(pathMap, expectedPath)
 }
 
-fun <T, S> TreeOutput<T, S>.debugPath() {
+internal fun <T, S> TreeOutput<T, S>.debugPath() {
     println("[DEBUG] Tree was ${this.treeResult}, path:")
     println(
         this.rulePath.joinToString(separator = "\n") {
@@ -20,7 +20,7 @@ fun <T, S> TreeOutput<T, S>.debugPath() {
     )
 }
 
-fun <T, S> TreeOutput<T, S>.debugPath(expectedPath: List<Pair<T, Boolean>>) {
+internal fun <T, S> TreeOutput<T, S>.debugPath(expectedPath: List<Pair<T, Boolean>>) {
     println("[DEBUG] Tree was ${this.treeResult}, path:")
 
     var ruleIndex = -1
@@ -39,12 +39,12 @@ fun <T, S> TreeOutput<T, S>.debugPath(expectedPath: List<Pair<T, Boolean>>) {
     )
 }
 
-fun <T, S> Pair<TreeOutput<T, S>, Juridisk>.debugPath(): Pair<TreeOutput<T, S>, Juridisk> {
+internal fun <T, S> Pair<TreeOutput<T, S>, Juridisk>.debugPath(): Pair<TreeOutput<T, S>, Juridisk> {
     this.first.debugPath()
     return this
 }
 
-fun <T, S> Pair<TreeOutput<T, S>, Juridisk>.debugPath(
+internal fun <T, S> Pair<TreeOutput<T, S>, Juridisk>.debugPath(
     expectedPath: List<Pair<T, Boolean>>
 ): Pair<TreeOutput<T, S>, Juridisk> {
     this.first.debugPath(expectedPath)

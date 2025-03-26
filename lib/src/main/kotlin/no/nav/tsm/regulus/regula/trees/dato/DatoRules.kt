@@ -7,12 +7,12 @@ import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.latestTom
 
-class DatoRules(periodePayload: DatoRulePayload) :
+internal class DatoRules(periodePayload: DatoRulePayload) :
     TreeExecutor<DatoRule, DatoRulePayload>(datoRuleTree, periodePayload) {
     override fun getRule(rule: DatoRule) = getDatoRule(rule)
 }
 
-fun getDatoRule(rules: DatoRule): DatoRuleFn {
+private fun getDatoRule(rules: DatoRule): DatoRuleFn {
     return when (rules) {
         DatoRule.FREMDATERT -> Rules.fremdatertOver30Dager
         DatoRule.TILBAKEDATERT_MER_ENN_3_AR -> Rules.tilbakeDatertOver3Ar

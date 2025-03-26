@@ -7,15 +7,13 @@ import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.utils.daysBetween
 import no.nav.tsm.regulus.regula.utils.workdaysBetween
 
-class PeriodeRules(payload: PeriodeRulePayload) :
+internal class PeriodeRules(payload: PeriodeRulePayload) :
     TreeExecutor<PeriodeRule, PeriodeRulePayload>(periodeRuleTree, payload) {
     override fun getRule(rule: PeriodeRule): (PeriodeRulePayload) -> RuleOutput<PeriodeRule> =
-        getPeriodRule(rule)
+        getPeriodeRule(rule)
 }
 
-private typealias PeriodeRuleFn = (payload: PeriodeRulePayload) -> RuleOutput<PeriodeRule>
-
-fun getPeriodRule(rules: PeriodeRule): PeriodeRuleFn {
+private fun getPeriodeRule(rules: PeriodeRule): PeriodeRuleFn {
     return when (rules) {
         PeriodeRule.PERIODER_MANGLER -> Rules.periodeMangler
         PeriodeRule.FRADATO_ETTER_TILDATO -> Rules.fraDatoEtterTilDato
@@ -31,6 +29,8 @@ fun getPeriodRule(rules: PeriodeRule): PeriodeRuleFn {
         PeriodeRule.SYKMELDING_MED_BEHANDLINGSDAGER -> Rules.inneholderBehandlingsDager
     }
 }
+
+private typealias PeriodeRuleFn = (payload: PeriodeRulePayload) -> RuleOutput<PeriodeRule>
 
 private val Rules =
     object {
@@ -213,5 +213,5 @@ private val Rules =
         }
     }
 
-fun ClosedRange<LocalDate>.startedWeeksBetween(): Int =
+private fun ClosedRange<LocalDate>.startedWeeksBetween(): Int =
     ChronoUnit.WEEKS.between(start, endInclusive).toInt() + 1

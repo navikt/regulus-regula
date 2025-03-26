@@ -11,7 +11,7 @@ import no.nav.tsm.regulus.regula.trees.tilbakedatering.extras.isForlengelse
 import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.latestTom
 
-class TilbakedateringRules(payload: TilbakedateringRulePayload) :
+internal class TilbakedateringRules(payload: TilbakedateringRulePayload) :
     TreeExecutor<TilbakedateringRule, TilbakedateringRulePayload>(
         tilbakedateringRuleTree,
         payload,

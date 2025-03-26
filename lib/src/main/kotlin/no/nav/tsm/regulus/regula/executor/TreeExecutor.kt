@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory
  * - a set of rule implementations
  * - a payload specific to the rules/tree
  */
-abstract class TreeExecutor<RuleEnum, Payload : BasePayload>(
+internal abstract class TreeExecutor<RuleEnum, Payload : BasePayload>(
     private val tree: Pair<RuleNode<RuleEnum, RuleResult>, Juridisk>,
     private val payload: Payload,
 ) {

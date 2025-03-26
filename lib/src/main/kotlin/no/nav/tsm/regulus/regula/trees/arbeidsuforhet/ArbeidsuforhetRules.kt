@@ -5,13 +5,13 @@ import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.payload.Diagnose
 
-class ArbeidsuforhetRules(val payload: ArbeidsuforhetRulePayload) :
+internal class ArbeidsuforhetRules(val payload: ArbeidsuforhetRulePayload) :
     TreeExecutor<ArbeidsuforhetRule, ArbeidsuforhetRulePayload>(arbeidsuforhetRuleTree, payload) {
     override fun getRule(rule: ArbeidsuforhetRule): ArbeidsuforhetRuleFn =
         getArbeidsuforhetRule(rule)
 }
 
-fun getArbeidsuforhetRule(rules: ArbeidsuforhetRule): ArbeidsuforhetRuleFn {
+private fun getArbeidsuforhetRule(rules: ArbeidsuforhetRule): ArbeidsuforhetRuleFn {
     return when (rules) {
         ArbeidsuforhetRule.ICPC_2_Z_DIAGNOSE -> Rules.icpc2ZDiagnose
         ArbeidsuforhetRule.HOVEDDIAGNOSE_MANGLER -> Rules.manglerHovedDiagnose

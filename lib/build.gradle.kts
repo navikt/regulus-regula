@@ -57,7 +57,7 @@ tasks.register("bumpVersion") {
 
 tasks.named<Test>("test") { useJUnitPlatform() }
 
-tasks.register<JavaExec>("lint-trees") {
+tasks.register<JavaExec>("lintTrees") {
     logging.captureStandardOutput(LogLevel.LIFECYCLE)
 
     mainClass.set("no.nav.tsm.regulus.regula.meta.TreeLinterKt")
@@ -68,7 +68,7 @@ tasks.register<JavaExec>("lint-trees") {
     environment("ONLY_ERRORS", true)
 }
 
-tasks.register<JavaExec>("generate-mermaid") {
+tasks.register<JavaExec>("generateMermaid") {
     val output = ByteArrayOutputStream()
     mainClass.set("no.nav.tsm.regulus.regula.meta.GenerateMermaidKt")
     classpath = sourceSets["main"].runtimeClasspath
@@ -96,6 +96,6 @@ tasks.register<JavaExec>("generate-mermaid") {
 }
 
 tasks.named("build") {
-    dependsOn("lint-trees")
-    dependsOn("generate-mermaid")
+    dependsOn("lintTrees")
+    dependsOn("generateMermaid")
 }

@@ -60,6 +60,7 @@ fun main() {
         output(expectedFiles.rules && rulesResult.errorCount() == 0, "${treeName}Rules.kt")
         output(rulesResult.correctName, "Has class ${treeName}Rules", level = 2)
         output(rulesResult.hasExecutor, "Has implemented TreeExecutor abstract class", level = 2)
+        output(rulesResult.hasPrivateGetRulesFn, "Has private fun get${treeName}Rule", level = 2)
         output(rulesResult.hasRulesObject, "Has private val Rules = ...", level = 2)
         output(rulesResult.hasRuleFnAlias, "Has private typealias ${treeName}RuleFn", level = 2)
 
@@ -67,9 +68,9 @@ fun main() {
     }
 
     if (totalErrors > 0) {
-        println("\nFound $totalErrors errors in ${folders.size} rule trees".red())
+        println("\nFound $totalErrors errors".red() + " in total ${folders.size} rule trees")
     } else {
-        println("\nAll trees are valid!".green())
+        println("\nAll ${folders.size} trees are valid!".green())
     }
 }
 
@@ -178,11 +179,19 @@ fun verifyExpectedRuleTreeFileStructure(folder: String, treeName: String): Verif
 data class VerifiedRules(
     val correctName: Boolean,
     val hasExecutor: Boolean,
+    val hasPrivateGetRulesFn: Boolean,
     val hasRulesObject: Boolean,
     val hasRuleFnAlias: Boolean,
 ) {
     fun errorCount(): Int {
-        return listOf(correctName, hasExecutor, hasRulesObject, hasRuleFnAlias).count { !it }
+        return listOf(
+                correctName,
+                hasExecutor,
+                hasPrivateGetRulesFn,
+                hasRulesObject,
+                hasRuleFnAlias,
+            )
+            .count { !it }
     }
 }
 
@@ -193,14 +202,22 @@ fun verifyExpectedRulesFileStructure(folder: String, treeName: String): Verified
 
         val correctName = fileContents.contains("class ${treeName}Rules(")
         val hasExecutor = fileContents.contains("TreeExecutor<")
+        val hasPrivateGetRulesFn = fileContents.contains("private fun get${treeName}Rule(")
         val hasRulesObject = fileContents.contains("private val Rules =")
         val hasRuleFnAlias = fileContents.contains("private typealias ${treeName}RuleFn")
 
-        return VerifiedRules(correctName, hasExecutor, hasRulesObject, hasRuleFnAlias)
+        return VerifiedRules(
+            correctName = correctName,
+            hasExecutor = hasExecutor,
+            hasPrivateGetRulesFn = hasPrivateGetRulesFn,
+            hasRulesObject = hasRulesObject,
+            hasRuleFnAlias = hasRuleFnAlias,
+        )
     } catch (e: Exception) {
         return VerifiedRules(
             correctName = false,
             hasExecutor = false,
+            hasPrivateGetRulesFn = false,
             hasRulesObject = false,
             hasRuleFnAlias = false,
         )

@@ -4,12 +4,12 @@ import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.utils.daysBetween
 
-class ValideringRules(validationRulePayload: ValideringRulePayload) :
+internal class ValideringRules(validationRulePayload: ValideringRulePayload) :
     TreeExecutor<ValideringRule, ValideringRulePayload>(valideringRuleTree, validationRulePayload) {
     override fun getRule(rule: ValideringRule) = getValideringRule(rule)
 }
 
-fun getValideringRule(rules: ValideringRule): ValideringRuleFn =
+private fun getValideringRule(rules: ValideringRule): ValideringRuleFn =
     when (rules) {
         ValideringRule.UGYLDIG_REGELSETTVERSJON -> Rules.ugyldigRegelsettversjon
         ValideringRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 ->

@@ -8,12 +8,12 @@ import no.nav.tsm.regulus.regula.utils.daysBetween
 import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.latestTom
 
-class HprRules(hprRulePayload: HprRulePayload) :
+internal class HprRules(hprRulePayload: HprRulePayload) :
     TreeExecutor<HprRule, HprRulePayload>(hprRuleTree, hprRulePayload) {
     override fun getRule(rule: HprRule) = getHprRule(rule)
 }
 
-fun getHprRule(rules: HprRule): HprRuleFn =
+private fun getHprRule(rules: HprRule): HprRuleFn =
     when (rules) {
         HprRule.BEHANDLER_GYLIDG_I_HPR -> Rules.behanderGyldigHPR
         HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR -> Rules.behandlerHarAutorisasjon

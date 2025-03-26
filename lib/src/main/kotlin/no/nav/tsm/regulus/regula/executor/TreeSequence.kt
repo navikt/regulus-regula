@@ -2,9 +2,9 @@ package no.nav.tsm.regulus.regula.executor
 
 import no.nav.tsm.regulus.regula.dsl.TreeOutput
 
-typealias RuleExecutionResult = List<Pair<TreeOutput<*, RuleResult>, Juridisk>>
+internal typealias RuleExecutionResult = List<Pair<TreeOutput<*, RuleResult>, Juridisk>>
 
-fun runRules(sequence: Sequence<TreeExecutor<*, *>>): RuleExecutionResult {
+internal fun runRules(sequence: Sequence<TreeExecutor<*, *>>): RuleExecutionResult {
     val results = mutableListOf<Pair<TreeOutput<*, RuleResult>, Juridisk>>()
 
     for (seq in sequence) {

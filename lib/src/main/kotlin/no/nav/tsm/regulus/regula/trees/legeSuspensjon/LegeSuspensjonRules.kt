@@ -3,7 +3,7 @@ package no.nav.tsm.regulus.regula.trees.legeSuspensjon
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 
-class LegeSuspensjonRules(legeSuspensjonPayload: LegeSuspensjonRulePayload) :
+internal class LegeSuspensjonRules(legeSuspensjonPayload: LegeSuspensjonRulePayload) :
     TreeExecutor<LegeSuspensjonRule, LegeSuspensjonRulePayload>(
         legeSuspensjonRuleTree,
         legeSuspensjonPayload,
@@ -11,7 +11,7 @@ class LegeSuspensjonRules(legeSuspensjonPayload: LegeSuspensjonRulePayload) :
     override fun getRule(rule: LegeSuspensjonRule) = getLegeSuspensjonRule(rule)
 }
 
-fun getLegeSuspensjonRule(rule: LegeSuspensjonRule): LegeSuspensjonRuleFn =
+private fun getLegeSuspensjonRule(rule: LegeSuspensjonRule): LegeSuspensjonRuleFn =
     when (rule) {
         LegeSuspensjonRule.BEHANDLER_SUSPENDERT -> Rules.behandlerSuspendert
     }
