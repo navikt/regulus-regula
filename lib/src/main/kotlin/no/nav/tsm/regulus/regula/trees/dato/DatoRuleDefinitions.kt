@@ -3,7 +3,7 @@ package no.nav.tsm.regulus.regula.trees.dato
 import no.nav.tsm.regulus.regula.executor.RuleOutcome
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 
-enum class DatoRule {
+internal enum class DatoRule {
     FREMDATERT,
     TILBAKEDATERT_MER_ENN_3_AR,
     TOTAL_VARIGHET_OVER_ETT_AAR;

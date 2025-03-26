@@ -9,13 +9,13 @@ import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.isWorkingDaysBetween
 import no.nav.tsm.regulus.regula.utils.latestTom
 
-data class Arbeidsgiverperiode(
+internal data class Arbeidsgiverperiode(
     val isArbeidsgiverperiode: Boolean,
     val startdato: LocalDate,
     val dager: List<LocalDate>,
 )
 
-fun isArbeidsgiverperiode(
+internal fun isArbeidsgiverperiode(
     earliestFom: LocalDate,
     latestTom: LocalDate,
     tidligereSykmeldinger: List<TidligereSykmelding>,
@@ -86,7 +86,7 @@ private fun filterDates(
         .sortedDescending()
 }
 
-fun getSykedagerForArbeidsgiverperiode(
+private fun getSykedagerForArbeidsgiverperiode(
     startDato: LocalDate,
     fom: LocalDate,
     tom: LocalDate,

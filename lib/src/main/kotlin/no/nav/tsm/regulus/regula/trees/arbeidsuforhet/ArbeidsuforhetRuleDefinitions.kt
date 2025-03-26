@@ -3,7 +3,7 @@ package no.nav.tsm.regulus.regula.trees.arbeidsuforhet
 import no.nav.tsm.regulus.regula.executor.RuleOutcome
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 
-enum class ArbeidsuforhetRule {
+internal enum class ArbeidsuforhetRule {
     ICPC_2_Z_DIAGNOSE,
     HOVEDDIAGNOSE_MANGLER,
     FRAVAERSGRUNN_MANGLER,

@@ -3,7 +3,7 @@ package no.nav.tsm.regulus.regula.trees.pasientUnder13
 import no.nav.tsm.regulus.regula.executor.RuleOutcome
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 
-enum class PasientUnder13Rule {
+internal enum class PasientUnder13Rule {
     PASIENT_YNGRE_ENN_13;
 
     enum class Outcomes(

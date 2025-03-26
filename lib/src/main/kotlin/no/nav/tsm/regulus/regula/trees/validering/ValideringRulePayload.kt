@@ -3,7 +3,7 @@ package no.nav.tsm.regulus.regula.trees.validering
 import no.nav.tsm.regulus.regula.payload.BasePayload
 import no.nav.tsm.regulus.regula.payload.FomTom
 
-data class ValideringRulePayload(
+internal data class ValideringRulePayload(
     override val sykmeldingId: String,
     val rulesetVersion: String,
     val perioder: List<FomTom>,
@@ -14,13 +14,13 @@ data class ValideringRulePayload(
     val utdypendeOpplysninger: Map<String, Map<String, SporsmalSvar>>,
 ) : BasePayload
 
-data class SporsmalSvar(
+internal data class SporsmalSvar(
     val sporsmal: String,
     val svar: String,
     val restriksjoner: List<SvarRestriksjon>,
 )
 
-enum class SvarRestriksjon(
+internal enum class SvarRestriksjon(
     val codeValue: String,
     val text: String,
     val oid: String = "2.16.578.1.12.4.1.1.8134",

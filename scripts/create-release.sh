@@ -20,7 +20,7 @@ git tag "$VERSION"
 git push origin "$VERSION"
 
 # Create GitHub release
-gh release create "$VERSION" -t "Release $VERSION" -n "$COMMITS"
+gh release create "$VERSION" -t "v$VERSION" -n "$COMMITS"
 
 # Write to GitHub Actions summary
 if [ -n "$GITHUB_STEP_SUMMARY" ]; then

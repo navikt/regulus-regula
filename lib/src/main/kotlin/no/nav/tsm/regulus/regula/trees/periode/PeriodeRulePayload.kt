@@ -4,14 +4,15 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import no.nav.tsm.regulus.regula.payload.BasePayload
 
-data class PeriodeRulePayload(
+internal data class PeriodeRulePayload(
     override val sykmeldingId: String,
     val perioder: List<Periode>,
     val behandletTidspunkt: LocalDateTime,
     val receivedDate: LocalDateTime,
 ) : BasePayload
 
-data class Periode(
+// TODO: Use reusable Periode
+internal data class Periode(
     val fom: LocalDate,
     val tom: LocalDate,
     val aktivitetIkkeMulig: AktivitetIkkeMulig?,
@@ -24,12 +25,12 @@ data class Periode(
     override val start: LocalDate = fom
 }
 
-data class AktivitetIkkeMulig(
+internal data class AktivitetIkkeMulig(
     val medisinskArsak: MedisinskArsak?,
     val arbeidsrelatertArsak: ArbeidsrelatertArsak?,
 )
 
-data class ArbeidsrelatertArsak(
+internal data class ArbeidsrelatertArsak(
     val beskrivelse: String?,
     val arsak: List<ArbeidsrelatertArsakType>,
 )
@@ -43,7 +44,7 @@ enum class ArbeidsrelatertArsakType(
     ANNET("9", "Annet"),
 }
 
-data class MedisinskArsak(val beskrivelse: String?, val arsak: List<MedisinskArsakType>)
+internal data class MedisinskArsak(val beskrivelse: String?, val arsak: List<MedisinskArsakType>)
 
 enum class MedisinskArsakType(
     val codeValue: String,
@@ -56,4 +57,4 @@ enum class MedisinskArsakType(
     ANNET("9", "Annet"),
 }
 
-data class Gradert(val reisetilskudd: Boolean, val grad: Int)
+internal data class Gradert(val reisetilskudd: Boolean, val grad: Int)

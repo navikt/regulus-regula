@@ -1,10 +1,10 @@
 package no.nav.tsm.regulus.regula.meta
 
 import no.nav.tsm.regulus.regula.dsl.*
-import no.nav.tsm.regulus.regula.executor.MedJuridisk
 import no.nav.tsm.regulus.regula.executor.RuleResult
 import no.nav.tsm.regulus.regula.executor.RuleStatus
-import no.nav.tsm.regulus.regula.executor.UtenJuridisk
+import no.nav.tsm.regulus.regula.juridisk.MedJuridisk
+import no.nav.tsm.regulus.regula.juridisk.UtenJuridisk
 import no.nav.tsm.regulus.regula.trees.arbeidsuforhet.arbeidsuforhetRuleTree
 import no.nav.tsm.regulus.regula.trees.dato.datoRuleTree
 import no.nav.tsm.regulus.regula.trees.hpr.hprRuleTree
@@ -106,7 +106,7 @@ private fun <T> TreeNode<T, RuleResult>.traverseTree(
     }
 }
 
-fun getStyle(childResult: RuleStatus): String =
+private fun getStyle(childResult: RuleStatus): String =
     when (childResult) {
         RuleStatus.OK -> ":::ok"
         RuleStatus.INVALID -> ":::invalid"

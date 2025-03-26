@@ -1,6 +1,7 @@
 package no.nav.tsm.regulus.regula.executor
 
 import no.nav.tsm.regulus.regula.dsl.TreeOutput
+import no.nav.tsm.regulus.regula.juridisk.Juridisk
 
 internal typealias RuleExecutionResult = List<Pair<TreeOutput<*, RuleResult>, Juridisk>>
 

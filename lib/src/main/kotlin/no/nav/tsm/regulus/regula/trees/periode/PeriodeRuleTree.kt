@@ -2,11 +2,11 @@ package no.nav.tsm.regulus.regula.trees.periode
 
 import no.nav.tsm.regulus.regula.dsl.tree
 import no.nav.tsm.regulus.regula.executor.RuleStatus.*
-import no.nav.tsm.regulus.regula.executor.UtenJuridisk
 import no.nav.tsm.regulus.regula.executor.no
 import no.nav.tsm.regulus.regula.executor.yes
+import no.nav.tsm.regulus.regula.juridisk.UtenJuridisk
 
-val periodeRuleTree =
+internal val periodeRuleTree =
     tree<PeriodeRule>(PeriodeRule.PERIODER_MANGLER) {
         yes(INVALID, PeriodeRule.Outcomes.PERIODER_MANGLER)
         no(PeriodeRule.FRADATO_ETTER_TILDATO) {

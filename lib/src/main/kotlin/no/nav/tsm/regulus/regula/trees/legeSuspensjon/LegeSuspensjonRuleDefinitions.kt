@@ -3,7 +3,7 @@ package no.nav.tsm.regulus.regula.trees.legeSuspensjon
 import no.nav.tsm.regulus.regula.executor.RuleOutcome
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 
-enum class LegeSuspensjonRule {
+internal enum class LegeSuspensjonRule {
     BEHANDLER_SUSPENDERT;
 
     enum class Outcomes(

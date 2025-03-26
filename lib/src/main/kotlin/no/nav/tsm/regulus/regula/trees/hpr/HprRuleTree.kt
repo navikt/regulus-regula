@@ -2,7 +2,6 @@ package no.nav.tsm.regulus.regula.trees.hpr
 
 import no.nav.tsm.regulus.regula.dsl.RuleNode
 import no.nav.tsm.regulus.regula.dsl.tree
-import no.nav.tsm.regulus.regula.executor.MedJuridisk
 import no.nav.tsm.regulus.regula.executor.RuleResult
 import no.nav.tsm.regulus.regula.executor.RuleStatus.INVALID
 import no.nav.tsm.regulus.regula.executor.RuleStatus.OK
@@ -10,8 +9,9 @@ import no.nav.tsm.regulus.regula.executor.no
 import no.nav.tsm.regulus.regula.executor.yes
 import no.nav.tsm.regulus.regula.juridisk.JuridiskHenvisning
 import no.nav.tsm.regulus.regula.juridisk.Lovverk
+import no.nav.tsm.regulus.regula.juridisk.MedJuridisk
 
-val hprRuleTree =
+internal val hprRuleTree =
     tree<HprRule>(HprRule.BEHANDLER_GYLIDG_I_HPR) {
         no(INVALID, HprRule.Outcomes.BEHANDLER_IKKE_GYLDIG_I_HPR)
         yes(HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR) {

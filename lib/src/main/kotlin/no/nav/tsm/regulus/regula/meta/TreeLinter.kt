@@ -74,25 +74,25 @@ fun main() {
     }
 }
 
-fun readFoldersInTreesDirectory(): List<String> {
+private fun readFoldersInTreesDirectory(): List<String> {
     val treesDirectory = File(basePath)
     return treesDirectory.listFiles()?.filter { it.isDirectory }?.map { it.name } ?: emptyList()
 }
 
-fun getFilesInFolder(folder: String): List<String> {
+private fun getFilesInFolder(folder: String): List<String> {
     val folderPath = "$basePath/$folder"
     val folder = File(folderPath)
     return folder.listFiles()?.filter { it.isFile }?.map { it.name } ?: emptyList()
 }
 
-data class ExpectedFiles(
+private data class ExpectedFiles(
     val ruleDefinitions: Boolean,
     val rulePayload: Boolean,
     val ruleTree: Boolean,
     val rules: Boolean,
 )
 
-fun getExpectedFiles(name: String, folderFiles: List<String>): ExpectedFiles {
+private fun getExpectedFiles(name: String, folderFiles: List<String>): ExpectedFiles {
     return ExpectedFiles(
         ruleDefinitions = folderFiles.contains("${name}RuleDefinitions.kt"),
         rulePayload = folderFiles.contains("${name}RulePayload.kt"),
@@ -101,7 +101,7 @@ fun getExpectedFiles(name: String, folderFiles: List<String>): ExpectedFiles {
     )
 }
 
-data class VerifiedRuleDefinitions(
+private data class VerifiedRuleDefinitions(
     val hasEnum: Boolean,
     val implementsOutcome: Boolean,
     val hasOutcomesEnum: Boolean,
@@ -115,7 +115,7 @@ data class VerifiedRuleDefinitions(
     * Verifies that it has an enum called ${treeName}Rule
     * Verifies that that enum has a sub-enum called Outcomes
 */
-fun verifyExpectedRuleDefinitionsFileStructure(
+private fun verifyExpectedRuleDefinitionsFileStructure(
     folder: String,
     treeName: String,
 ): VerifiedRuleDefinitions {
@@ -133,7 +133,7 @@ fun verifyExpectedRuleDefinitionsFileStructure(
 }
 
 /** Checks that the file has the correctly named data class */
-fun verifyExpectedRulePayloadFileStructure(folder: String, treeName: String): Boolean {
+private fun verifyExpectedRulePayloadFileStructure(folder: String, treeName: String): Boolean {
     try {
         val rulePayloadFile = File("$basePath/$folder/${treeName}RulePayload.kt")
         val fileContents = rulePayloadFile.readText()
@@ -144,7 +144,7 @@ fun verifyExpectedRulePayloadFileStructure(folder: String, treeName: String): Bo
     }
 }
 
-data class VerifiedRuleTree(
+private data class VerifiedRuleTree(
     val correctName: Boolean,
     // Good if null
     val noOtherClassOrFun: String?,
@@ -155,7 +155,10 @@ data class VerifiedRuleTree(
 /**
  * Checks that the file has the correctly implementation of the rule tree and has no other exports
  */
-fun verifyExpectedRuleTreeFileStructure(folder: String, treeName: String): VerifiedRuleTree {
+private fun verifyExpectedRuleTreeFileStructure(
+    folder: String,
+    treeName: String,
+): VerifiedRuleTree {
     try {
         val ruleTreeFile = File("$basePath/$folder/${treeName}RuleTree.kt")
         val fileContents = ruleTreeFile.readText()
@@ -176,7 +179,7 @@ fun verifyExpectedRuleTreeFileStructure(folder: String, treeName: String): Verif
     }
 }
 
-data class VerifiedRules(
+private data class VerifiedRules(
     val correctName: Boolean,
     val hasExecutor: Boolean,
     val hasPrivateGetRulesFn: Boolean,
@@ -195,7 +198,7 @@ data class VerifiedRules(
     }
 }
 
-fun verifyExpectedRulesFileStructure(folder: String, treeName: String): VerifiedRules {
+private fun verifyExpectedRulesFileStructure(folder: String, treeName: String): VerifiedRules {
     try {
         val rulesFile = File("$basePath/$folder/${treeName}Rules.kt")
         val fileContents = rulesFile.readText()
@@ -224,15 +227,7 @@ fun verifyExpectedRulesFileStructure(folder: String, treeName: String): Verified
     }
 }
 
-fun output(good: Boolean?, text: String, level: Int = 1, after: () -> Unit) {
-    output(good, text, level)
-
-    if (good == false) {
-        after()
-    }
-}
-
-fun output(good: Boolean?, text: String, level: Int = 1): Unit {
+private fun output(good: Boolean?, text: String, level: Int = 1): Unit {
     if (good == null) {
         println(text)
         return
@@ -246,4 +241,4 @@ private fun String.red() = "\u001B[31m$this\u001B[0m"
 
 private fun String.green() = "\u001B[32m$this\u001B[0m"
 
-fun String.camelToPascal(): String = replaceFirstChar { it.uppercaseChar() }
+private fun String.camelToPascal(): String = replaceFirstChar { it.uppercaseChar() }

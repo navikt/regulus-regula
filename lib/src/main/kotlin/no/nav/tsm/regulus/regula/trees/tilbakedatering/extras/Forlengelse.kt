@@ -9,14 +9,14 @@ import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.isWorkingDaysBetween
 import no.nav.tsm.regulus.regula.utils.latestTom
 
-data class Forlengelse(
+internal data class Forlengelse(
     val sykmeldingId: String,
     val fom: LocalDate,
     val tom: LocalDate,
     val gradert: Int?,
 )
 
-fun isForlengelse(
+internal fun isForlengelse(
     perioder: List<SykmeldingPeriode>,
     hoveddiagnose: Diagnose?,
     tidligereSykmeldinger: List<TidligereSykmelding>,

@@ -6,7 +6,7 @@ import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 
-fun testTilbakedateringRulePayload(
+internal fun testTilbakedateringRulePayload(
     perioder: List<SykmeldingPeriode> =
         listOf(
             SykmeldingPeriode.AktivitetIkkeMulig(
@@ -30,7 +30,7 @@ fun testTilbakedateringRulePayload(
         begrunnelseIkkeKontakt = begrunnelseIkkeKontakt,
     )
 
-fun testPeriode(fomOffset: Long, tomOffset: Long): List<SykmeldingPeriode> {
+internal fun testPeriode(fomOffset: Long, tomOffset: Long): List<SykmeldingPeriode> {
     return listOf(
         SykmeldingPeriode.AktivitetIkkeMulig(
             fom = LocalDate.now().plusDays(fomOffset),

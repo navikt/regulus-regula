@@ -3,7 +3,7 @@ package no.nav.tsm.regulus.regula.trees.periode
 import no.nav.tsm.regulus.regula.executor.RuleOutcome
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 
-enum class PeriodeRule {
+internal enum class PeriodeRule {
     PERIODER_MANGLER,
     FRADATO_ETTER_TILDATO,
     OVERLAPPENDE_PERIODER,

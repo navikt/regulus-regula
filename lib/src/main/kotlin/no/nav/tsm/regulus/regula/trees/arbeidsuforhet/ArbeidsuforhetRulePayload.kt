@@ -3,11 +3,11 @@ package no.nav.tsm.regulus.regula.trees.arbeidsuforhet
 import no.nav.tsm.regulus.regula.payload.BasePayload
 import no.nav.tsm.regulus.regula.payload.Diagnose
 
-data class ArbeidsuforhetRulePayload(
+internal data class ArbeidsuforhetRulePayload(
     override val sykmeldingId: String,
     val hoveddiagnose: Diagnose?,
     val bidiagnoser: List<Diagnose>,
     val annenFraversArsak: AnnenFraversArsak?,
 ) : BasePayload
 
-data class AnnenFraversArsak(val grunn: List<String>, val beskrivelse: String?)
+internal data class AnnenFraversArsak(val grunn: List<String>, val beskrivelse: String?)

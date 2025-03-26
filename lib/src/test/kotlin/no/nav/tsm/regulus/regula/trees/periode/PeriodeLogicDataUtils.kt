@@ -3,7 +3,7 @@ package no.nav.tsm.regulus.regula.trees.periode
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-fun testAktivitetIkkeMuligPeriode(
+internal fun testAktivitetIkkeMuligPeriode(
     fom: LocalDate = LocalDate.now(),
     tom: LocalDate = LocalDate.now().plusDays(15),
 ) =
@@ -17,7 +17,7 @@ fun testAktivitetIkkeMuligPeriode(
         reisetilskudd = false,
     )
 
-fun testBehandlingsdagerPeriode(
+internal fun testBehandlingsdagerPeriode(
     fom: LocalDate = LocalDate.now(),
     tom: LocalDate = LocalDate.now().plusDays(15),
     behandlingsdager: Int,
@@ -32,7 +32,7 @@ fun testBehandlingsdagerPeriode(
         reisetilskudd = false,
     )
 
-fun testGradertPeriode(
+internal fun testGradertPeriode(
     fom: LocalDate = LocalDate.now(),
     tom: LocalDate = LocalDate.now().plusDays(15),
     gradert: Int,
@@ -47,7 +47,7 @@ fun testGradertPeriode(
         reisetilskudd = false,
     )
 
-fun testAvventendePeriode(
+internal fun testAvventendePeriode(
     fom: LocalDate = LocalDate.now(),
     tom: LocalDate = LocalDate.now().plusDays(15),
     avventendeInnspill: String,
@@ -62,7 +62,7 @@ fun testAvventendePeriode(
         reisetilskudd = false,
     )
 
-fun testPeriodLogicRulePayload(
+internal fun testPeriodLogicRulePayload(
     perioder: List<Periode> = listOf(testAktivitetIkkeMuligPeriode()),
     behandletTidspunkt: LocalDateTime = LocalDateTime.now(),
     receivedDate: LocalDateTime = LocalDateTime.now(),

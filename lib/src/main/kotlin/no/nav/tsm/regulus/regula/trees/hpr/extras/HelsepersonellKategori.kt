@@ -1,6 +1,6 @@
 package no.nav.tsm.regulus.regula.trees.hpr.extras
 
-enum class HelsepersonellKategori(
+internal enum class HelsepersonellKategori(
     val beskrivendeHelsepersonellKategoriKategoriVerdi: String,
     val verdi: String,
 ) {

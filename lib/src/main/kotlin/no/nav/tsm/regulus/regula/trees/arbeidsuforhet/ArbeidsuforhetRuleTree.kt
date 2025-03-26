@@ -1,15 +1,15 @@
 package no.nav.tsm.regulus.regula.trees.arbeidsuforhet
 
 import no.nav.tsm.regulus.regula.dsl.tree
-import no.nav.tsm.regulus.regula.executor.MedJuridisk
 import no.nav.tsm.regulus.regula.executor.RuleStatus.INVALID
 import no.nav.tsm.regulus.regula.executor.RuleStatus.OK
 import no.nav.tsm.regulus.regula.executor.no
 import no.nav.tsm.regulus.regula.executor.yes
 import no.nav.tsm.regulus.regula.juridisk.JuridiskHenvisning
 import no.nav.tsm.regulus.regula.juridisk.Lovverk
+import no.nav.tsm.regulus.regula.juridisk.MedJuridisk
 
-val arbeidsuforhetRuleTree =
+internal val arbeidsuforhetRuleTree =
     tree<ArbeidsuforhetRule>(ArbeidsuforhetRule.HOVEDDIAGNOSE_MANGLER) {
         yes(ArbeidsuforhetRule.FRAVAERSGRUNN_MANGLER) {
             yes(INVALID, ArbeidsuforhetRule.Outcomes.FRAVAERSGRUNN_MANGLER)

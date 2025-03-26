@@ -3,7 +3,7 @@ package no.nav.tsm.regulus.regula.trees
 import kotlin.test.assertEquals
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.dsl.TreeOutput
-import no.nav.tsm.regulus.regula.executor.Juridisk
+import no.nav.tsm.regulus.regula.juridisk.Juridisk
 
 internal fun <T> assertPath(result: List<RuleOutput<T>>, expectedPath: List<Pair<T, Boolean>>) {
     val pathMap = result.map { it.rule to it.ruleResult }

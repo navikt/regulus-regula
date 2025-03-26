@@ -2,11 +2,12 @@ package no.nav.tsm.regulus.regula.dsl
 
 import no.nav.tsm.regulus.regula.executor.RuleResult
 
-sealed class TreeNode<Enum, Result>
+internal sealed class TreeNode<Enum, Result>
 
-class ResultNode<Enum, Result>(val result: Result) : TreeNode<Enum, Result>()
+internal class ResultNode<Enum, Result>(val result: Result) : TreeNode<Enum, Result>()
 
-class RuleNode<Enum, Result> internal constructor(val rule: Enum) : TreeNode<Enum, Result>() {
+internal class RuleNode<Enum, Result> internal constructor(val rule: Enum) :
+    TreeNode<Enum, Result>() {
     lateinit var yes: TreeNode<Enum, Result>
     lateinit var no: TreeNode<Enum, Result>
 
@@ -27,12 +28,12 @@ class RuleNode<Enum, Result> internal constructor(val rule: Enum) : TreeNode<Enu
     }
 }
 
-fun <Enum> tree(
+internal fun <Enum> tree(
     rule: Enum,
     init: RuleNode<Enum, RuleResult>.() -> Unit,
 ): RuleNode<Enum, RuleResult> = RuleNode<Enum, RuleResult>(rule).apply(init)
 
-fun <Enum> rule(
+internal fun <Enum> rule(
     rule: Enum,
     init: RuleNode<Enum, RuleResult>.() -> Unit,
 ): RuleNode<Enum, RuleResult> = RuleNode<Enum, RuleResult>(rule).apply(init)

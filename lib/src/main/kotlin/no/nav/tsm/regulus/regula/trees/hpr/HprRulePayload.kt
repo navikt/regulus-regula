@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 import no.nav.tsm.regulus.regula.payload.BasePayload
 import no.nav.tsm.regulus.regula.payload.FomTom
 
-data class HprRulePayload(
+internal data class HprRulePayload(
     override val sykmeldingId: String,
     val behandler: Behandler,
     val perioder: List<FomTom>,
@@ -13,15 +13,15 @@ data class HprRulePayload(
     val signaturdato: LocalDateTime,
 ) : BasePayload
 
-data class Behandler(val godkjenninger: List<Godkjenning>)
+internal data class Behandler(val godkjenninger: List<Godkjenning>)
 
-data class Godkjenning(
+internal data class Godkjenning(
     val autorisasjon: Kode?,
     val helsepersonellkategori: Kode?,
     val tillegskompetanse: List<Tilleggskompetanse>?,
 )
 
-data class Tilleggskompetanse(
+internal data class Tilleggskompetanse(
     val avsluttetStatus: Kode?,
     val eTag: String?,
     val gyldig: Periode?,
@@ -29,6 +29,6 @@ data class Tilleggskompetanse(
     val type: Kode?,
 )
 
-data class Periode(val fra: LocalDateTime?, val til: LocalDateTime?)
+internal data class Periode(val fra: LocalDateTime?, val til: LocalDateTime?)
 
-data class Kode(val aktiv: Boolean, val oid: Int, val verdi: String?)
+internal data class Kode(val aktiv: Boolean, val oid: Int, val verdi: String?)

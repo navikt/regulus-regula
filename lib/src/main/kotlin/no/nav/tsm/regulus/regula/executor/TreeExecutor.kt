@@ -7,6 +7,7 @@ import no.nav.tsm.regulus.regula.dsl.TreeNode
 import no.nav.tsm.regulus.regula.dsl.TreeOutput
 import no.nav.tsm.regulus.regula.dsl.join
 import no.nav.tsm.regulus.regula.dsl.printRulePath
+import no.nav.tsm.regulus.regula.juridisk.Juridisk
 import no.nav.tsm.regulus.regula.payload.BasePayload
 import org.slf4j.LoggerFactory
 

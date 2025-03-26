@@ -6,13 +6,13 @@ import no.nav.tsm.regulus.regula.payload.BasePayload
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 
-data class TidligereSykmelding(
+internal data class TidligereSykmelding(
     val sykmeldingId: String,
     val perioder: List<SykmeldingPeriode>,
     val hoveddiagnose: Diagnose?,
 )
 
-data class TilbakedateringRulePayload(
+internal data class TilbakedateringRulePayload(
     override val sykmeldingId: String,
     val signaturdato: LocalDateTime,
     val perioder: List<SykmeldingPeriode>,

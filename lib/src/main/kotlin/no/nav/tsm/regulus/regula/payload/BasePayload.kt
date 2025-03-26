@@ -1,5 +1,5 @@
 package no.nav.tsm.regulus.regula.payload
 
-interface BasePayload {
+internal interface BasePayload {
     val sykmeldingId: String
 }

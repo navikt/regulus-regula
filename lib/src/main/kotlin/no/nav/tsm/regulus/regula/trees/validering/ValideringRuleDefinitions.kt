@@ -3,7 +3,7 @@ package no.nav.tsm.regulus.regula.trees.validering
 import no.nav.tsm.regulus.regula.executor.RuleOutcome
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 
-enum class ValideringRule {
+internal enum class ValideringRule {
     UGYLDIG_REGELSETTVERSJON,
     MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39,
     UGYLDIG_ORGNR_LENGDE,

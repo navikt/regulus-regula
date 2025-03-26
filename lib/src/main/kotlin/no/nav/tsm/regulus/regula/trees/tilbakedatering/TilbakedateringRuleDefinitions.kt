@@ -3,7 +3,7 @@ package no.nav.tsm.regulus.regula.trees.tilbakedatering
 import no.nav.tsm.regulus.regula.executor.RuleOutcome
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 
-enum class TilbakedateringRule {
+internal enum class TilbakedateringRule {
     ARBEIDSGIVERPERIODE,
     BEGRUNNELSE_MIN_1_ORD,
     BEGRUNNELSE_MIN_3_ORD,

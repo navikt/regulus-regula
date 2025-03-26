@@ -7,14 +7,14 @@ import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger("Ettersending")
 
-data class Ettersendelse(
+internal data class Ettersendelse(
     val sykmeldingId: String,
     val fom: LocalDate,
     val tom: LocalDate,
     val gradert: Int?,
 )
 
-fun isEttersending(
+internal fun isEttersending(
     sykmeldingId: String,
     perioder: List<SykmeldingPeriode>,
     harMedisinskVurdering: Boolean,
@@ -64,7 +64,7 @@ fun isEttersending(
     }
 }
 
-fun SykmeldingPeriode.ettersendingmessigEqual(other: SykmeldingPeriode): Boolean {
+private fun SykmeldingPeriode.ettersendingmessigEqual(other: SykmeldingPeriode): Boolean {
     val overallEqual = this.type == other.type && this.fom == other.fom && this.tom == other.tom
     if (!overallEqual) return false
 

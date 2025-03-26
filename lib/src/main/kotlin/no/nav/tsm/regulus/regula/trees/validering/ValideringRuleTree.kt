@@ -3,11 +3,11 @@ package no.nav.tsm.regulus.regula.trees.validering
 import no.nav.tsm.regulus.regula.dsl.tree
 import no.nav.tsm.regulus.regula.executor.RuleStatus.INVALID
 import no.nav.tsm.regulus.regula.executor.RuleStatus.OK
-import no.nav.tsm.regulus.regula.executor.UtenJuridisk
 import no.nav.tsm.regulus.regula.executor.no
 import no.nav.tsm.regulus.regula.executor.yes
+import no.nav.tsm.regulus.regula.juridisk.UtenJuridisk
 
-val valideringRuleTree =
+internal val valideringRuleTree =
     tree<ValideringRule>(ValideringRule.UGYLDIG_REGELSETTVERSJON) {
         yes(INVALID, ValideringRule.Outcomes.UGYLDIG_REGELSETTVERSJON)
         no(ValideringRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39) {
