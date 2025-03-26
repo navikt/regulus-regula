@@ -47,14 +47,6 @@ publishing {
 
 spotless { kotlin { ktfmt("0.54").kotlinlangStyle() } }
 
-tasks.register("bumpVersion") {
-    doLast {
-        val versionFile = file("version")
-        val current = versionFile.readText().trim().toInt()
-        versionFile.writeText((current + 1).toString())
-    }
-}
-
 tasks.named<Test>("test") { useJUnitPlatform() }
 
 tasks.register<JavaExec>("lintTrees") {

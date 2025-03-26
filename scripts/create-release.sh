@@ -1,16 +1,19 @@
 #!/bin/bash
 set -e
 
-# Commit bumped version
-git config user.name "github-actions[bot]"
-git config user.email "github-actions[bot]@users.noreply.github.com"
-git add lib/version
-git commit -m "Set next version to $VERSION [skip ci]"
-git push origin HEAD
-
 VERSION=$(cat lib/version)
 LAST_TAG=$(git tag --sort=-creatordate | head -n 1)
 COMMITS=$(git log ${LAST_TAG}..HEAD --pretty=format:"* %s")
+
+if [ -z "$VERSION" ]; then
+  echo "No version found in lib/version"
+  exit 1
+fi
+
+echo "Got version $VERSION"
+echo "Last tag is $LAST_TAG"
+echo "Commits since last tag:"
+echo "$COMMITS"
 
 # Create git tag
 git tag "$VERSION"
