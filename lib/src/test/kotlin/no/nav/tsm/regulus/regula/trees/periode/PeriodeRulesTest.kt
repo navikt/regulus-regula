@@ -6,9 +6,10 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import no.nav.tsm.regulus.regula.executor.RuleStatus
+import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 import no.nav.tsm.regulus.regula.trees.assertPath
 
-class DatoRulesTest {
+class PeriodeRulesTest {
     @Test
     fun `Alt er ok, Status OK`() {
         val perioder =
@@ -19,7 +20,7 @@ class DatoRulesTest {
                 )
             )
 
-        val payload = testPeriodLogicRulePayload(perioder = perioder)
+        val payload = testPeriodeRulePayload(perioder = perioder)
 
         val (result) = PeriodeRules(payload).execute()
 
@@ -46,7 +47,8 @@ class DatoRulesTest {
             mapOf(
                 "perioder" to perioder,
                 "behandslingsDatoEtterMottatDato" to false,
-                "avventendeKombinert" to false,
+                "antallAvventende" to 0,
+                "antallPerioder" to 1,
                 "manglendeInnspillArbeidsgiver" to false,
                 "avventendeOver16Dager" to false,
                 "forMangeBehandlingsDagerPrUke" to false,
@@ -59,13 +61,13 @@ class DatoRulesTest {
 
     @Test
     fun `Periode mangler, Status INVALID`() {
-        val payload = testPeriodLogicRulePayload(perioder = listOf())
+        val payload = testPeriodeRulePayload(perioder = listOf())
         val (result) = PeriodeRules(payload).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(result.rulePath, listOf(PeriodeRule.PERIODER_MANGLER to true))
 
-        assertEquals(result.ruleInputs, mapOf("perioder" to emptyList<Periode>()))
+        assertEquals(result.ruleInputs, mapOf("perioder" to emptyList<SykmeldingPeriode>()))
 
         assertEquals(result.treeResult.ruleOutcome, PeriodeRule.Outcomes.PERIODER_MANGLER)
     }
@@ -80,7 +82,7 @@ class DatoRulesTest {
                 )
             )
 
-        val payload = testPeriodLogicRulePayload(perioder = perioder)
+        val payload = testPeriodeRulePayload(perioder = perioder)
 
         val (result) = PeriodeRules(payload).execute()
 
@@ -109,7 +111,7 @@ class DatoRulesTest {
                 ),
             )
 
-        val payload = testPeriodLogicRulePayload(perioder = perioder)
+        val payload = testPeriodeRulePayload(perioder = perioder)
 
         val (result) = PeriodeRules(payload).execute()
 
@@ -150,7 +152,7 @@ class DatoRulesTest {
                 ),
             )
 
-        val payload = testPeriodLogicRulePayload(perioder = perioder)
+        val payload = testPeriodeRulePayload(perioder = perioder)
 
         val (result) = PeriodeRules(payload).execute()
 
@@ -174,18 +176,13 @@ class DatoRulesTest {
     fun `Ikke definert periode, Status INVALID`() {
         val perioder =
             listOf(
-                Periode(
+                SykmeldingPeriode.Ugyldig(
                     fom = LocalDate.of(2018, 2, 1),
                     tom = LocalDate.of(2018, 2, 2),
-                    aktivitetIkkeMulig = null,
-                    gradert = null,
-                    avventendeInnspillTilArbeidsgiver = null,
-                    reisetilskudd = false,
-                    behandlingsdager = 0,
                 )
             )
 
-        val payload = testPeriodLogicRulePayload(perioder = perioder)
+        val payload = testPeriodeRulePayload(perioder = perioder)
 
         val (result) = PeriodeRules(payload).execute()
 
@@ -211,7 +208,7 @@ class DatoRulesTest {
         testAktivitetIkkeMuligPeriode()
 
         val payload =
-            testPeriodLogicRulePayload(
+            testPeriodeRulePayload(
                 behandletTidspunkt = LocalDateTime.now().plusDays(2),
                 receivedDate = LocalDateTime.now(),
                 perioder =
@@ -264,7 +261,7 @@ class DatoRulesTest {
                 ),
             )
 
-        val payload = testPeriodLogicRulePayload(perioder = perioder)
+        val payload = testPeriodeRulePayload(perioder = perioder)
 
         val (result) = PeriodeRules(payload).execute()
 
@@ -287,7 +284,8 @@ class DatoRulesTest {
             mapOf(
                 "perioder" to perioder,
                 "behandslingsDatoEtterMottatDato" to false,
-                "avventendeKombinert" to true,
+                "antallAvventende" to 1,
+                "antallPerioder" to 2,
             ),
         )
 
@@ -308,7 +306,7 @@ class DatoRulesTest {
                 )
             )
 
-        val payload = testPeriodLogicRulePayload(perioder = perioder)
+        val payload = testPeriodeRulePayload(perioder = perioder)
 
         val (result) = PeriodeRules(payload).execute()
 
@@ -332,7 +330,8 @@ class DatoRulesTest {
             mapOf(
                 "perioder" to perioder,
                 "behandslingsDatoEtterMottatDato" to false,
-                "avventendeKombinert" to false,
+                "antallAvventende" to 1,
+                "antallPerioder" to 1,
                 "manglendeInnspillArbeidsgiver" to true,
             ),
         )
@@ -353,7 +352,7 @@ class DatoRulesTest {
                     avventendeInnspill = "Bør gå minst mulig på jobb",
                 )
             )
-        val payload = testPeriodLogicRulePayload(perioder = perioder)
+        val payload = testPeriodeRulePayload(perioder = perioder)
 
         val (result) = PeriodeRules(payload).execute()
 
@@ -378,7 +377,8 @@ class DatoRulesTest {
             mapOf(
                 "perioder" to perioder,
                 "behandslingsDatoEtterMottatDato" to false,
-                "avventendeKombinert" to false,
+                "antallAvventende" to 1,
+                "antallPerioder" to 1,
                 "manglendeInnspillArbeidsgiver" to false,
                 "avventendeOver16Dager" to true,
             ),
@@ -401,7 +401,7 @@ class DatoRulesTest {
                 )
             )
 
-        val payload = testPeriodLogicRulePayload(perioder = perioder)
+        val payload = testPeriodeRulePayload(perioder = perioder)
 
         val (result) = PeriodeRules(payload).execute()
 
@@ -427,7 +427,8 @@ class DatoRulesTest {
             mapOf(
                 "perioder" to perioder,
                 "behandslingsDatoEtterMottatDato" to false,
-                "avventendeKombinert" to false,
+                "antallAvventende" to 0,
+                "antallPerioder" to 1,
                 "manglendeInnspillArbeidsgiver" to false,
                 "avventendeOver16Dager" to false,
                 "forMangeBehandlingsDagerPrUke" to true,
@@ -443,9 +444,9 @@ class DatoRulesTest {
     @Test
     fun `Gradert over 99 prosent, Status INVALID`() {
         val perioder =
-            listOf(testGradertPeriode(fom = LocalDate.now(), tom = LocalDate.now(), gradert = 100))
+            listOf(testGradertPeriode(fom = LocalDate.now(), tom = LocalDate.now(), grad = 100))
 
-        val payload = testPeriodLogicRulePayload(perioder = perioder)
+        val payload = testPeriodeRulePayload(perioder = perioder)
 
         val (result) = PeriodeRules(payload).execute()
 
@@ -472,7 +473,8 @@ class DatoRulesTest {
             mapOf(
                 "perioder" to perioder,
                 "behandslingsDatoEtterMottatDato" to false,
-                "avventendeKombinert" to false,
+                "antallAvventende" to 0,
+                "antallPerioder" to 1,
                 "manglendeInnspillArbeidsgiver" to false,
                 "avventendeOver16Dager" to false,
                 "forMangeBehandlingsDagerPrUke" to false,
@@ -497,7 +499,7 @@ class DatoRulesTest {
                 )
             )
 
-        val payload = testPeriodLogicRulePayload(perioder = perioder)
+        val payload = testPeriodeRulePayload(perioder = perioder)
 
         val (result) = PeriodeRules(payload).execute()
 
@@ -525,7 +527,8 @@ class DatoRulesTest {
             mapOf(
                 "perioder" to perioder,
                 "behandslingsDatoEtterMottatDato" to false,
-                "avventendeKombinert" to false,
+                "antallAvventende" to 0,
+                "antallPerioder" to 1,
                 "manglendeInnspillArbeidsgiver" to false,
                 "avventendeOver16Dager" to false,
                 "forMangeBehandlingsDagerPrUke" to false,

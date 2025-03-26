@@ -2,68 +2,38 @@ package no.nav.tsm.regulus.regula.trees.periode
 
 import java.time.LocalDate
 import java.time.LocalDateTime
+import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 
 internal fun testAktivitetIkkeMuligPeriode(
     fom: LocalDate = LocalDate.now(),
     tom: LocalDate = LocalDate.now().plusDays(15),
-) =
-    Periode(
-        fom = fom,
-        tom = tom,
-        aktivitetIkkeMulig = AktivitetIkkeMulig(medisinskArsak = null, arbeidsrelatertArsak = null),
-        avventendeInnspillTilArbeidsgiver = null,
-        behandlingsdager = null,
-        gradert = null,
-        reisetilskudd = false,
-    )
+) = SykmeldingPeriode.AktivitetIkkeMulig(fom = fom, tom = tom)
 
 internal fun testBehandlingsdagerPeriode(
     fom: LocalDate = LocalDate.now(),
     tom: LocalDate = LocalDate.now().plusDays(15),
     behandlingsdager: Int,
-) =
-    Periode(
-        fom = fom,
-        tom = tom,
-        aktivitetIkkeMulig = null,
-        avventendeInnspillTilArbeidsgiver = null,
-        behandlingsdager = behandlingsdager,
-        gradert = null,
-        reisetilskudd = false,
-    )
+) = SykmeldingPeriode.Behandlingsdager(fom = fom, tom = tom, behandlingsdager = behandlingsdager)
 
 internal fun testGradertPeriode(
     fom: LocalDate = LocalDate.now(),
     tom: LocalDate = LocalDate.now().plusDays(15),
-    gradert: Int,
-) =
-    Periode(
-        fom = fom,
-        tom = tom,
-        aktivitetIkkeMulig = null,
-        avventendeInnspillTilArbeidsgiver = null,
-        behandlingsdager = null,
-        gradert = Gradert(grad = gradert, reisetilskudd = false),
-        reisetilskudd = false,
-    )
+    grad: Int,
+) = SykmeldingPeriode.Gradert(fom = fom, tom = tom, grad = grad)
 
 internal fun testAvventendePeriode(
     fom: LocalDate = LocalDate.now(),
     tom: LocalDate = LocalDate.now().plusDays(15),
     avventendeInnspill: String,
 ) =
-    Periode(
+    SykmeldingPeriode.Avventende(
         fom = fom,
         tom = tom,
-        aktivitetIkkeMulig = null,
         avventendeInnspillTilArbeidsgiver = avventendeInnspill,
-        behandlingsdager = null,
-        gradert = null,
-        reisetilskudd = false,
     )
 
-internal fun testPeriodLogicRulePayload(
-    perioder: List<Periode> = listOf(testAktivitetIkkeMuligPeriode()),
+internal fun testPeriodeRulePayload(
+    perioder: List<SykmeldingPeriode> = listOf(testAktivitetIkkeMuligPeriode()),
     behandletTidspunkt: LocalDateTime = LocalDateTime.now(),
     receivedDate: LocalDateTime = LocalDateTime.now(),
 ) =

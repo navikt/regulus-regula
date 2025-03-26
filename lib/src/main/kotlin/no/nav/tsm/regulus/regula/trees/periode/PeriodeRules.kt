@@ -4,6 +4,8 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
+import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
+import no.nav.tsm.regulus.regula.payload.SykmeldingPeriodeType
 import no.nav.tsm.regulus.regula.utils.daysBetween
 import no.nav.tsm.regulus.regula.utils.workdaysBetween
 
@@ -95,15 +97,7 @@ private val Rules =
 
         val ikkeDefinertPeriode: PeriodeRuleFn = { payload ->
             val perioder = payload.perioder
-
-            val ikkeDefinertPeriode =
-                perioder.any {
-                    it.aktivitetIkkeMulig == null &&
-                        it.gradert == null &&
-                        it.avventendeInnspillTilArbeidsgiver.isNullOrEmpty() &&
-                        !it.reisetilskudd &&
-                        (it.behandlingsdager == null || it.behandlingsdager == 0)
-                }
+            val ikkeDefinertPeriode = perioder.any { it.type == SykmeldingPeriodeType.INVALID }
 
             RuleOutput(
                 ruleInputs = mapOf("perioder" to perioder),
@@ -129,12 +123,15 @@ private val Rules =
         val avventendeKombinert: PeriodeRuleFn = { payload ->
             val perioder = payload.perioder
 
-            val avventendeKombinert =
-                perioder.count { it.avventendeInnspillTilArbeidsgiver != null } != 0 &&
-                    perioder.size > 1
+            val antallAvventende = perioder.count { it.type == SykmeldingPeriodeType.AVVENTENDE }
+            val avventendeKombinert = antallAvventende != 0 && perioder.size > 1
 
             RuleOutput(
-                ruleInputs = mapOf("avventendeKombinert" to avventendeKombinert),
+                ruleInputs =
+                    mapOf(
+                        "antallAvventende" to antallAvventende,
+                        "antallPerioder" to perioder.size,
+                    ),
                 rule = PeriodeRule.AVVENTENDE_SYKMELDING_KOMBINERT,
                 ruleResult = avventendeKombinert,
             )
@@ -142,16 +139,18 @@ private val Rules =
 
         val manglendeInnspillArbeidsgiver: PeriodeRuleFn = { payload ->
             val perioder = payload.perioder
-
             val manglendeInnspillArbeidsgiver =
                 perioder.any {
-                    it.avventendeInnspillTilArbeidsgiver != null &&
+                    it is SykmeldingPeriode.Avventende &&
                         it.avventendeInnspillTilArbeidsgiver?.trim().isNullOrEmpty()
                 }
 
             RuleOutput(
                 ruleInputs =
-                    mapOf("manglendeInnspillArbeidsgiver" to manglendeInnspillArbeidsgiver),
+                    mapOf(
+                        // TODO: Dårlig etterlevelse, samme som output
+                        "manglendeInnspillArbeidsgiver" to manglendeInnspillArbeidsgiver
+                    ),
                 rule = PeriodeRule.MANGLENDE_INNSPILL_TIL_ARBEIDSGIVER,
                 ruleResult = manglendeInnspillArbeidsgiver,
             )
@@ -162,7 +161,7 @@ private val Rules =
 
             val avventendeOver16Dager =
                 perioder
-                    .filter { it.avventendeInnspillTilArbeidsgiver != null }
+                    .filter { it.type == SykmeldingPeriodeType.AVVENTENDE }
                     .any { (daysBetween(it.fom, it.tom)) > 16 }
 
             RuleOutput(
@@ -177,7 +176,8 @@ private val Rules =
 
             val forMangeBehandlingsDagerPrUke =
                 perioder.any {
-                    it.behandlingsdager != null && it.behandlingsdager!! > it.startedWeeksBetween()
+                    it is SykmeldingPeriode.Behandlingsdager &&
+                        it.behandlingsdager > it.startedWeeksBetween()
                 }
 
             RuleOutput(
@@ -191,10 +191,15 @@ private val Rules =
         val gradertOver99Prosent: PeriodeRuleFn = { payload ->
             val perioder = payload.perioder
 
-            val gradertOver99Prosent = perioder.mapNotNull { it.gradert }.any { it.grad > 99 }
+            val gradertOver99Prosent =
+                perioder.any { it is SykmeldingPeriode.Gradert && it.grad > 99 }
 
             RuleOutput(
-                ruleInputs = mapOf("gradertOver99Prosent" to gradertOver99Prosent),
+                ruleInputs =
+                    mapOf(
+                        // TODO: Dårlig etterlevelse
+                        "gradertOver99Prosent" to gradertOver99Prosent
+                    ),
                 rule = PeriodeRule.GRADERT_SYKMELDING_OVER_99_PROSENT,
                 ruleResult = gradertOver99Prosent,
             )
@@ -203,7 +208,8 @@ private val Rules =
         val inneholderBehandlingsDager: PeriodeRuleFn = { payload ->
             val perioder = payload.perioder
 
-            val inneholderBehandlingsDager = perioder.any { it.behandlingsdager != null }
+            val inneholderBehandlingsDager =
+                perioder.any { it.type == SykmeldingPeriodeType.BEHANDLINGSDAGER }
 
             RuleOutput(
                 ruleInputs = mapOf("inneholderBehandlingsDager" to inneholderBehandlingsDager),
