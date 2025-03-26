@@ -38,7 +38,7 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/navikt/regulus-regula")
             credentials {
-                username = System.getenv("GITHUB_ACTOR")
+                username = "x-access-token"
                 password = System.getenv("GITHUB_TOKEN")
             }
         }

@@ -9,7 +9,7 @@ jobs:
   build_and_release:
     permissions:
       packages: write
-      contents: read
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,7 +27,10 @@ jobs:
 
       - name: Publish package
         if: github.ref == 'refs/heads/main'
-        run: ./gradlew publish
+        run: |
+          ./gradlew publish
+          ./gradlew bumpVersion
+          ./scripts/create-release.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
