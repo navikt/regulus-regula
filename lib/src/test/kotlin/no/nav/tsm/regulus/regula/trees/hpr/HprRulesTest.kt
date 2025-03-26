@@ -412,9 +412,7 @@ class HprRulesTest {
                                 listOf(
                                     Tilleggskompetanse(
                                         avsluttetStatus = null,
-                                        eTag = null,
                                         gyldig = Periode(fra = signaturdato, til = null),
-                                        id = null,
                                         type = Kode(aktiv = true, oid = 7702, verdi = "1"),
                                     )
                                 ),
@@ -465,10 +463,8 @@ class HprRulesTest {
                                 listOf(
                                     Tilleggskompetanse(
                                         avsluttetStatus = null,
-                                        eTag = null,
                                         gyldig =
                                             Periode(fra = signaturdato.plusDays(1), til = null),
-                                        id = null,
                                         type = Kode(aktiv = true, oid = 7702, verdi = "1"),
                                     )
                                 ),
@@ -526,13 +522,11 @@ class HprRulesTest {
                                 listOf(
                                     Tilleggskompetanse(
                                         avsluttetStatus = null,
-                                        eTag = null,
                                         gyldig =
                                             Periode(
                                                 fra = signaturdato.minusDays(10),
                                                 til = signaturdato.minusDays(1),
                                             ),
-                                        id = null,
                                         type = Kode(aktiv = true, oid = 7702, verdi = "1"),
                                     )
                                 ),
@@ -590,13 +584,11 @@ class HprRulesTest {
                                 listOf(
                                     Tilleggskompetanse(
                                         avsluttetStatus = null,
-                                        eTag = null,
                                         gyldig =
                                             Periode(
                                                 fra = signaturdato.minusDays(10),
                                                 til = signaturdato,
                                             ),
-                                        id = null,
                                         type = Kode(aktiv = true, oid = 7702, verdi = "1"),
                                     )
                                 ),

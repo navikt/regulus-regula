@@ -1,6 +1,7 @@
 package no.nav.tsm.regulus.regula.meta
 
 import java.io.File
+import kotlin.system.exitProcess
 
 private val prefix = if (File("").absolutePath.endsWith("lib")) "" else "lib/"
 private val basePath = "./${prefix}src/main/kotlin/no/nav/tsm/regulus/regula/trees"
@@ -69,6 +70,8 @@ fun main() {
 
     if (totalErrors > 0) {
         println("\nFound $totalErrors errors".red() + " in total ${folders.size} rule trees")
+        // Exit non-zero:
+        exitProcess(1)
     } else {
         println("\nAll ${folders.size} trees are valid!".green())
     }

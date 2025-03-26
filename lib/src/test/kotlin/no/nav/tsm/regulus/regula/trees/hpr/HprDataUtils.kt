@@ -102,13 +102,11 @@ internal fun testBehandler(variant: BehandlerScenarios): Behandler =
                                 listOf(
                                     Tilleggskompetanse(
                                         avsluttetStatus = null,
-                                        eTag = null,
                                         gyldig =
                                             Periode(
                                                 fra = LocalDate.of(2000, 1, 1).atStartOfDay(),
                                                 til = null,
                                             ),
-                                        id = null,
                                         type = Kode(aktiv = true, oid = 7702, verdi = "1"),
                                     )
                                 ),
@@ -139,13 +137,11 @@ internal fun testBehandler(variant: BehandlerScenarios): Behandler =
                                 listOf(
                                     Tilleggskompetanse(
                                         avsluttetStatus = null,
-                                        eTag = null,
                                         gyldig =
                                             Periode(
                                                 fra = LocalDate.of(2000, 1, 1).atStartOfDay(),
                                                 til = null,
                                             ),
-                                        id = null,
                                         type = Kode(aktiv = true, oid = 7702, verdi = "1"),
                                     )
                                 ),
@@ -164,13 +160,11 @@ internal fun testBehandler(variant: BehandlerScenarios): Behandler =
                                 listOf(
                                     Tilleggskompetanse(
                                         avsluttetStatus = null,
-                                        eTag = null,
                                         gyldig =
                                             Periode(
                                                 fra = LocalDate.of(2000, 1, 1).atStartOfDay(),
                                                 til = null,
                                             ),
-                                        id = null,
                                         type =
                                             Kode(
                                                 aktiv = true,
@@ -194,13 +188,11 @@ internal fun testBehandler(variant: BehandlerScenarios): Behandler =
                                 listOf(
                                     Tilleggskompetanse(
                                         avsluttetStatus = null,
-                                        eTag = null,
                                         gyldig =
                                             Periode(
                                                 fra = LocalDate.of(2000, 1, 1).atStartOfDay(),
                                                 til = null,
                                             ),
-                                        id = null,
                                         type =
                                             Kode(
                                                 aktiv = false, // Inactive
@@ -230,13 +222,11 @@ internal fun testBehandler(variant: BehandlerScenarios): Behandler =
                                 listOf(
                                     Tilleggskompetanse(
                                         avsluttetStatus = null,
-                                        eTag = null,
                                         gyldig =
                                             Periode(
                                                 fra = LocalDate.of(2015, 8, 16).atStartOfDay(),
                                                 til = LocalDate.of(2059, 1, 5).atStartOfDay(),
                                             ),
-                                        id = 20358,
                                         type = Kode(aktiv = true, oid = 7702, verdi = "1"),
                                     )
                                 ),

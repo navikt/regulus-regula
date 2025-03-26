@@ -23,9 +23,7 @@ internal data class Godkjenning(
 
 internal data class Tilleggskompetanse(
     val avsluttetStatus: Kode?,
-    val eTag: String?,
     val gyldig: Periode?,
-    val id: Int?,
     val type: Kode?,
 )
 
