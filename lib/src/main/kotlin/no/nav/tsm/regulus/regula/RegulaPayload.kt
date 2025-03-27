@@ -38,7 +38,7 @@ data class RegulaMeta(
     val signaturdato: LocalDateTime,
     val mottattDato: LocalDateTime,
     val behandletTidspunkt: LocalDateTime,
-    val rulesetVersion: String,
+    val rulesetVersion: String?,
 )
 
 data class RegulaBehandler(
