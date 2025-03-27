@@ -28,7 +28,7 @@ private val Rules =
             val rulesetVersion = payload.rulesetVersion
 
             RuleOutput(
-                ruleInputs = mapOf("rulesetVersion" to rulesetVersion),
+                ruleInputs = mapOf("rulesetVersion" to (rulesetVersion ?: "null")),
                 rule = ValideringRule.UGYLDIG_REGELSETTVERSJON,
                 ruleResult = rulesetVersion !in arrayOf(null, "", "1", "2", "3"),
             )
@@ -55,7 +55,7 @@ private val Rules =
             RuleOutput(
                 ruleInputs =
                     mapOf(
-                        "rulesetVersion" to rulesetVersion,
+                        "rulesetVersion" to (rulesetVersion ?: "null"),
                         "sykmeldingPerioder" to sykmeldingPerioder,
                         "utdypendeOpplysninger" to payload.utdypendeOpplysninger,
                     ),

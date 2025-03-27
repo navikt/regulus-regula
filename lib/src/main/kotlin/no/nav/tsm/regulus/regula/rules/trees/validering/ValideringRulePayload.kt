@@ -5,7 +5,7 @@ import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 
 internal data class ValideringRulePayload(
     override val sykmeldingId: String,
-    val rulesetVersion: String,
+    val rulesetVersion: String?,
     val perioder: List<SykmeldingPeriode>,
     val legekontorOrgnr: String?,
     val behandlerFnr: String,
