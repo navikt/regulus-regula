@@ -24,7 +24,7 @@ import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRulePayload
 import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRules
 
 /** Apply all the rules to the given sykmelding. */
-fun executeRegulaRules(ruleExecutionPayload: RegulusRegulaPayload): RegulaResult {
+fun executeRegulaRules(ruleExecutionPayload: RegulaPayload): RegulaResult {
     val executedChain =
         runRules(
             createSequence(

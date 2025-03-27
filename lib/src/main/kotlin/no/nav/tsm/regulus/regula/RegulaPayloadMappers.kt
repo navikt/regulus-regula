@@ -9,14 +9,14 @@ import no.nav.tsm.regulus.regula.rules.trees.periode.PeriodeRulePayload
 import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.TilbakedateringRulePayload
 import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRulePayload
 
-internal fun RegulusRegulaPayload.toLegeSuspensjonRulePayload(): LegeSuspensjonRulePayload {
+internal fun RegulaPayload.toLegeSuspensjonRulePayload(): LegeSuspensjonRulePayload {
     return LegeSuspensjonRulePayload(
         sykmeldingId = sykmeldingId,
         behandlerSuspendert = behandler.suspendert,
     )
 }
 
-internal fun RegulusRegulaPayload.toValideringRulePayload(): ValideringRulePayload {
+internal fun RegulaPayload.toValideringRulePayload(): ValideringRulePayload {
     return ValideringRulePayload(
         sykmeldingId = sykmeldingId,
         perioder = perioder,
@@ -29,7 +29,7 @@ internal fun RegulusRegulaPayload.toValideringRulePayload(): ValideringRulePaylo
     )
 }
 
-internal fun RegulusRegulaPayload.toPeriodeRulePayload(): PeriodeRulePayload {
+internal fun RegulaPayload.toPeriodeRulePayload(): PeriodeRulePayload {
     return PeriodeRulePayload(
         sykmeldingId = sykmeldingId,
         perioder = perioder,
@@ -38,7 +38,7 @@ internal fun RegulusRegulaPayload.toPeriodeRulePayload(): PeriodeRulePayload {
     )
 }
 
-internal fun RegulusRegulaPayload.toHprRulePayload(): HprRulePayload {
+internal fun RegulaPayload.toHprRulePayload(): HprRulePayload {
     return HprRulePayload(
         sykmeldingId = sykmeldingId,
         behandlerGodkjenninger = behandler.godkjenninger,
@@ -48,7 +48,7 @@ internal fun RegulusRegulaPayload.toHprRulePayload(): HprRulePayload {
     )
 }
 
-internal fun RegulusRegulaPayload.toArbeidsuforhetRulePayload(): ArbeidsuforhetRulePayload {
+internal fun RegulaPayload.toArbeidsuforhetRulePayload(): ArbeidsuforhetRulePayload {
     return ArbeidsuforhetRulePayload(
         sykmeldingId = sykmeldingId,
         hoveddiagnose = hoveddiagnose,
@@ -57,7 +57,7 @@ internal fun RegulusRegulaPayload.toArbeidsuforhetRulePayload(): ArbeidsuforhetR
     )
 }
 
-internal fun RegulusRegulaPayload.toPasientUnder13RulePayload(): PasientUnder13RulePayload {
+internal fun RegulaPayload.toPasientUnder13RulePayload(): PasientUnder13RulePayload {
     return PasientUnder13RulePayload(
         sykmeldingId = sykmeldingId,
         perioder = perioder,
@@ -65,7 +65,7 @@ internal fun RegulusRegulaPayload.toPasientUnder13RulePayload(): PasientUnder13R
     )
 }
 
-internal fun RegulusRegulaPayload.toDatoRulePayload(): DatoRulePayload {
+internal fun RegulaPayload.toDatoRulePayload(): DatoRulePayload {
     return DatoRulePayload(
         sykmeldingId = sykmeldingId,
         perioder = perioder,
@@ -73,7 +73,7 @@ internal fun RegulusRegulaPayload.toDatoRulePayload(): DatoRulePayload {
     )
 }
 
-internal fun RegulusRegulaPayload.toTilbakedateringRulePayload(): TilbakedateringRulePayload {
+internal fun RegulaPayload.toTilbakedateringRulePayload(): TilbakedateringRulePayload {
     return TilbakedateringRulePayload(
         sykmeldingId = sykmeldingId,
         perioder = perioder,

@@ -18,7 +18,7 @@ class RegulaKtTest {
     fun `simple complete happy path`() {
         val result =
             executeRegulaRules(
-                RegulusRegulaPayload(
+                RegulaPayload(
                     sykmeldingId = "123456789",
                     hoveddiagnose = Diagnose(kode = "A01", system = Diagnosekoder.ICPC2_CODE),
                     bidiagnoser = listOf(Diagnose(kode = "B02", system = Diagnosekoder.ICPC2_CODE)),
@@ -60,19 +60,19 @@ class RegulaKtTest {
                         ),
                     kontaktPasientBegrunnelseIkkeKontakt = "Pasienten var ikke tilgjengelig",
                     pasient =
-                        RegulusRegulaPasient(
+                        RegulaPasient(
                             ident = "12345678910",
                             fodselsdato = LocalDate.now().minusYears(30),
                         ),
                     meta =
-                        RegulusRegulaMeta(
+                        RegulaMeta(
                             signaturdato = LocalDateTime.now().minusDays(1),
                             mottattDato = LocalDateTime.now(),
                             behandletTidspunkt = LocalDateTime.now(),
                             rulesetVersion = "2",
                         ),
                     behandler =
-                        RegulusRegulaBehandler(
+                        RegulaBehandler(
                             suspendert = false,
                             godkjenninger =
                                 listOf(
@@ -87,7 +87,7 @@ class RegulaKtTest {
                             legekontorOrgnr = "123456789",
                             fnr = "10987654321",
                         ),
-                    avsender = RegulusRegulaAvsender(fnr = "10987654321"),
+                    avsender = RegulaAvsender(fnr = "10987654321"),
                 )
             )
 
