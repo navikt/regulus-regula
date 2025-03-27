@@ -8,5 +8,5 @@ internal data class PeriodeRulePayload(
     override val sykmeldingId: String,
     val perioder: List<SykmeldingPeriode>,
     val behandletTidspunkt: LocalDateTime,
-    val receivedDate: LocalDateTime,
+    val mottattDato: LocalDateTime,
 ) : BasePayload

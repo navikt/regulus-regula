@@ -1,9 +1,9 @@
 package no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.extras
 
 import java.time.LocalDate
+import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 import no.nav.tsm.regulus.regula.rules.shared.getStartdatoFromRelevanteDatoer
 import no.nav.tsm.regulus.regula.rules.shared.relevanteDatoer
-import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.TidligereSykmelding
 import no.nav.tsm.regulus.regula.utils.allDaysBetween
 import no.nav.tsm.regulus.regula.utils.isWorkingDaysBetween
 

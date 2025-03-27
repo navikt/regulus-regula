@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
-import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.TidligereSykmelding
+import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 import no.nav.tsm.regulus.regula.testutils.*
 
 private fun testTidligereSykmelding(fom: LocalDate, tom: LocalDate) =

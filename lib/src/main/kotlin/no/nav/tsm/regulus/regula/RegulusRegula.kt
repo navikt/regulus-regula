@@ -22,27 +22,23 @@ import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.TilbakedateringRule
 import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRulePayload
 import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRules
 
-/** The entire payload needed to apply the rules to this specific sykmelding. */
-data class RegulusRegulaPayload(val sykmeldingId: String)
-
-data class RegulusRegulaResult(val good: Boolean)
-
 /** Apply all the rules to the given sykmelding. */
 fun executeRules(sykmelding: RegulusRegulaPayload): RegulusRegulaResult {
     val result =
         runRules(
             createSequence(
-                legeSuspensjonRulePayload = TODO(),
-                valideringRulePayload = TODO(),
-                periodeRulePayload = TODO(),
-                hprRulePayload = TODO(),
-                arbeidsuforhetRulePayload = TODO(),
-                pasientUnder13RulePayload = TODO(),
-                datoRulePayload = TODO(),
-                tilbakedateringRulePayload = TODO(),
+                legeSuspensjonRulePayload = sykmelding.toLegeSuspensjonRulePayload(),
+                valideringRulePayload = sykmelding.toValideringRulePayload(),
+                periodeRulePayload = sykmelding.toPeriodeRulePayload(),
+                hprRulePayload = sykmelding.toHprRulePayload(),
+                arbeidsuforhetRulePayload = sykmelding.toArbeidsuforhetRulePayload(),
+                pasientUnder13RulePayload = sykmelding.toPasientUnder13RulePayload(),
+                datoRulePayload = sykmelding.toDatoRulePayload(),
+                tilbakedateringRulePayload = sykmelding.toTilbakedateringRulePayload(),
             )
         )
 
+    // TODO: Map to elevated result
     return RegulusRegulaResult(result.first().first.treeResult.status == RuleStatus.OK)
 }
 

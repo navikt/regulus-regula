@@ -6,6 +6,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.executor.RuleStatus
+import no.nav.tsm.regulus.regula.payload.AnnenFravarsArsak
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
 import org.junit.jupiter.api.Nested
@@ -18,7 +19,7 @@ class ArbeidsuforhetRulesTest {
     inner class DiagnoseTester {
         @Test
         fun `Hoveddiagnose is null and annen Fraværsårsak is null`() {
-            val payload = testArbeidsuforhetPayload(hoveddiagnose = null, annenFraversArsak = null)
+            val payload = testArbeidsuforhetPayload(hoveddiagnose = null, annenFravarsArsak = null)
 
             val (result) = ArbeidsuforhetRules(payload).execute()
 
@@ -45,8 +46,8 @@ class ArbeidsuforhetRulesTest {
             val payload =
                 testArbeidsuforhetPayload(
                     hoveddiagnose = null,
-                    annenFraversArsak =
-                        AnnenFraversArsak(
+                    annenFravarsArsak =
+                        AnnenFravarsArsak(
                             grunn = listOf("grunn1", "grunn2"),
                             beskrivelse = "beskrivelse",
                         ),
@@ -79,7 +80,7 @@ class ArbeidsuforhetRulesTest {
             val payload =
                 testArbeidsuforhetPayload(
                     hoveddiagnose = null,
-                    annenFraversArsak = AnnenFraversArsak(beskrivelse = null, grunn = emptyList()),
+                    annenFravarsArsak = AnnenFravarsArsak(beskrivelse = null, grunn = emptyList()),
                 )
 
             val (result) = ArbeidsuforhetRules(payload).execute()
@@ -107,8 +108,8 @@ class ArbeidsuforhetRulesTest {
             val payload =
                 testArbeidsuforhetPayload(
                     hoveddiagnose = null,
-                    annenFraversArsak =
-                        AnnenFraversArsak(beskrivelse = "beskrivelse", grunn = emptyList()),
+                    annenFravarsArsak =
+                        AnnenFravarsArsak(beskrivelse = "beskrivelse", grunn = emptyList()),
                     bidiagnoser =
                         listOf(Diagnose(system = "2.16.578.1.12.4.1.1.7170", kode = "R222222")),
                 )
@@ -230,7 +231,7 @@ class ArbeidsuforhetRulesTest {
     @Test
     fun `HovedDiagnose og fraversgrunn mangler, Status INVALID`() {
         // TODO: This is exactly the same as one of the tests in DiagnoseTester, should be removed
-        val payload = testArbeidsuforhetPayload(hoveddiagnose = null, annenFraversArsak = null)
+        val payload = testArbeidsuforhetPayload(hoveddiagnose = null, annenFravarsArsak = null)
 
         val (result) = ArbeidsuforhetRules(payload).execute()
 

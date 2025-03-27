@@ -2,7 +2,7 @@ package no.nav.tsm.regulus.regula.payload
 
 import java.time.LocalDate
 
-internal enum class SykmeldingPeriodeType {
+enum class SykmeldingPeriodeType {
     AKTIVITET_IKKE_MULIG,
     AVVENTENDE,
     BEHANDLINGSDAGER,
@@ -15,7 +15,7 @@ internal enum class SykmeldingPeriodeType {
  * A more complex representation of the sykmeldingsperioder, with a distinct union on the 5 types of
  * periods.
  */
-internal sealed class SykmeldingPeriode(
+sealed class SykmeldingPeriode(
     val type: SykmeldingPeriodeType,
     open val fom: LocalDate,
     open val tom: LocalDate,

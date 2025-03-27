@@ -3,6 +3,9 @@ package no.nav.tsm.regulus.regula.rules.trees.hpr
 import java.time.LocalDateTime
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
+import no.nav.tsm.regulus.regula.payload.BehandlerGodkjenning
+import no.nav.tsm.regulus.regula.payload.BehandlerTilleggskompetanse
+import no.nav.tsm.regulus.regula.rules.shared.getStartdatoFromTidligereSykmeldinger
 import no.nav.tsm.regulus.regula.rules.trees.hpr.extras.HelsepersonellKategori
 import no.nav.tsm.regulus.regula.utils.daysBetween
 import no.nav.tsm.regulus.regula.utils.earliestFom
@@ -32,7 +35,7 @@ private typealias HprRuleFn = (payload: HprRulePayload) -> RuleOutput<HprRule>
 private val Rules =
     object {
         val behanderGyldigHPR: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandler.godkjenninger
+            val behandlerGodkjenninger = payload.behandlerGodkjenninger
 
             val aktivAutorisasjon =
                 behandlerGodkjenninger.any {
@@ -47,7 +50,7 @@ private val Rules =
         }
 
         val behandlerHarAutorisasjon: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandler.godkjenninger
+            val behandlerGodkjenninger = payload.behandlerGodkjenninger
 
             val gyldigeGodkjenninger =
                 behandlerGodkjenninger.any {
@@ -66,7 +69,7 @@ private val Rules =
         }
 
         val behandlerErLege: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandler.godkjenninger
+            val behandlerGodkjenninger = payload.behandlerGodkjenninger
 
             val behandlerErLege =
                 sjekkBehandler(behandlerGodkjenninger, HelsepersonellKategori.LEGE)
@@ -79,7 +82,7 @@ private val Rules =
         }
 
         val behandlerErTannlege: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandler.godkjenninger
+            val behandlerGodkjenninger = payload.behandlerGodkjenninger
 
             val behandlerErTannlege =
                 sjekkBehandler(behandlerGodkjenninger, HelsepersonellKategori.TANNLEGE)
@@ -92,7 +95,7 @@ private val Rules =
         }
 
         val behandlerErManuellterapeut: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandler.godkjenninger
+            val behandlerGodkjenninger = payload.behandlerGodkjenninger
 
             val behandlerErManuellterapeut =
                 sjekkBehandler(behandlerGodkjenninger, HelsepersonellKategori.MANUELLTERAPEUT)
@@ -105,7 +108,7 @@ private val Rules =
         }
 
         val behandlerErFTMedTilligskompetanseSykmelding: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandler.godkjenninger
+            val behandlerGodkjenninger = payload.behandlerGodkjenninger
             val genereringsTidspunkt = payload.signaturdato
 
             val erFtMedTilleggskompetanse =
@@ -129,7 +132,7 @@ private val Rules =
         }
 
         val behandlerErKIMedTilligskompetanseSykmelding: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandler.godkjenninger
+            val behandlerGodkjenninger = payload.behandlerGodkjenninger
             val genereringsTidspunkt = payload.signaturdato
 
             val erKIMedTilleggskompetanse =
@@ -151,20 +154,20 @@ private val Rules =
         val sykefravarOver12Uker: HprRuleFn = { payload ->
             val forsteFomDato = payload.perioder.earliestFom()
             val sisteTomDato = payload.perioder.latestTom()
-            val behandlerStartDato = payload.startdato
-            val behandlerGodkjenninger = payload.behandler.godkjenninger
+            val behandlerGodkjenninger = payload.behandlerGodkjenninger
+            val startdato =
+                getStartdatoFromTidligereSykmeldinger(forsteFomDato, payload.tidligereSykmeldinger)
 
             val over12Uker =
                 daysBetween(forsteFomDato, sisteTomDato) > 84 ||
-                    (behandlerStartDato != null &&
-                        daysBetween(behandlerStartDato, sisteTomDato) > 84)
+                    (daysBetween(startdato, sisteTomDato) > 84)
 
             RuleOutput(
                 ruleInputs =
                     mapOf(
                         "fom" to forsteFomDato,
                         "tom" to sisteTomDato,
-                        "startDatoSykefravær" to (behandlerStartDato ?: forsteFomDato),
+                        "startDatoSykefravær" to startdato,
                         "behandlerGodkjenninger" to behandlerGodkjenninger,
                     ),
                 rule = HprRule.SYKEFRAVAR_OVER_12_UKER,
@@ -174,7 +177,7 @@ private val Rules =
     }
 
 private fun erHelsepersonellKategoriMedTilleggskompetanse(
-    behandlerGodkjenninger: List<Godkjenning>,
+    behandlerGodkjenninger: List<BehandlerGodkjenning>,
     genereringsTidspunkt: LocalDateTime,
     helsepersonellkategori: HelsepersonellKategori,
 ) =
@@ -190,7 +193,7 @@ private fun erHelsepersonellKategoriMedTilleggskompetanse(
     }
 
 private fun sjekkBehandler(
-    behandlerGodkjenninger: List<Godkjenning>,
+    behandlerGodkjenninger: List<BehandlerGodkjenning>,
     helsepersonellkategori: HelsepersonellKategori,
 ) =
     behandlerGodkjenninger.any {
@@ -203,7 +206,7 @@ private fun sjekkBehandler(
     }
 
 private fun harAktivHelsepersonellAutorisasjonsSom(
-    behandlerGodkjenninger: List<Godkjenning>,
+    behandlerGodkjenninger: List<BehandlerGodkjenning>,
     helsepersonerVerdi: String,
 ): Boolean =
     behandlerGodkjenninger.any { godkjenning ->
@@ -213,7 +216,9 @@ private fun harAktivHelsepersonellAutorisasjonsSom(
             godkjenning.helsepersonellkategori.let { it.aktiv && it.verdi == helsepersonerVerdi }
     }
 
-private fun Tilleggskompetanse.gyldigPeriode(genereringsTidspunkt: LocalDateTime): Boolean {
+private fun BehandlerTilleggskompetanse.gyldigPeriode(
+    genereringsTidspunkt: LocalDateTime
+): Boolean {
     val fom = gyldig?.fra?.toLocalDate()
     val tom = gyldig?.til?.toLocalDate()
     val genDate = genereringsTidspunkt.toLocalDate()

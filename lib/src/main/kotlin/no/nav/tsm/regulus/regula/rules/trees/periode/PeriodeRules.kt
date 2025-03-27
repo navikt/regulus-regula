@@ -108,7 +108,7 @@ private val Rules =
 
         val behandslingsDatoEtterMottatDato: PeriodeRuleFn = { payload ->
             val behandletTidspunkt = payload.behandletTidspunkt
-            val receivedDate = payload.receivedDate
+            val receivedDate = payload.mottattDato
 
             val behandslingsDatoEtterMottatDato = behandletTidspunkt > receivedDate.plusDays(1)
 

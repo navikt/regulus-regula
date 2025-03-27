@@ -41,5 +41,5 @@ internal fun testPeriodeRulePayload(
         sykmeldingId = "sykmeldingId",
         perioder = perioder,
         behandletTidspunkt = behandletTidspunkt,
-        receivedDate = receivedDate,
+        mottattDato = receivedDate,
     )

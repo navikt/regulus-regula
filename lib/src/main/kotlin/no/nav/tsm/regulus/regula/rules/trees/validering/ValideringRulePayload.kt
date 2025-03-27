@@ -11,7 +11,5 @@ internal data class ValideringRulePayload(
     val behandlerFnr: String,
     val avsenderFnr: String,
     val pasientIdent: String,
-    val utdypendeOpplysninger: Map<String, Map<String, SporsmalSvar>>,
+    val utdypendeOpplysninger: Map<String, Map<String, Map<String, String>>>,
 ) : BasePayload
-
-internal data class SporsmalSvar(val sporsmal: String, val svar: String)

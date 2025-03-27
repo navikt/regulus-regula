@@ -2,7 +2,7 @@ package no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.extras
 
 import java.time.LocalDate
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
-import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.TidligereSykmelding
+import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger("Ettersending")

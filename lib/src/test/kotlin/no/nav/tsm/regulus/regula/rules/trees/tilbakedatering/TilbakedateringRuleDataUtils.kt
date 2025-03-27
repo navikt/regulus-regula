@@ -5,6 +5,7 @@ import java.time.LocalDateTime
 import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
+import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 
 internal fun testTilbakedateringRulePayload(
     perioder: List<SykmeldingPeriode> =
@@ -24,7 +25,6 @@ internal fun testTilbakedateringRulePayload(
         sykmeldingId = "foo-bar-baz",
         signaturdato = signaturdato,
         perioder = perioder,
-        startdato = startdato,
         hoveddiagnose = hoveddiagnose,
         tidligereSykmeldinger = tidligereSykmeldinger,
         begrunnelseIkkeKontakt = begrunnelseIkkeKontakt,

@@ -3,7 +3,7 @@ package no.nav.tsm.regulus.regula.rules.shared
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriodeType
-import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.TidligereSykmelding
+import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 import no.nav.tsm.regulus.regula.utils.allDaysBetween
 import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.latestTom

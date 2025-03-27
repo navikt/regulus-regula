@@ -52,10 +52,10 @@ private val Rules =
         }
 
         val manglerAnnenFravarsArsak: ArbeidsuforhetRuleFn = { payload ->
-            val annenFraversArsak = payload.annenFraversArsak
+            val annenFravarsArsak = payload.annenFravarsArsak
 
             val fraversgrunnMangler =
-                (annenFraversArsak?.let { it.grunn.isEmpty() && it.beskrivelse.isNullOrBlank() }
+                (annenFravarsArsak?.let { it.grunn.isEmpty() && it.beskrivelse.isNullOrBlank() }
                     ?: true)
 
             RuleOutput(
