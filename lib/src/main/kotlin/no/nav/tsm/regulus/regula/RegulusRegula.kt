@@ -23,18 +23,18 @@ import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRulePayload
 import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRules
 
 /** Apply all the rules to the given sykmelding. */
-fun executeRules(sykmelding: RegulusRegulaPayload): RegulusRegulaResult {
+fun executeRules(ruleExecutionPayload: RegulusRegulaPayload): RegulusRegulaResult {
     val result =
         runRules(
             createSequence(
-                legeSuspensjonRulePayload = sykmelding.toLegeSuspensjonRulePayload(),
-                valideringRulePayload = sykmelding.toValideringRulePayload(),
-                periodeRulePayload = sykmelding.toPeriodeRulePayload(),
-                hprRulePayload = sykmelding.toHprRulePayload(),
-                arbeidsuforhetRulePayload = sykmelding.toArbeidsuforhetRulePayload(),
-                pasientUnder13RulePayload = sykmelding.toPasientUnder13RulePayload(),
-                datoRulePayload = sykmelding.toDatoRulePayload(),
-                tilbakedateringRulePayload = sykmelding.toTilbakedateringRulePayload(),
+                legeSuspensjonRulePayload = ruleExecutionPayload.toLegeSuspensjonRulePayload(),
+                valideringRulePayload = ruleExecutionPayload.toValideringRulePayload(),
+                periodeRulePayload = ruleExecutionPayload.toPeriodeRulePayload(),
+                hprRulePayload = ruleExecutionPayload.toHprRulePayload(),
+                arbeidsuforhetRulePayload = ruleExecutionPayload.toArbeidsuforhetRulePayload(),
+                pasientUnder13RulePayload = ruleExecutionPayload.toPasientUnder13RulePayload(),
+                datoRulePayload = ruleExecutionPayload.toDatoRulePayload(),
+                tilbakedateringRulePayload = ruleExecutionPayload.toTilbakedateringRulePayload(),
             )
         )
 

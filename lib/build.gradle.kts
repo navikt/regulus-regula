@@ -22,7 +22,10 @@ dependencies {
     api(libs.slf4j)
 }
 
-java { toolchain { languageVersion = JavaLanguageVersion.of(21) } }
+java {
+    toolchain { languageVersion = JavaLanguageVersion.of(21) }
+    withSourcesJar()
+}
 
 publishing {
     publications {
