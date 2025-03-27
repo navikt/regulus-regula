@@ -8,11 +8,28 @@ on:
       - 'scripts/create-release.sh'
 
 jobs:
+  should_release:
+    runs-on: ubuntu-latest
+    outputs:
+      skip: ${{ steps.check.outputs.skip }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: check
+        run: |
+          body="$(git log -1 --pretty=%B | tail -n +2)"
+          if echo "$body" | grep -qi 'skip release'; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "⏭️ Skipping release due to 'skip release' in commit message." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
   build_and_release:
     permissions:
       packages: write
       contents: write
     runs-on: ubuntu-latest
+    needs: should_release
     steps:
       - uses: actions/checkout@v4
         with:
@@ -31,7 +48,7 @@ jobs:
         run: ./gradlew build
 
       - name: Publish package
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && needs.should_release.outputs.skip == 'false'
         run: |
           ./gradlew publish
           ./scripts/create-release.sh
