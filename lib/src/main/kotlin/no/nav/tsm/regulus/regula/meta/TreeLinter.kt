@@ -4,7 +4,7 @@ import java.io.File
 import kotlin.system.exitProcess
 
 private val prefix = if (File("").absolutePath.endsWith("lib")) "" else "lib/"
-private val basePath = "./${prefix}src/main/kotlin/no/nav/tsm/regulus/regula/trees"
+private val basePath = "./${prefix}src/main/kotlin/no/nav/tsm/regulus/regula/rules/trees"
 private val onlyErrors = System.getenv("ONLY_ERRORS")?.toBoolean() ?: false
 
 fun main() {

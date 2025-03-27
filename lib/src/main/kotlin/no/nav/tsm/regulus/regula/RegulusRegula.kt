@@ -5,22 +5,22 @@ package no.nav.tsm.regulus.regula
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.executor.runRules
-import no.nav.tsm.regulus.regula.trees.arbeidsuforhet.ArbeidsuforhetRulePayload
-import no.nav.tsm.regulus.regula.trees.arbeidsuforhet.ArbeidsuforhetRules
-import no.nav.tsm.regulus.regula.trees.dato.DatoRulePayload
-import no.nav.tsm.regulus.regula.trees.dato.DatoRules
-import no.nav.tsm.regulus.regula.trees.hpr.HprRulePayload
-import no.nav.tsm.regulus.regula.trees.hpr.HprRules
-import no.nav.tsm.regulus.regula.trees.legeSuspensjon.LegeSuspensjonRulePayload
-import no.nav.tsm.regulus.regula.trees.legeSuspensjon.LegeSuspensjonRules
-import no.nav.tsm.regulus.regula.trees.pasientUnder13.PasientUnder13RulePayload
-import no.nav.tsm.regulus.regula.trees.pasientUnder13.PasientUnder13Rules
-import no.nav.tsm.regulus.regula.trees.periode.PeriodeRulePayload
-import no.nav.tsm.regulus.regula.trees.periode.PeriodeRules
-import no.nav.tsm.regulus.regula.trees.tilbakedatering.TilbakedateringRulePayload
-import no.nav.tsm.regulus.regula.trees.tilbakedatering.TilbakedateringRules
-import no.nav.tsm.regulus.regula.trees.validering.ValideringRulePayload
-import no.nav.tsm.regulus.regula.trees.validering.ValideringRules
+import no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet.ArbeidsuforhetRulePayload
+import no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet.ArbeidsuforhetRules
+import no.nav.tsm.regulus.regula.rules.trees.dato.DatoRulePayload
+import no.nav.tsm.regulus.regula.rules.trees.dato.DatoRules
+import no.nav.tsm.regulus.regula.rules.trees.hpr.HprRulePayload
+import no.nav.tsm.regulus.regula.rules.trees.hpr.HprRules
+import no.nav.tsm.regulus.regula.rules.trees.legeSuspensjon.LegeSuspensjonRulePayload
+import no.nav.tsm.regulus.regula.rules.trees.legeSuspensjon.LegeSuspensjonRules
+import no.nav.tsm.regulus.regula.rules.trees.pasientUnder13.PasientUnder13RulePayload
+import no.nav.tsm.regulus.regula.rules.trees.pasientUnder13.PasientUnder13Rules
+import no.nav.tsm.regulus.regula.rules.trees.periode.PeriodeRulePayload
+import no.nav.tsm.regulus.regula.rules.trees.periode.PeriodeRules
+import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.TilbakedateringRulePayload
+import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.TilbakedateringRules
+import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRulePayload
+import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRules
 
 /** The entire payload needed to apply the rules to this specific sykmelding. */
 data class RegulusRegulaPayload(val sykmeldingId: String)

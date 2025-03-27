@@ -5,14 +5,14 @@ import no.nav.tsm.regulus.regula.executor.RuleResult
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.juridisk.MedJuridisk
 import no.nav.tsm.regulus.regula.juridisk.UtenJuridisk
-import no.nav.tsm.regulus.regula.trees.arbeidsuforhet.arbeidsuforhetRuleTree
-import no.nav.tsm.regulus.regula.trees.dato.datoRuleTree
-import no.nav.tsm.regulus.regula.trees.hpr.hprRuleTree
-import no.nav.tsm.regulus.regula.trees.legeSuspensjon.legeSuspensjonRuleTree
-import no.nav.tsm.regulus.regula.trees.pasientUnder13.pasientUnder13RuleTree
-import no.nav.tsm.regulus.regula.trees.periode.periodeRuleTree
-import no.nav.tsm.regulus.regula.trees.tilbakedatering.tilbakedateringRuleTree
-import no.nav.tsm.regulus.regula.trees.validering.valideringRuleTree
+import no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet.arbeidsuforhetRuleTree
+import no.nav.tsm.regulus.regula.rules.trees.dato.datoRuleTree
+import no.nav.tsm.regulus.regula.rules.trees.hpr.hprRuleTree
+import no.nav.tsm.regulus.regula.rules.trees.legeSuspensjon.legeSuspensjonRuleTree
+import no.nav.tsm.regulus.regula.rules.trees.pasientUnder13.pasientUnder13RuleTree
+import no.nav.tsm.regulus.regula.rules.trees.periode.periodeRuleTree
+import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.tilbakedateringRuleTree
+import no.nav.tsm.regulus.regula.rules.trees.validering.valideringRuleTree
 
 fun main() {
     val ruleTrees =
