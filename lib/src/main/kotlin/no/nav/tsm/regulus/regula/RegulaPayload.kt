@@ -52,6 +52,6 @@ data class RegulusRegulaBehandler(
      * helsenettproxy fra konsumerende applikasjon.
      */
     val godkjenninger: List<BehandlerGodkjenning>,
-    val legekontorOrgnr: String,
+    val legekontorOrgnr: String?,
     val fnr: String,
 )

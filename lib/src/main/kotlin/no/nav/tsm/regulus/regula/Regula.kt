@@ -2,6 +2,7 @@
 
 package no.nav.tsm.regulus.regula
 
+import no.nav.tsm.regulus.regula.dsl.printRulePath
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.executor.runRules
@@ -23,8 +24,8 @@ import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRulePayload
 import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRules
 
 /** Apply all the rules to the given sykmelding. */
-fun executeRules(ruleExecutionPayload: RegulusRegulaPayload): RegulusRegulaResult {
-    val result =
+fun executeRegulaRules(ruleExecutionPayload: RegulusRegulaPayload): RegulaResult {
+    val executedChain =
         runRules(
             createSequence(
                 legeSuspensjonRulePayload = ruleExecutionPayload.toLegeSuspensjonRulePayload(),
@@ -38,9 +39,53 @@ fun executeRules(ruleExecutionPayload: RegulusRegulaPayload): RegulusRegulaResul
             )
         )
 
-    // TODO: Map to elevated result
-    return RegulusRegulaResult(result.first().first.treeResult.status == RuleStatus.OK)
+    val overallStatus: RegulaStatus =
+        executedChain
+            .map { (result) -> result.treeResult.status }
+            .let {
+                it.firstOrNull { status -> status == RuleStatus.INVALID }
+                    ?: it.firstOrNull { status -> status == RuleStatus.MANUAL_PROCESSING }
+                    ?: RuleStatus.OK
+            }
+            .toRegulaStatus()
+
+    val ruleHits: List<RegulaOutcome> =
+        executedChain
+            .mapNotNull { (result) -> result.treeResult.ruleOutcome }
+            .map {
+                RegulaOutcome(
+                    status = it.status.toRegulaStatus(),
+                    rule = it.rule,
+                    messageForSender = it.messageForSender,
+                    messageForUser = it.messageForUser,
+                )
+            }
+
+    val results: List<TreeResult> =
+        executedChain.map { (result) ->
+            TreeResult(
+                outcome =
+                    result.treeResult.ruleOutcome?.let {
+                        RegulaOutcome(
+                            status = it.status.toRegulaStatus(),
+                            rule = it.rule,
+                            messageForSender = it.messageForSender,
+                            messageForUser = it.messageForUser,
+                        )
+                    },
+                rulePath = result.printRulePath(),
+            )
+        }
+
+    return RegulaResult(status = overallStatus, ruleHits = ruleHits, results = results)
 }
+
+private fun RuleStatus.toRegulaStatus(): RegulaStatus =
+    when (this) {
+        RuleStatus.OK -> RegulaStatus.OK
+        RuleStatus.MANUAL_PROCESSING -> RegulaStatus.MANUAL_PROCESSING
+        RuleStatus.INVALID -> RegulaStatus.INVALID
+    }
 
 /**
  * Defines the order of rule execution. Rules are short-circuited, meaning that if a rule fails, the
