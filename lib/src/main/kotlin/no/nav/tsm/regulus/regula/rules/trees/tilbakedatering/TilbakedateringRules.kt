@@ -172,7 +172,7 @@ private val Rules =
         }
 
         val spesialisthelsetjenesten: TilbakedateringRuleFn = { payload ->
-            val spesialhelsetjenesten = payload.hoveddiagnose?.system === Diagnosekoder.ICD10_CODE
+            val spesialhelsetjenesten = payload.hoveddiagnose?.system == Diagnosekoder.ICD10_CODE
 
             RuleOutput(
                 ruleInputs =
