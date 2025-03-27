@@ -30,7 +30,7 @@ java {
 publishing {
     publications {
         create<MavenPublication>("gpr") {
-            from(components["kotlin"])
+            from(components["java"])
             groupId = "no.nav.tsm.regulus"
             artifactId = "regula"
             version = file("version").readText().trim()
