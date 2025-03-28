@@ -44,7 +44,7 @@ private val Rules =
                     sykmeldingPerioder.any { daysBetween(it.fom, it.tom) > 273 }
 
             val manglendeDynamiskesporsmaalversjon2uke39 =
-                if (shouldHaveAllSporsmals) {
+                if (shouldHaveAllSporsmals && utdypendeOpplysinger != null) {
                     val group65Answers = utdypendeOpplysinger["6.5"]?.map { it.key } ?: emptyList()
 
                     !group65Answers.containsAll(listOf("6.5.1", "6.5.2", "6.5.3", "6.5.4"))
@@ -57,7 +57,7 @@ private val Rules =
                     mapOf(
                         "rulesetVersion" to (rulesetVersion ?: "null"),
                         "sykmeldingPerioder" to sykmeldingPerioder,
-                        "utdypendeOpplysninger" to payload.utdypendeOpplysninger,
+                        "utdypendeOpplysninger" to (payload.utdypendeOpplysninger ?: "null"),
                     ),
                 rule = ValideringRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39,
                 ruleResult = manglendeDynamiskesporsmaalversjon2uke39,
