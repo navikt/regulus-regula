@@ -3,6 +3,7 @@ package no.nav.tsm.regulus.regula.rules.trees.legeSuspensjon
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
 
@@ -11,7 +12,11 @@ class LegeSuspensjonRulesTest {
     fun `Er ikkje suspendert, Status OK`() {
         val (result) =
             LegeSuspensjonRules(
-                    LegeSuspensjonRulePayload(sykmeldingId = "foo-bar", behandlerSuspendert = false)
+                    LegeSuspensjonRulePayload(
+                        sykmeldingId = "foo-bar",
+                        behandlerSuspendert = false,
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -26,7 +31,8 @@ class LegeSuspensjonRulesTest {
     fun `Er suspendert, Status INVALID`() {
         val (result) =
             LegeSuspensjonRules(
-                    LegeSuspensjonRulePayload(sykmeldingId = "foo-bar", behandlerSuspendert = true)
+                    LegeSuspensjonRulePayload(sykmeldingId = "foo-bar", behandlerSuspendert = true),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 

@@ -3,14 +3,15 @@ package no.nav.tsm.regulus.regula.rules.trees.periode
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
+import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriodeType
 import no.nav.tsm.regulus.regula.utils.daysBetween
 import no.nav.tsm.regulus.regula.utils.workdaysBetween
 
-internal class PeriodeRules(payload: PeriodeRulePayload) :
-    TreeExecutor<PeriodeRule, PeriodeRulePayload>(periodeRuleTree, payload) {
+internal class PeriodeRules(payload: PeriodeRulePayload, mode: ExecutionMode) :
+    TreeExecutor<PeriodeRule, PeriodeRulePayload>(periodeRuleTree, payload, mode) {
     override fun getRule(rule: PeriodeRule): (PeriodeRulePayload) -> RuleOutput<PeriodeRule> =
         getPeriodeRule(rule)
 }

@@ -2,6 +2,7 @@ package no.nav.tsm.regulus.regula.rules.trees.hpr
 
 import java.time.LocalDateTime
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
+import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.payload.BehandlerGodkjenning
 import no.nav.tsm.regulus.regula.payload.BehandlerTilleggskompetanse
@@ -11,8 +12,8 @@ import no.nav.tsm.regulus.regula.utils.daysBetween
 import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.latestTom
 
-internal class HprRules(hprRulePayload: HprRulePayload) :
-    TreeExecutor<HprRule, HprRulePayload>(hprRuleTree, hprRulePayload) {
+internal class HprRules(hprRulePayload: HprRulePayload, mode: ExecutionMode) :
+    TreeExecutor<HprRule, HprRulePayload>(hprRuleTree, hprRulePayload, mode) {
     override fun getRule(rule: HprRule) = getHprRule(rule)
 }
 

@@ -1,11 +1,16 @@
 package no.nav.tsm.regulus.regula.rules.trees.validering
 
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
+import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.utils.daysBetween
 
-internal class ValideringRules(validationRulePayload: ValideringRulePayload) :
-    TreeExecutor<ValideringRule, ValideringRulePayload>(valideringRuleTree, validationRulePayload) {
+internal class ValideringRules(validationRulePayload: ValideringRulePayload, mode: ExecutionMode) :
+    TreeExecutor<ValideringRule, ValideringRulePayload>(
+        valideringRuleTree,
+        validationRulePayload,
+        mode,
+    ) {
     override fun getRule(rule: ValideringRule) = getValideringRule(rule)
 }
 

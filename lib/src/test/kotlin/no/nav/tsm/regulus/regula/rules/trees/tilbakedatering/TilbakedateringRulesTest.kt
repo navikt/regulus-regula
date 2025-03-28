@@ -6,6 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import no.nav.helse.diagnosekoder.Diagnosekoder
+import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
@@ -33,7 +34,7 @@ class TilbakedateringRulesTest {
                     signaturdato = LocalDateTime.now(),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(result.rulePath, listOf(TILBAKEDATERING to false))
@@ -57,7 +58,7 @@ class TilbakedateringRulesTest {
                     signaturdato = LocalDateTime.now(),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
@@ -87,7 +88,7 @@ class TilbakedateringRulesTest {
                     signaturdato = LocalDateTime.now(),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
@@ -127,7 +128,7 @@ class TilbakedateringRulesTest {
                     hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(result.rulePath, listOf(TILBAKEDATERING to true, ETTERSENDING to true))
@@ -164,7 +165,7 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = "Det er begrunna!",
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
@@ -198,7 +199,7 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = null,
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
                 result.rulePath,
@@ -224,6 +225,20 @@ class TilbakedateringRulesTest {
                 ),
             )
 
+            assertEquals(result.treeResult.ruleOutcome, Outcomes.INNTIL_8_DAGER)
+        }
+
+        @Test
+        fun `Papirmode - Uten begrunnelse, Manuell`() {
+            val payload =
+                testTilbakedateringRulePayload(
+                    perioder = testPeriode(-5, 0),
+                    signaturdato = LocalDateTime.now(),
+                    begrunnelseIkkeKontakt = null,
+                )
+
+            val (result) = TilbakedateringRules(payload, ExecutionMode.PAPIR).execute()
+            assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertEquals(result.treeResult.ruleOutcome, Outcomes.INNTIL_8_DAGER)
         }
 
@@ -257,7 +272,7 @@ class TilbakedateringRulesTest {
                         ),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
@@ -301,7 +316,7 @@ class TilbakedateringRulesTest {
                     tidligereSykmeldinger = listOf(),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
@@ -340,7 +355,7 @@ class TilbakedateringRulesTest {
                     hoveddiagnose = Diagnose("X01", Diagnosekoder.ICD10_CODE),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
@@ -382,7 +397,7 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = null,
                     hoveddiagnose = Diagnose("X01", Diagnosekoder.ICD10_CODE),
                 )
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
@@ -418,7 +433,7 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = null,
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
@@ -456,7 +471,7 @@ class TilbakedateringRulesTest {
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = "12344123112341232....,,,..12",
                 )
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
@@ -513,7 +528,7 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                     hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
                 )
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
@@ -555,7 +570,7 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(
@@ -595,7 +610,7 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
@@ -632,7 +647,7 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(
@@ -688,7 +703,7 @@ class TilbakedateringRulesTest {
                         ),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(
@@ -730,7 +745,7 @@ class TilbakedateringRulesTest {
                     tidligereSykmeldinger = listOf(),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
@@ -774,7 +789,7 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = "Veldig bra begrunnels!",
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(
@@ -807,7 +822,7 @@ class TilbakedateringRulesTest {
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = "Dårlig begrunnels>:(",
                 )
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
@@ -844,7 +859,7 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = "abcdefghijklmno",
                     hoveddiagnose = Diagnose("X01", Diagnosekoder.ICD10_CODE),
                 )
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(
@@ -888,7 +903,7 @@ class TilbakedateringRulesTest {
                     hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
@@ -931,7 +946,7 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = "abcghgfgh",
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
@@ -977,7 +992,7 @@ class TilbakedateringRulesTest {
                     hoveddiagnose = Diagnose("X01", Diagnosekoder.ICD10_CODE),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute()
+            val (result) = TilbakedateringRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(

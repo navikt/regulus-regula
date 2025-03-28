@@ -3,6 +3,7 @@ package no.nav.tsm.regulus.regula.rules.trees.validering
 import java.time.LocalDate
 import kotlin.test.*
 import kotlin.test.Test
+import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
@@ -25,7 +26,8 @@ class ValideringRulesTest {
                         avsenderFnr = "01912391932",
                         pasientIdent = pasientFnr,
                         utdypendeOpplysninger = emptyMap(),
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -70,7 +72,8 @@ class ValideringRulesTest {
                         avsenderFnr = "01912391932",
                         pasientIdent = "07091912345",
                         utdypendeOpplysninger = emptyMap(),
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -105,7 +108,8 @@ class ValideringRulesTest {
                         avsenderFnr = "01912391932",
                         pasientIdent = "07091912345",
                         utdypendeOpplysninger = emptyMap(),
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -148,7 +152,8 @@ class ValideringRulesTest {
                         avsenderFnr = "2",
                         pasientIdent = pasientFnr,
                         utdypendeOpplysninger = emptyMap(),
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -190,7 +195,8 @@ class ValideringRulesTest {
                         avsenderFnr = pasientFnr,
                         pasientIdent = pasientFnr,
                         utdypendeOpplysninger = emptyMap(),
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -238,7 +244,8 @@ class ValideringRulesTest {
                         pasientIdent = pasientFnr,
                         avsenderFnr = "08201023912",
                         utdypendeOpplysninger = emptyMap(),
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 

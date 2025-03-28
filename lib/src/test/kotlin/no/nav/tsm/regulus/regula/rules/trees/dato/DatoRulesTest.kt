@@ -3,6 +3,7 @@ package no.nav.tsm.regulus.regula.rules.trees.dato
 import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.test.*
+import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
@@ -26,7 +27,8 @@ class DatoRulesTest {
                         sykmeldingId = "sykmeldingId",
                         perioder = perioder,
                         signaturdato = now,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -72,7 +74,8 @@ class DatoRulesTest {
                         sykmeldingId = "sykmeldingId",
                         perioder = perioder,
                         signaturdato = now,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -109,7 +112,8 @@ class DatoRulesTest {
                         sykmeldingId = "sykmeldingId",
                         perioder = perioder,
                         signaturdato = now,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
