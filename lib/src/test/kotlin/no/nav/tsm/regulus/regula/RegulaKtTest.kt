@@ -91,7 +91,62 @@ class RegulaKtTest {
                 )
             )
 
-        println("Result: $result")
+        // All 8 chains
+        assertEquals(result.results.size, 8)
+        assertEquals(result.status, RegulaStatus.OK)
+        assertEquals(result.ruleHits.size, 0)
+    }
+
+    @Test
+    fun `smallest possible valid sykmelding`() {
+        val result =
+            executeRegulaRules(
+                RegulaPayload(
+                    sykmeldingId = "123456789",
+                    hoveddiagnose = Diagnose(kode = "A01", system = Diagnosekoder.ICPC2_CODE),
+                    perioder =
+                        listOf(
+                            SykmeldingPeriode.AktivitetIkkeMulig(
+                                fom = LocalDate.now().minusDays(0),
+                                tom = LocalDate.now().plusDays(7),
+                            )
+                        ),
+                    meta =
+                        RegulaMeta(
+                            signaturdato = LocalDateTime.now().minusDays(1),
+                            mottattDato = LocalDateTime.now(),
+                            behandletTidspunkt = LocalDateTime.now(),
+                            rulesetVersion = "2",
+                        ),
+                    tidligereSykmeldinger = emptyList(),
+                    bidiagnoser = null,
+                    annenFravarsArsak = null,
+                    utdypendeOpplysninger = null,
+                    kontaktPasientBegrunnelseIkkeKontakt = null,
+                    pasient =
+                        RegulaPasient(
+                            ident = "12345678910",
+                            fodselsdato = LocalDate.now().minusYears(30),
+                        ),
+                    behandler =
+                        RegulaBehandler(
+                            suspendert = false,
+                            godkjenninger =
+                                listOf(
+                                    BehandlerGodkjenning(
+                                        autorisasjon =
+                                            BehandlerKode(aktiv = true, oid = 7704, verdi = "1"),
+                                        helsepersonellkategori =
+                                            BehandlerKode(aktiv = true, oid = 9060, verdi = "LE"),
+                                        tillegskompetanse = null,
+                                    )
+                                ),
+                            legekontorOrgnr = "123456789",
+                            fnr = "10987654321",
+                        ),
+                    avsender = RegulaAvsender(fnr = "10987654321"),
+                )
+            )
 
         // All 8 chains
         assertEquals(result.results.size, 8)
