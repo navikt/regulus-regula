@@ -3,7 +3,6 @@ package no.nav.tsm.regulus.regula.rules.trees.tilbakedatering
 import java.time.temporal.ChronoUnit
 import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
-import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.extras.Forlengelse
 import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.extras.isArbeidsgiverperiode
@@ -12,11 +11,10 @@ import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.extras.isForlengels
 import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.latestTom
 
-internal class TilbakedateringRules(payload: TilbakedateringRulePayload, mode: ExecutionMode) :
+internal class TilbakedateringRules(payload: TilbakedateringRulePayload) :
     TreeExecutor<TilbakedateringRule, TilbakedateringRulePayload>(
         tilbakedateringRuleTree,
         payload,
-        mode,
     ) {
     override fun getRule(rule: TilbakedateringRule): TilbakedateringRuleFn =
         getTilbakedateringRule(rule)

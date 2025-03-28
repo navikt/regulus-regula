@@ -2,16 +2,11 @@ package no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet
 
 import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
-import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.payload.Diagnose
 
-internal class ArbeidsuforhetRules(val payload: ArbeidsuforhetRulePayload, mode: ExecutionMode) :
-    TreeExecutor<ArbeidsuforhetRule, ArbeidsuforhetRulePayload>(
-        arbeidsuforhetRuleTree,
-        payload,
-        mode,
-    ) {
+internal class ArbeidsuforhetRules(val payload: ArbeidsuforhetRulePayload) :
+    TreeExecutor<ArbeidsuforhetRule, ArbeidsuforhetRulePayload>(arbeidsuforhetRuleTree, payload) {
     override fun getRule(rule: ArbeidsuforhetRule): ArbeidsuforhetRuleFn =
         getArbeidsuforhetRule(rule)
 }

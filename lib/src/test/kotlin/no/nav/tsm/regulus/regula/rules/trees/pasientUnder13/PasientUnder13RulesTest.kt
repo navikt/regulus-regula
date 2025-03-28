@@ -25,10 +25,9 @@ class PasientUnder13RulesTest {
                                     tom = LocalDate.now().plusDays(10),
                                 )
                             ),
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.OK)
         assertPath(result.rulePath, listOf(PasientUnder13Rule.PASIENT_YNGRE_ENN_13 to false))
@@ -52,10 +51,9 @@ class PasientUnder13RulesTest {
                                     tom = LocalDate.now().plusDays(10),
                                 )
                             ),
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(result.rulePath, listOf(PasientUnder13Rule.PASIENT_YNGRE_ENN_13 to true))

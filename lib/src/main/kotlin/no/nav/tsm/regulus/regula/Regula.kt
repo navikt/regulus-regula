@@ -37,8 +37,8 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload): RegulaResult {
                 pasientUnder13RulePayload = ruleExecutionPayload.toPasientUnder13RulePayload(),
                 datoRulePayload = ruleExecutionPayload.toDatoRulePayload(),
                 tilbakedateringRulePayload = ruleExecutionPayload.toTilbakedateringRulePayload(),
-                mode = ExecutionMode.NORMAL,
-            )
+            ),
+            ExecutionMode.NORMAL,
         )
 
     val overallStatus: RegulaStatus =
@@ -102,15 +102,14 @@ private fun createSequence(
     pasientUnder13RulePayload: PasientUnder13RulePayload,
     datoRulePayload: DatoRulePayload,
     tilbakedateringRulePayload: TilbakedateringRulePayload,
-    mode: ExecutionMode,
 ): Sequence<TreeExecutor<*, *>> =
     sequenceOf(
-        LegeSuspensjonRules(legeSuspensjonRulePayload, mode),
-        ValideringRules(valideringRulePayload, mode),
-        PeriodeRules(periodeRulePayload, mode),
-        HprRules(hprRulePayload, mode),
-        ArbeidsuforhetRules(arbeidsuforhetRulePayload, mode),
-        PasientUnder13Rules(pasientUnder13RulePayload, mode),
-        DatoRules(datoRulePayload, mode),
-        TilbakedateringRules(tilbakedateringRulePayload, mode),
+        LegeSuspensjonRules(legeSuspensjonRulePayload),
+        ValideringRules(valideringRulePayload),
+        PeriodeRules(periodeRulePayload),
+        HprRules(hprRulePayload),
+        ArbeidsuforhetRules(arbeidsuforhetRulePayload),
+        PasientUnder13Rules(pasientUnder13RulePayload),
+        DatoRules(datoRulePayload),
+        TilbakedateringRules(tilbakedateringRulePayload),
     )

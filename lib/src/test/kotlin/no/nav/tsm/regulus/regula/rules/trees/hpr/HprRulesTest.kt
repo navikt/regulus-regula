@@ -35,7 +35,7 @@ class HprRulesTest {
     @Test
     fun `har ikke aktiv autorisasjon, Status INVALID`() {
         val behandler = testBehandlerGodkjenninger(BehandlerScenarios.INAKTIV_LEGE)
-        val (result) = HprRules(createHprRulePayload(behandler), ExecutionMode.NORMAL).execute()
+        val (result) = HprRules(createHprRulePayload(behandler)).execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.INVALID, result.treeResult.status)
         assertPath(result.rulePath, listOf(HprRule.BEHANDLER_GYLIDG_I_HPR to false))
@@ -45,7 +45,7 @@ class HprRulesTest {
     @Test
     fun `mangler autorisasjon, Status INVALID`() {
         val behandler = testBehandlerGodkjenninger(BehandlerScenarios.UGYLDIG_AUTORISASJON)
-        val (result) = HprRules(createHprRulePayload(behandler), ExecutionMode.NORMAL).execute()
+        val (result) = HprRules(createHprRulePayload(behandler)).execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.INVALID, result.treeResult.status)
         assertPath(
@@ -75,10 +75,9 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.OK, result.treeResult.status)
         assertPath(
@@ -109,10 +108,9 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.OK, result.treeResult.status)
         assertPath(
@@ -154,10 +152,9 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.OK, result.treeResult.status)
         assertPath(
@@ -194,10 +191,9 @@ class HprRulesTest {
                         perioder = perioder,
                         signaturdato = signaturdato,
                         tidligereSykmeldinger = tidligereSykmeldinger,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.INVALID, result.treeResult.status)
         assertPath(
@@ -239,10 +235,9 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.INVALID, result.treeResult.status)
         assertPath(
@@ -283,10 +278,9 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.OK, result.treeResult.status)
         assertPath(
@@ -325,10 +319,9 @@ class HprRulesTest {
                         perioder = perioder,
                         signaturdato = signaturdato,
                         tidligereSykmeldinger = tidligereSykmeldinger,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         val expectedStartDate =
             LocalDate.of(2020, 1, 2).minusDays(85) // More than 12 weeks (84 days) before tom date
@@ -375,10 +368,9 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.INVALID, result.treeResult.status)
         assertPath(
@@ -417,10 +409,9 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.OK, result.treeResult.status)
         assertPath(
@@ -460,10 +451,9 @@ class HprRulesTest {
                         perioder = perioder,
                         tidligereSykmeldinger = tidligereSykmeldinger,
                         signaturdato = signaturdato,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.INVALID, result.treeResult.status)
         assertPath(
@@ -529,10 +519,9 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandlerWithCustomGyldig,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.OK, result.treeResult.status)
         assertPath(
@@ -584,10 +573,9 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandlerWithCustomGyldig,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.INVALID, result.treeResult.status)
         assertPath(
@@ -649,10 +637,9 @@ class HprRulesTest {
                         behandlerWithCustomGyldig,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.INVALID, result.treeResult.status)
         assertPath(
@@ -714,10 +701,9 @@ class HprRulesTest {
                         behandlerWithCustomGyldig,
                         perioder,
                         signaturdato = signaturdato,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.OK, result.treeResult.status)
         assertPath(
@@ -754,10 +740,9 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.INVALID, result.treeResult.status)
         assertPath(
@@ -798,10 +783,9 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.INVALID, result.treeResult.status)
         assertPath(
@@ -840,10 +824,9 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.OK, result.treeResult.status)
         assertPath(
@@ -882,10 +865,9 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.OK, result.treeResult.status)
         assertPath(

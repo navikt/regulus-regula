@@ -27,10 +27,9 @@ class DatoRulesTest {
                         sykmeldingId = "sykmeldingId",
                         perioder = perioder,
                         signaturdato = now,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.OK)
         assertPath(
@@ -74,10 +73,9 @@ class DatoRulesTest {
                         sykmeldingId = "sykmeldingId",
                         perioder = perioder,
                         signaturdato = now,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(result.rulePath, listOf(DatoRule.FREMDATERT to true))
@@ -112,10 +110,9 @@ class DatoRulesTest {
                         sykmeldingId = "sykmeldingId",
                         perioder = perioder,
                         signaturdato = now,
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
