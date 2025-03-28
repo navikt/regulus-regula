@@ -7,6 +7,10 @@ on:
       - 'lib/version'
       - 'scripts/create-release.sh'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.branch }}
+  cancel-in-progress: true
+
 jobs:
   should_release:
     runs-on: ubuntu-latest
