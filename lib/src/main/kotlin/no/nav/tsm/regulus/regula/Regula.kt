@@ -25,20 +25,21 @@ import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRulePayload
 import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRules
 
 /** Apply all the rules to the given sykmelding. */
-fun executeRegulaRules(ruleExecutionPayload: RegulaPayload): RegulaResult {
+fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode): RegulaResult {
     val executedChain =
         runRules(
-            createSequence(
-                legeSuspensjonRulePayload = ruleExecutionPayload.toLegeSuspensjonRulePayload(),
-                valideringRulePayload = ruleExecutionPayload.toValideringRulePayload(),
-                periodeRulePayload = ruleExecutionPayload.toPeriodeRulePayload(),
-                hprRulePayload = ruleExecutionPayload.toHprRulePayload(),
-                arbeidsuforhetRulePayload = ruleExecutionPayload.toArbeidsuforhetRulePayload(),
-                pasientUnder13RulePayload = ruleExecutionPayload.toPasientUnder13RulePayload(),
-                datoRulePayload = ruleExecutionPayload.toDatoRulePayload(),
-                tilbakedateringRulePayload = ruleExecutionPayload.toTilbakedateringRulePayload(),
-            ),
-            ExecutionMode.NORMAL,
+            sequence =
+                createSequence(
+                    legeSuspensjonRulePayload = ruleExecutionPayload.toLegeSuspensjonRulePayload(),
+                    valideringRulePayload = ruleExecutionPayload.toValideringRulePayload(),
+                    periodeRulePayload = ruleExecutionPayload.toPeriodeRulePayload(),
+                    hprRulePayload = ruleExecutionPayload.toHprRulePayload(),
+                    arbeidsuforhetRulePayload = ruleExecutionPayload.toArbeidsuforhetRulePayload(),
+                    pasientUnder13RulePayload = ruleExecutionPayload.toPasientUnder13RulePayload(),
+                    datoRulePayload = ruleExecutionPayload.toDatoRulePayload(),
+                    tilbakedateringRulePayload = ruleExecutionPayload.toTilbakedateringRulePayload(),
+                ),
+            mode = mode,
         )
 
     val overallStatus: RegulaStatus =

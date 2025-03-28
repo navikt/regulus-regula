@@ -5,6 +5,7 @@ import java.time.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import no.nav.helse.diagnosekoder.Diagnosekoder
+import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.payload.AnnenFravarsArsak
 import no.nav.tsm.regulus.regula.payload.BehandlerGodkjenning
 import no.nav.tsm.regulus.regula.payload.BehandlerKode
@@ -88,7 +89,8 @@ class RegulaKtTest {
                             fnr = "10987654321",
                         ),
                     avsender = RegulaAvsender(fnr = "10987654321"),
-                )
+                ),
+                ExecutionMode.NORMAL,
             )
 
         // All 8 chains
@@ -145,7 +147,8 @@ class RegulaKtTest {
                             fnr = "10987654321",
                         ),
                     avsender = RegulaAvsender(fnr = "10987654321"),
-                )
+                ),
+                ExecutionMode.NORMAL,
             )
 
         // All 8 chains
