@@ -21,7 +21,7 @@ internal fun RegulaPayload.toValideringRulePayload(): ValideringRulePayload {
         sykmeldingId = sykmeldingId,
         perioder = perioder,
         utdypendeOpplysninger = utdypendeOpplysninger,
-        rulesetVersion = meta.rulesetVersion,
+        rulesetVersion = if (meta is RegulaMeta.LegacyMeta) meta.rulesetVersion else "3",
         legekontorOrgnr = behandler.legekontorOrgnr,
         behandlerFnr = behandler.fnr,
         avsenderFnr = avsender.fnr,
@@ -33,8 +33,12 @@ internal fun RegulaPayload.toPeriodeRulePayload(): PeriodeRulePayload {
     return PeriodeRulePayload(
         sykmeldingId = sykmeldingId,
         perioder = perioder,
-        behandletTidspunkt = meta.behandletTidspunkt,
-        mottattDato = meta.mottattDato,
+        behandletTidspunkt = behandletTidspunkt,
+        mottattDato =
+            when (meta) {
+                is RegulaMeta.LegacyMeta -> meta.mottattDato
+                is RegulaMeta.Meta -> meta.sendtTidspunkt
+            },
     )
 }
 
@@ -43,7 +47,11 @@ internal fun RegulaPayload.toHprRulePayload(): HprRulePayload {
         sykmeldingId = sykmeldingId,
         behandlerGodkjenninger = behandler.godkjenninger,
         perioder = perioder,
-        signaturdato = meta.signaturdato,
+        signaturdato =
+            when (meta) {
+                is RegulaMeta.LegacyMeta -> meta.signaturdato
+                is RegulaMeta.Meta -> meta.sendtTidspunkt
+            },
         tidligereSykmeldinger = tidligereSykmeldinger,
     )
 }
@@ -69,7 +77,11 @@ internal fun RegulaPayload.toDatoRulePayload(): DatoRulePayload {
     return DatoRulePayload(
         sykmeldingId = sykmeldingId,
         perioder = perioder,
-        signaturdato = meta.signaturdato,
+        signaturdato =
+            when (meta) {
+                is RegulaMeta.LegacyMeta -> meta.signaturdato
+                is RegulaMeta.Meta -> meta.sendtTidspunkt
+            },
     )
 }
 
@@ -78,7 +90,11 @@ internal fun RegulaPayload.toTilbakedateringRulePayload(): TilbakedateringRulePa
         sykmeldingId = sykmeldingId,
         perioder = perioder,
         tidligereSykmeldinger = tidligereSykmeldinger,
-        signaturdato = meta.signaturdato,
+        signaturdato =
+            when (meta) {
+                is RegulaMeta.LegacyMeta -> meta.signaturdato
+                is RegulaMeta.Meta -> meta.sendtTidspunkt
+            },
         hoveddiagnose = hoveddiagnose,
         begrunnelseIkkeKontakt = kontaktPasientBegrunnelseIkkeKontakt,
     )

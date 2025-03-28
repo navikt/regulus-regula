@@ -65,11 +65,11 @@ class RegulaKtTest {
                             ident = "12345678910",
                             fodselsdato = LocalDate.now().minusYears(30),
                         ),
+                    behandletTidspunkt = LocalDateTime.now(),
                     meta =
-                        RegulaMeta(
+                        RegulaMeta.LegacyMeta(
                             signaturdato = LocalDateTime.now().minusDays(1),
                             mottattDato = LocalDateTime.now(),
-                            behandletTidspunkt = LocalDateTime.now(),
                             rulesetVersion = "2",
                         ),
                     behandler =
@@ -113,11 +113,11 @@ class RegulaKtTest {
                                 tom = LocalDate.now().plusDays(7),
                             )
                         ),
+                    behandletTidspunkt = LocalDateTime.now(),
                     meta =
-                        RegulaMeta(
+                        RegulaMeta.LegacyMeta(
                             signaturdato = LocalDateTime.now().minusDays(1),
                             mottattDato = LocalDateTime.now(),
-                            behandletTidspunkt = LocalDateTime.now(),
                             rulesetVersion = "2",
                         ),
                     tidligereSykmeldinger = emptyList(),
