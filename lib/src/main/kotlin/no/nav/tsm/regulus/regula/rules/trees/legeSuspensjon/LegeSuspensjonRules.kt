@@ -1,17 +1,12 @@
 package no.nav.tsm.regulus.regula.rules.trees.legeSuspensjon
 
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
-import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 
-internal class LegeSuspensjonRules(
-    legeSuspensjonPayload: LegeSuspensjonRulePayload,
-    mode: ExecutionMode,
-) :
+internal class LegeSuspensjonRules(legeSuspensjonPayload: LegeSuspensjonRulePayload) :
     TreeExecutor<LegeSuspensjonRule, LegeSuspensjonRulePayload>(
         legeSuspensjonRuleTree,
         legeSuspensjonPayload,
-        mode,
     ) {
     override fun getRule(rule: LegeSuspensjonRule) = getLegeSuspensjonRule(rule)
 }

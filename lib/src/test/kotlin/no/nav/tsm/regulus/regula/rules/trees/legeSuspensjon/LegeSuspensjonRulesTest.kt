@@ -12,13 +12,9 @@ class LegeSuspensjonRulesTest {
     fun `Er ikkje suspendert, Status OK`() {
         val (result) =
             LegeSuspensjonRules(
-                    LegeSuspensjonRulePayload(
-                        sykmeldingId = "foo-bar",
-                        behandlerSuspendert = false,
-                    ),
-                    ExecutionMode.NORMAL,
+                    LegeSuspensjonRulePayload(sykmeldingId = "foo-bar", behandlerSuspendert = false)
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.OK)
         assertNull(result.treeResult.ruleOutcome)
@@ -31,10 +27,9 @@ class LegeSuspensjonRulesTest {
     fun `Er suspendert, Status INVALID`() {
         val (result) =
             LegeSuspensjonRules(
-                    LegeSuspensjonRulePayload(sykmeldingId = "foo-bar", behandlerSuspendert = true),
-                    ExecutionMode.NORMAL,
+                    LegeSuspensjonRulePayload(sykmeldingId = "foo-bar", behandlerSuspendert = true)
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertEquals(

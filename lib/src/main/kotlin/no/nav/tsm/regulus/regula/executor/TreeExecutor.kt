@@ -27,13 +27,12 @@ enum class ExecutionMode {
 internal abstract class TreeExecutor<RuleEnum, Payload : BasePayload>(
     private val tree: Pair<RuleNode<RuleEnum, RuleResult>, Juridisk>,
     private val payload: Payload,
-    private val mode: ExecutionMode,
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     abstract fun getRule(rule: RuleEnum): (Payload) -> RuleOutput<RuleEnum>
 
-    fun execute(): Pair<TreeOutput<RuleEnum, RuleResult>, Juridisk> {
+    fun execute(mode: ExecutionMode): Pair<TreeOutput<RuleEnum, RuleResult>, Juridisk> {
         val executedTreeResult =
             tree.first.evaluate(payload).also { treeOutput: TreeOutput<RuleEnum, RuleResult> ->
                 logger.info(

@@ -26,10 +26,9 @@ class ValideringRulesTest {
                         avsenderFnr = "01912391932",
                         pasientIdent = pasientFnr,
                         utdypendeOpplysninger = emptyMap(),
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.OK)
         assertPath(
@@ -72,10 +71,9 @@ class ValideringRulesTest {
                         avsenderFnr = "01912391932",
                         pasientIdent = "07091912345",
                         utdypendeOpplysninger = emptyMap(),
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(result.rulePath, listOf(ValideringRule.UGYLDIG_REGELSETTVERSJON to true))
@@ -108,10 +106,9 @@ class ValideringRulesTest {
                         avsenderFnr = "01912391932",
                         pasientIdent = "07091912345",
                         utdypendeOpplysninger = emptyMap(),
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -152,10 +149,9 @@ class ValideringRulesTest {
                         avsenderFnr = "2",
                         pasientIdent = pasientFnr,
                         utdypendeOpplysninger = emptyMap(),
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -195,10 +191,9 @@ class ValideringRulesTest {
                         avsenderFnr = pasientFnr,
                         pasientIdent = pasientFnr,
                         utdypendeOpplysninger = emptyMap(),
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -244,10 +239,9 @@ class ValideringRulesTest {
                         pasientIdent = pasientFnr,
                         avsenderFnr = "08201023912",
                         utdypendeOpplysninger = emptyMap(),
-                    ),
-                    ExecutionMode.NORMAL,
+                    )
                 )
-                .execute()
+                .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(

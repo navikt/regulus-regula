@@ -3,13 +3,12 @@ package no.nav.tsm.regulus.regula.rules.trees.dato
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
-import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.latestTom
 
-internal class DatoRules(periodePayload: DatoRulePayload, mode: ExecutionMode) :
-    TreeExecutor<DatoRule, DatoRulePayload>(datoRuleTree, periodePayload, mode) {
+internal class DatoRules(periodePayload: DatoRulePayload) :
+    TreeExecutor<DatoRule, DatoRulePayload>(datoRuleTree, periodePayload) {
     override fun getRule(rule: DatoRule) = getDatoRule(rule)
 }
 

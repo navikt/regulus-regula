@@ -57,11 +57,10 @@ private val testTree =
             )
         )
 
-private class ArbeidsuforhetRules(
-    val payload: TestPayload,
-    mode: ExecutionMode,
+private class TestRules(
+    payload: TestPayload,
     val getTestRule: (TestEnumRule) -> (TestPayload) -> RuleOutput<TestEnumRule>,
-) : TreeExecutor<TestEnumRule, TestPayload>(testTree, payload, mode) {
+) : TreeExecutor<TestEnumRule, TestPayload>(testTree, payload) {
     override fun getRule(rule: TestEnumRule): (TestPayload) -> RuleOutput<TestEnumRule> =
         getTestRule(rule)
 }
@@ -70,13 +69,14 @@ private data class TestPayload(override val sykmeldingId: String) : BasePayload
 
 class TreeExecutorTest {
 
+    private val payload = TestPayload("123")
+
     @Nested
     inner class NormalModeExecution {
         @Test
         fun `shall return OK when tree path is OK`() {
-            val payload = TestPayload("123")
             val executor =
-                ArbeidsuforhetRules(payload, ExecutionMode.NORMAL) {
+                TestRules(payload) {
                     val result =
                         when (it) {
                             TestEnumRule.RULE_1 -> true
@@ -87,7 +87,7 @@ class TreeExecutorTest {
                     { _ -> RuleOutput(ruleInputs = emptyMap(), rule = it, ruleResult = result) }
                 }
 
-            val (result) = executor.execute()
+            val (result) = executor.execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
@@ -102,9 +102,8 @@ class TreeExecutorTest {
 
         @Test
         fun `invalid path shall return INVALID`() {
-            val payload = TestPayload("123")
             val executor =
-                ArbeidsuforhetRules(payload, ExecutionMode.NORMAL) {
+                TestRules(payload) {
                     val result =
                         when (it) {
                             TestEnumRule.RULE_1 -> true
@@ -115,7 +114,7 @@ class TreeExecutorTest {
                     { _ -> RuleOutput(ruleInputs = emptyMap(), rule = it, ruleResult = result) }
                 }
 
-            val (result) = executor.execute()
+            val (result) = executor.execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
@@ -130,9 +129,8 @@ class TreeExecutorTest {
 
         @Test
         fun `manuell path shall return MANUELL`() {
-            val payload = TestPayload("123")
             val executor =
-                ArbeidsuforhetRules(payload, ExecutionMode.NORMAL) {
+                TestRules(payload) {
                     val result =
                         when (it) {
                             TestEnumRule.RULE_1 -> true
@@ -143,7 +141,7 @@ class TreeExecutorTest {
                     { _ -> RuleOutput(ruleInputs = emptyMap(), rule = it, ruleResult = result) }
                 }
 
-            val (result) = executor.execute()
+            val (result) = executor.execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(
@@ -158,9 +156,8 @@ class TreeExecutorTest {
 
         @Test
         fun `shall return OK when tree path is OK`() {
-            val payload = TestPayload("123")
             val executor =
-                ArbeidsuforhetRules(payload, ExecutionMode.PAPIR) {
+                TestRules(payload) {
                     val result =
                         when (it) {
                             TestEnumRule.RULE_1 -> true
@@ -171,7 +168,7 @@ class TreeExecutorTest {
                     { _ -> RuleOutput(ruleInputs = emptyMap(), rule = it, ruleResult = result) }
                 }
 
-            val (result) = executor.execute()
+            val (result) = executor.execute(ExecutionMode.PAPIR)
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
@@ -186,9 +183,8 @@ class TreeExecutorTest {
 
         @Test
         fun `invalid path shall return MANUELL`() {
-            val payload = TestPayload("123")
             val executor =
-                ArbeidsuforhetRules(payload, ExecutionMode.PAPIR) {
+                TestRules(payload) {
                     val result =
                         when (it) {
                             TestEnumRule.RULE_1 -> true
@@ -199,7 +195,7 @@ class TreeExecutorTest {
                     { _ -> RuleOutput(ruleInputs = emptyMap(), rule = it, ruleResult = result) }
                 }
 
-            val (result) = executor.execute()
+            val (result) = executor.execute(ExecutionMode.PAPIR)
 
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(
@@ -214,9 +210,8 @@ class TreeExecutorTest {
 
         @Test
         fun `manuell path shall return MANUELL`() {
-            val payload = TestPayload("123")
             val executor =
-                ArbeidsuforhetRules(payload, ExecutionMode.PAPIR) {
+                TestRules(payload) {
                     val result =
                         when (it) {
                             TestEnumRule.RULE_1 -> true
@@ -227,7 +222,7 @@ class TreeExecutorTest {
                     { _ -> RuleOutput(ruleInputs = emptyMap(), rule = it, ruleResult = result) }
                 }
 
-            val (result) = executor.execute()
+            val (result) = executor.execute(ExecutionMode.PAPIR)
 
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(
