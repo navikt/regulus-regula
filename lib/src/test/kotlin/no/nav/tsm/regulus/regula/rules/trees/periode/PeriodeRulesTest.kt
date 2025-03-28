@@ -5,6 +5,7 @@ import java.time.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
@@ -22,7 +23,7 @@ class PeriodeRulesTest {
 
         val payload = testPeriodeRulePayload(perioder = perioder)
 
-        val (result) = PeriodeRules(payload).execute()
+        val (result) = PeriodeRules(payload, ExecutionMode.NORMAL).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.OK)
         assertPath(
@@ -62,7 +63,7 @@ class PeriodeRulesTest {
     @Test
     fun `Periode mangler, Status INVALID`() {
         val payload = testPeriodeRulePayload(perioder = listOf())
-        val (result) = PeriodeRules(payload).execute()
+        val (result) = PeriodeRules(payload, ExecutionMode.NORMAL).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(result.rulePath, listOf(PeriodeRule.PERIODER_MANGLER to true))
@@ -84,7 +85,7 @@ class PeriodeRulesTest {
 
         val payload = testPeriodeRulePayload(perioder = perioder)
 
-        val (result) = PeriodeRules(payload).execute()
+        val (result) = PeriodeRules(payload, ExecutionMode.NORMAL).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -113,7 +114,7 @@ class PeriodeRulesTest {
 
         val payload = testPeriodeRulePayload(perioder = perioder)
 
-        val (result) = PeriodeRules(payload).execute()
+        val (result) = PeriodeRules(payload, ExecutionMode.NORMAL).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -154,7 +155,7 @@ class PeriodeRulesTest {
 
         val payload = testPeriodeRulePayload(perioder = perioder)
 
-        val (result) = PeriodeRules(payload).execute()
+        val (result) = PeriodeRules(payload, ExecutionMode.NORMAL).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -184,7 +185,7 @@ class PeriodeRulesTest {
 
         val payload = testPeriodeRulePayload(perioder = perioder)
 
-        val (result) = PeriodeRules(payload).execute()
+        val (result) = PeriodeRules(payload, ExecutionMode.NORMAL).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -220,7 +221,7 @@ class PeriodeRulesTest {
                     ),
             )
 
-        val (result) = PeriodeRules(payload).execute()
+        val (result) = PeriodeRules(payload, ExecutionMode.NORMAL).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -263,7 +264,7 @@ class PeriodeRulesTest {
 
         val payload = testPeriodeRulePayload(perioder = perioder)
 
-        val (result) = PeriodeRules(payload).execute()
+        val (result) = PeriodeRules(payload, ExecutionMode.NORMAL).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -308,7 +309,7 @@ class PeriodeRulesTest {
 
         val payload = testPeriodeRulePayload(perioder = perioder)
 
-        val (result) = PeriodeRules(payload).execute()
+        val (result) = PeriodeRules(payload, ExecutionMode.NORMAL).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -354,7 +355,7 @@ class PeriodeRulesTest {
             )
         val payload = testPeriodeRulePayload(perioder = perioder)
 
-        val (result) = PeriodeRules(payload).execute()
+        val (result) = PeriodeRules(payload, ExecutionMode.NORMAL).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -403,7 +404,7 @@ class PeriodeRulesTest {
 
         val payload = testPeriodeRulePayload(perioder = perioder)
 
-        val (result) = PeriodeRules(payload).execute()
+        val (result) = PeriodeRules(payload, ExecutionMode.NORMAL).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -448,7 +449,7 @@ class PeriodeRulesTest {
 
         val payload = testPeriodeRulePayload(perioder = perioder)
 
-        val (result) = PeriodeRules(payload).execute()
+        val (result) = PeriodeRules(payload, ExecutionMode.NORMAL).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -501,7 +502,7 @@ class PeriodeRulesTest {
 
         val payload = testPeriodeRulePayload(perioder = perioder)
 
-        val (result) = PeriodeRules(payload).execute()
+        val (result) = PeriodeRules(payload, ExecutionMode.NORMAL).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
         assertPath(

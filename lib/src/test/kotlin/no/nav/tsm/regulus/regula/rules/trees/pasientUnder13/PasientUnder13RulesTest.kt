@@ -4,6 +4,7 @@ import java.time.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
@@ -24,7 +25,8 @@ class PasientUnder13RulesTest {
                                     tom = LocalDate.now().plusDays(10),
                                 )
                             ),
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -50,7 +52,8 @@ class PasientUnder13RulesTest {
                                     tom = LocalDate.now().plusDays(10),
                                 )
                             ),
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 

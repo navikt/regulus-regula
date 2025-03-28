@@ -1,11 +1,16 @@
 package no.nav.tsm.regulus.regula.rules.trees.pasientUnder13
 
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
+import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.utils.latestTom
 
-internal class PasientUnder13Rules(payload: PasientUnder13RulePayload) :
-    TreeExecutor<PasientUnder13Rule, PasientUnder13RulePayload>(pasientUnder13RuleTree, payload) {
+internal class PasientUnder13Rules(payload: PasientUnder13RulePayload, mode: ExecutionMode) :
+    TreeExecutor<PasientUnder13Rule, PasientUnder13RulePayload>(
+        pasientUnder13RuleTree,
+        payload,
+        mode,
+    ) {
     override fun getRule(rule: PasientUnder13Rule): PasientUnder13RuleFn =
         getPasientUnder13Rule(rule)
 }

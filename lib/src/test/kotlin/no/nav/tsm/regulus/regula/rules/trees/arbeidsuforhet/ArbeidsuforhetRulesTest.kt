@@ -1,10 +1,10 @@
 package no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet
 
-import java.time.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import no.nav.helse.diagnosekoder.Diagnosekoder
+import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.payload.AnnenFravarsArsak
 import no.nav.tsm.regulus.regula.payload.Diagnose
@@ -13,17 +13,39 @@ import org.junit.jupiter.api.Nested
 
 class ArbeidsuforhetRulesTest {
 
-    val person31Years = LocalDate.now().minusYears(31)
-
     @Nested
     inner class DiagnoseTester {
         @Test
         fun `Hoveddiagnose is null and annen Fraværsårsak is null`() {
             val payload = testArbeidsuforhetPayload(hoveddiagnose = null, annenFravarsArsak = null)
 
-            val (result) = ArbeidsuforhetRules(payload).execute()
+            val (result) = ArbeidsuforhetRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
+            assertPath(
+                result.rulePath,
+                listOf(
+                    ArbeidsuforhetRule.HOVEDDIAGNOSE_MANGLER to true,
+                    ArbeidsuforhetRule.FRAVAERSGRUNN_MANGLER to true,
+                ),
+            )
+            assertEquals(
+                result.ruleInputs,
+                mapOf("hoveddiagnoseMangler" to true, "fraversgrunnMangler" to true),
+            )
+            assertEquals(
+                result.treeResult.ruleOutcome,
+                ArbeidsuforhetRule.Outcomes.FRAVAERSGRUNN_MANGLER,
+            )
+        }
+
+        @Test
+        fun `Papirmode - Hoveddiagnose is null and annen Fraværsårsak is null`() {
+            val payload = testArbeidsuforhetPayload(hoveddiagnose = null, annenFravarsArsak = null)
+
+            val (result) = ArbeidsuforhetRules(payload, ExecutionMode.PAPIR).execute()
+
+            assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(
                 result.rulePath,
                 listOf(
@@ -53,7 +75,7 @@ class ArbeidsuforhetRulesTest {
                         ),
                 )
 
-            val (result) = ArbeidsuforhetRules(payload).execute()
+            val (result) = ArbeidsuforhetRules(payload, ExecutionMode.NORMAL).execute()
 
             assertPath(
                 result.rulePath,
@@ -83,7 +105,7 @@ class ArbeidsuforhetRulesTest {
                     annenFravarsArsak = AnnenFravarsArsak(beskrivelse = null, grunn = emptyList()),
                 )
 
-            val (result) = ArbeidsuforhetRules(payload).execute()
+            val (result) = ArbeidsuforhetRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
@@ -114,7 +136,7 @@ class ArbeidsuforhetRulesTest {
                         listOf(Diagnose(system = "2.16.578.1.12.4.1.1.7170", kode = "R222222")),
                 )
 
-            val (result) = ArbeidsuforhetRules(payload).execute()
+            val (result) = ArbeidsuforhetRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
@@ -147,7 +169,7 @@ class ArbeidsuforhetRulesTest {
                     bidiagnoser = listOf(Diagnose(system = Diagnosekoder.ICPC2_CODE, kode = "R24")),
                 )
 
-            val (result) = ArbeidsuforhetRules(payload).execute()
+            val (result) = ArbeidsuforhetRules(payload, ExecutionMode.NORMAL).execute()
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
@@ -179,7 +201,7 @@ class ArbeidsuforhetRulesTest {
                 hoveddiagnose = Diagnose(system = "2.16.578.1.12.4.1.1.9999", kode = "A09")
             )
 
-        val (result) = ArbeidsuforhetRules(payload).execute()
+        val (result) = ArbeidsuforhetRules(payload, ExecutionMode.NORMAL).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -206,7 +228,7 @@ class ArbeidsuforhetRulesTest {
                 hoveddiagnose = Diagnose(system = Diagnosekoder.ICPC2_CODE, kode = "Z09")
             )
 
-        val (result) = ArbeidsuforhetRules(payload).execute()
+        val (result) = ArbeidsuforhetRules(payload, ExecutionMode.NORMAL).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -233,7 +255,7 @@ class ArbeidsuforhetRulesTest {
         // TODO: This is exactly the same as one of the tests in DiagnoseTester, should be removed
         val payload = testArbeidsuforhetPayload(hoveddiagnose = null, annenFravarsArsak = null)
 
-        val (result) = ArbeidsuforhetRules(payload).execute()
+        val (result) = ArbeidsuforhetRules(payload, ExecutionMode.NORMAL).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -261,7 +283,7 @@ class ArbeidsuforhetRulesTest {
                 bidiagnoser = listOf(Diagnose(system = "2.16.578.1.12.4.1.1.7110", kode = "S09")),
             )
 
-        val (result) = ArbeidsuforhetRules(payload).execute()
+        val (result) = ArbeidsuforhetRules(payload, ExecutionMode.NORMAL).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -295,7 +317,7 @@ class ArbeidsuforhetRulesTest {
                 hoveddiagnose = Diagnose(system = "2.16.578.1.12.4.1.1.7110", kode = "Z09")
             )
 
-        val (result) = ArbeidsuforhetRules(payload).execute()
+        val (result) = ArbeidsuforhetRules(payload, ExecutionMode.NORMAL).execute()
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(

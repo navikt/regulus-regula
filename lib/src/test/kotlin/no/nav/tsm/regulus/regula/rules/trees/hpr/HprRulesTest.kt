@@ -4,6 +4,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.payload.BehandlerGodkjenning
 import no.nav.tsm.regulus.regula.payload.BehandlerKode
@@ -34,7 +35,7 @@ class HprRulesTest {
     @Test
     fun `har ikke aktiv autorisasjon, Status INVALID`() {
         val behandler = testBehandlerGodkjenninger(BehandlerScenarios.INAKTIV_LEGE)
-        val (result) = HprRules(createHprRulePayload(behandler)).execute()
+        val (result) = HprRules(createHprRulePayload(behandler), ExecutionMode.NORMAL).execute()
 
         assertEquals(RuleStatus.INVALID, result.treeResult.status)
         assertPath(result.rulePath, listOf(HprRule.BEHANDLER_GYLIDG_I_HPR to false))
@@ -44,7 +45,7 @@ class HprRulesTest {
     @Test
     fun `mangler autorisasjon, Status INVALID`() {
         val behandler = testBehandlerGodkjenninger(BehandlerScenarios.UGYLDIG_AUTORISASJON)
-        val (result) = HprRules(createHprRulePayload(behandler)).execute()
+        val (result) = HprRules(createHprRulePayload(behandler), ExecutionMode.NORMAL).execute()
 
         assertEquals(RuleStatus.INVALID, result.treeResult.status)
         assertPath(
@@ -74,7 +75,8 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -107,7 +109,8 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -151,7 +154,8 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -190,7 +194,8 @@ class HprRulesTest {
                         perioder = perioder,
                         signaturdato = signaturdato,
                         tidligereSykmeldinger = tidligereSykmeldinger,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -234,7 +239,8 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -277,7 +283,8 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -318,7 +325,8 @@ class HprRulesTest {
                         perioder = perioder,
                         signaturdato = signaturdato,
                         tidligereSykmeldinger = tidligereSykmeldinger,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -367,7 +375,8 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -408,7 +417,8 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -450,7 +460,8 @@ class HprRulesTest {
                         perioder = perioder,
                         tidligereSykmeldinger = tidligereSykmeldinger,
                         signaturdato = signaturdato,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -518,7 +529,8 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandlerWithCustomGyldig,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -572,7 +584,8 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandlerWithCustomGyldig,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -636,7 +649,8 @@ class HprRulesTest {
                         behandlerWithCustomGyldig,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -700,7 +714,8 @@ class HprRulesTest {
                         behandlerWithCustomGyldig,
                         perioder,
                         signaturdato = signaturdato,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -739,7 +754,8 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -782,7 +798,8 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -823,7 +840,8 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
@@ -864,7 +882,8 @@ class HprRulesTest {
                         behandlerGodkjenninger = behandler,
                         perioder = perioder,
                         signaturdato = signaturdato,
-                    )
+                    ),
+                    ExecutionMode.NORMAL,
                 )
                 .execute()
 
