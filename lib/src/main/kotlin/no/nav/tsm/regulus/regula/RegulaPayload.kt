@@ -8,7 +8,7 @@ import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 
-/** The entire payload needed to apply the rules to this specific sykmelding. */
+/** The entire payload is needed to apply the rules to this specific sykmelding. */
 data class RegulaPayload(
     val sykmeldingId: String,
     val hoveddiagnose: Diagnose?,
@@ -31,6 +31,10 @@ data class RegulaPasient(
     val fodselsdato: LocalDate,
 )
 
+/**
+ * In the new architecture this is the same fnr as the RegulaBehandler.fnr, in the legacy it can be
+ * different
+ */
 data class RegulaAvsender(val fnr: String)
 
 /** Values that are not directly in the sykmelding document, but assosiated with it */
