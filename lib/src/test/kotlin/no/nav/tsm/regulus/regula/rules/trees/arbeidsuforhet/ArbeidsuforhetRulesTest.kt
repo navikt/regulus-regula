@@ -5,6 +5,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
+import no.nav.tsm.regulus.regula.dsl.getOutcome
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.payload.AnnenFravarsArsak
 import no.nav.tsm.regulus.regula.payload.Diagnose
@@ -34,7 +35,7 @@ class ArbeidsuforhetRulesTest {
                 mapOf("hoveddiagnoseMangler" to true, "fraversgrunnMangler" to true),
             )
             assertEquals(
-                result.treeResult.ruleOutcome,
+                result.treeResult.getOutcome(),
                 ArbeidsuforhetRule.Outcomes.FRAVAERSGRUNN_MANGLER,
             )
         }
@@ -58,7 +59,7 @@ class ArbeidsuforhetRulesTest {
                 mapOf("hoveddiagnoseMangler" to true, "fraversgrunnMangler" to true),
             )
             assertEquals(
-                result.treeResult.ruleOutcome,
+                result.treeResult.getOutcome(),
                 ArbeidsuforhetRule.Outcomes.FRAVAERSGRUNN_MANGLER,
             )
         }
@@ -94,7 +95,7 @@ class ArbeidsuforhetRulesTest {
                 ),
             )
             assertEquals(result.treeResult.status, RuleStatus.OK)
-            assertNull(result.treeResult.ruleOutcome)
+            assertNull(result.treeResult.getOutcome())
         }
 
         @Test
@@ -120,7 +121,7 @@ class ArbeidsuforhetRulesTest {
                 mapOf("hoveddiagnoseMangler" to true, "fraversgrunnMangler" to true),
             )
             assertEquals(
-                result.treeResult.ruleOutcome,
+                result.treeResult.getOutcome(),
                 ArbeidsuforhetRule.Outcomes.FRAVAERSGRUNN_MANGLER,
             )
         }
@@ -156,7 +157,7 @@ class ArbeidsuforhetRulesTest {
                 ),
             )
             assertEquals(
-                result.treeResult.ruleOutcome,
+                result.treeResult.getOutcome(),
                 ArbeidsuforhetRule.Outcomes.UGYLDIG_KODEVERK_FOR_BIDIAGNOSE,
             )
         }
@@ -190,7 +191,7 @@ class ArbeidsuforhetRulesTest {
                     "ugyldigKodeVerkBiDiagnose" to false,
                 ),
             )
-            assertNull(result.treeResult.ruleOutcome)
+            assertNull(result.treeResult.getOutcome())
         }
     }
 
@@ -216,7 +217,7 @@ class ArbeidsuforhetRulesTest {
             mapOf("hoveddiagnoseMangler" to false, "ugyldigKodeverkHovedDiagnose" to true),
         )
         assertEquals(
-            result.treeResult.ruleOutcome,
+            result.treeResult.getOutcome(),
             ArbeidsuforhetRule.Outcomes.UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE,
         )
     }
@@ -247,7 +248,7 @@ class ArbeidsuforhetRulesTest {
                 "icpc2ZDiagnose" to true,
             ),
         )
-        assertEquals(result.treeResult.ruleOutcome, ArbeidsuforhetRule.Outcomes.ICPC_2_Z_DIAGNOSE)
+        assertEquals(result.treeResult.getOutcome(), ArbeidsuforhetRule.Outcomes.ICPC_2_Z_DIAGNOSE)
     }
 
     @Test
@@ -270,7 +271,7 @@ class ArbeidsuforhetRulesTest {
             mapOf("hoveddiagnoseMangler" to true, "fraversgrunnMangler" to true),
         )
         assertEquals(
-            result.treeResult.ruleOutcome,
+            result.treeResult.getOutcome(),
             ArbeidsuforhetRule.Outcomes.FRAVAERSGRUNN_MANGLER,
         )
     }
@@ -305,7 +306,7 @@ class ArbeidsuforhetRulesTest {
             ),
         )
         assertEquals(
-            result.treeResult.ruleOutcome,
+            result.treeResult.getOutcome(),
             ArbeidsuforhetRule.Outcomes.UGYLDIG_KODEVERK_FOR_BIDIAGNOSE,
         )
     }
@@ -332,7 +333,7 @@ class ArbeidsuforhetRulesTest {
             mapOf("hoveddiagnoseMangler" to false, "ugyldigKodeverkHovedDiagnose" to true),
         )
         assertEquals(
-            result.treeResult.ruleOutcome,
+            result.treeResult.getOutcome(),
             ArbeidsuforhetRule.Outcomes.UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE,
         )
     }

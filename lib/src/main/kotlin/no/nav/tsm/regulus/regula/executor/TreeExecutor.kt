@@ -1,10 +1,10 @@
 package no.nav.tsm.regulus.regula.executor
 
-import no.nav.tsm.regulus.regula.dsl.ResultNode
-import no.nav.tsm.regulus.regula.dsl.RuleNode
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.TreeNode
+import no.nav.tsm.regulus.regula.dsl.TreeNode.*
+import no.nav.tsm.regulus.regula.dsl.TreeNode.LeafNode.*
 import no.nav.tsm.regulus.regula.dsl.TreeOutput
 import no.nav.tsm.regulus.regula.dsl.getRulePath
 import no.nav.tsm.regulus.regula.juridisk.Juridisk
@@ -52,12 +52,19 @@ internal abstract class TreeExecutor<RuleEnum, Payload : BasePayload>(
             return this
         }
 
-        return copy(treeResult = treeResult.copy(status = RuleStatus.MANUAL_PROCESSING))
+        val flippedResult =
+            when (treeResult) {
+                is OK<*> -> return this
+                is MANUAL<*> -> return this
+                is INVALID<*> -> MANUAL<RuleEnum>(this.treeResult.outcome)
+            }
+
+        return copy(treeResult = flippedResult)
     }
 
     private fun TreeNode<RuleEnum>.evaluate(payload: Payload): TreeOutput<RuleEnum> =
         when (this) {
-            is ResultNode -> TreeOutput(treeResult = result)
+            is LeafNode -> TreeOutput(treeResult = this)
             is RuleNode -> {
                 val rule = getRule(rule)
                 val result = rule(payload)
