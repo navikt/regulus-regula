@@ -3,6 +3,8 @@ package no.nav.tsm.regulus.regula.meta
 import no.nav.tsm.regulus.regula.dsl.*
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.TreeNode.*
+import no.nav.tsm.regulus.regula.juridisk.MedJuridisk
+import no.nav.tsm.regulus.regula.juridisk.UtenJuridisk
 import no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet.arbeidsuforhetRuleTree
 import no.nav.tsm.regulus.regula.rules.trees.dato.datoRuleTree
 import no.nav.tsm.regulus.regula.rules.trees.hpr.hprRuleTree
@@ -54,25 +56,27 @@ private fun <Enum> TreeNode<Enum>.traverseTree(
 
         is RuleNode -> {
             val currentNodeKey = "${nodeKey}_$rule"
-            if (yes is LeafNode) {
-                val childResult = (yes as LeafNode).status
+            val yesNode = yes
+
+            if (yesNode is LeafNode) {
+                val childResult = yesNode.status
                 val childKey = "${currentNodeKey}_$childResult"
 
                 if (childResult == RuleStatus.INVALID) {
                     builder.append(
-                        "    $thisNodeKey($rule) -->|Ja| ${childKey}(${childResult.norsk()})${
+                        "    $thisNodeKey($rule) -->|Ja| ${childKey}(${childResult.norsk()}${yesNode.juridisk.folkelig()})${
                             getStyle(
                                 childResult
                             )
                         }\n"
                     )
                     builder.append(
-                        "    $thisNodeKey($rule) -->|\"Ja (papir)\"| ${childKey}_papir(${RuleStatus.MANUAL_PROCESSING.norsk()})${getStyle(
+                        "    $thisNodeKey($rule) -->|\"Ja (papir)\"| ${childKey}_papir(${RuleStatus.MANUAL_PROCESSING.norsk()}${yesNode.juridisk.folkelig()})${getStyle(
                             RuleStatus.MANUAL_PROCESSING)}\n"
                     )
                 } else {
                     builder.append(
-                        "    $thisNodeKey($rule) -->|Ja| $childKey(${childResult.norsk()})${
+                        "    $thisNodeKey($rule) -->|Ja| $childKey(${childResult.norsk()}${yesNode.juridisk.folkelig()})${
                             getStyle(
                                 childResult
                             )
@@ -80,11 +84,12 @@ private fun <Enum> TreeNode<Enum>.traverseTree(
                     )
                 }
             } else {
-                val childRule = (yes as RuleNode<Enum>).rule
+                val childRule = (yesNode as RuleNode<Enum>).rule
                 val childKey = "${currentNodeKey}_$childRule"
                 builder.append("    $thisNodeKey($rule) -->|Ja| $childKey($childRule)\n")
                 yes.traverseTree(builder, childKey, currentNodeKey)
             }
+
             if (no is LeafNode) {
                 val childResult = (no as LeafNode).status
                 val childKey = "${currentNodeKey}_$childResult"
@@ -121,6 +126,22 @@ private fun <Enum> TreeNode<Enum>.traverseTree(
         }
     }
 }
+
+private fun RuleJuridisk.folkelig(): String =
+    when (this.juridisk) {
+        is UtenJuridisk -> ""
+        is MedJuridisk -> {
+            val it = this.juridisk.juridiskHenvisning
+            buildString {
+                append("\n")
+                append(it.lovverk.navn)
+                append(" § ${it.paragraf}")
+                it.ledd?.let { ledd -> append("-$ledd") }
+                it.punktum?.let { pkt -> append(" ${pkt}.") }
+                it.bokstav?.let { bokstav -> append(" ${bokstav.lowercase()})") }
+            }
+        }
+    }
 
 private fun RuleStatus.norsk(): String =
     when (this) {
