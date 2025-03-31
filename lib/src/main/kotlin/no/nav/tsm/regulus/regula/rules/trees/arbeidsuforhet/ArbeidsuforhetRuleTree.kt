@@ -1,30 +1,27 @@
 package no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet
 
-import no.nav.tsm.regulus.regula.dsl.RuleStatus.INVALID
-import no.nav.tsm.regulus.regula.dsl.RuleStatus.OK
-import no.nav.tsm.regulus.regula.dsl.no
+import no.nav.tsm.regulus.regula.dsl.TreeNode.LeafNode.*
 import no.nav.tsm.regulus.regula.dsl.tree
-import no.nav.tsm.regulus.regula.dsl.yes
 import no.nav.tsm.regulus.regula.juridisk.JuridiskHenvisning
 import no.nav.tsm.regulus.regula.juridisk.Lovverk
 import no.nav.tsm.regulus.regula.juridisk.MedJuridisk
 
 internal val arbeidsuforhetRuleTree =
-    tree<ArbeidsuforhetRule>(ArbeidsuforhetRule.HOVEDDIAGNOSE_MANGLER) {
+    tree(ArbeidsuforhetRule.HOVEDDIAGNOSE_MANGLER) {
         yes(ArbeidsuforhetRule.FRAVAERSGRUNN_MANGLER) {
-            yes(INVALID, ArbeidsuforhetRule.Outcomes.FRAVAERSGRUNN_MANGLER)
+            yes(INVALID(ArbeidsuforhetRule.Outcomes.FRAVAERSGRUNN_MANGLER))
             no(ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_BIDIAGNOSE) {
-                yes(INVALID, ArbeidsuforhetRule.Outcomes.UGYLDIG_KODEVERK_FOR_BIDIAGNOSE)
-                no(OK)
+                yes(INVALID(ArbeidsuforhetRule.Outcomes.UGYLDIG_KODEVERK_FOR_BIDIAGNOSE))
+                no(OK())
             }
         }
         no(ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE) {
-            yes(INVALID, ArbeidsuforhetRule.Outcomes.UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE)
+            yes(INVALID(ArbeidsuforhetRule.Outcomes.UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE))
             no(ArbeidsuforhetRule.ICPC_2_Z_DIAGNOSE) {
-                yes(INVALID, ArbeidsuforhetRule.Outcomes.ICPC_2_Z_DIAGNOSE)
+                yes(INVALID(ArbeidsuforhetRule.Outcomes.ICPC_2_Z_DIAGNOSE))
                 no(ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_BIDIAGNOSE) {
-                    yes(INVALID, ArbeidsuforhetRule.Outcomes.UGYLDIG_KODEVERK_FOR_BIDIAGNOSE)
-                    no(OK)
+                    yes(INVALID(ArbeidsuforhetRule.Outcomes.UGYLDIG_KODEVERK_FOR_BIDIAGNOSE))
+                    no(OK())
                 }
             }
         }

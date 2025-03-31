@@ -5,6 +5,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
+import no.nav.tsm.regulus.regula.dsl.getOutcome
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
@@ -33,7 +34,7 @@ class PasientUnder13RulesTest {
         assertPath(result.rulePath, listOf(PasientUnder13Rule.PASIENT_YNGRE_ENN_13 to false))
         assertEquals(result.ruleInputs, mapOf("pasientUnder13Aar" to false))
 
-        assertNull(result.treeResult.ruleOutcome, null)
+        assertNull(result.treeResult.getOutcome(), null)
     }
 
     @Test
@@ -61,7 +62,7 @@ class PasientUnder13RulesTest {
         assertEquals(result.ruleInputs, mapOf("pasientUnder13Aar" to true))
 
         assertEquals(
-            result.treeResult.ruleOutcome,
+            result.treeResult.getOutcome(),
             PasientUnder13Rule.Outcomes.PASIENT_YNGRE_ENN_13,
         )
     }

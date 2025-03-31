@@ -7,6 +7,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
+import no.nav.tsm.regulus.regula.dsl.getOutcome
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.Diagnose
@@ -48,7 +49,7 @@ class TilbakedateringRulesTest {
                 ),
             )
 
-            assertNull(result.treeResult.ruleOutcome)
+            assertNull(result.treeResult.getOutcome())
         }
 
         @Test
@@ -78,7 +79,7 @@ class TilbakedateringRulesTest {
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                 ),
             )
-            assertNull(result.treeResult.ruleOutcome)
+            assertNull(result.treeResult.getOutcome())
         }
 
         @Test
@@ -149,7 +150,7 @@ class TilbakedateringRulesTest {
                 ),
             )
 
-            assertNull(result.treeResult.ruleOutcome)
+            assertNull(result.treeResult.getOutcome())
         }
     }
 
@@ -226,7 +227,7 @@ class TilbakedateringRulesTest {
                 ),
             )
 
-            assertEquals(result.treeResult.ruleOutcome, Outcomes.INNTIL_8_DAGER)
+            assertEquals(result.treeResult.getOutcome(), Outcomes.INNTIL_8_DAGER)
         }
 
         @Test
@@ -240,7 +241,7 @@ class TilbakedateringRulesTest {
 
             val (result) = TilbakedateringRules(payload).execute(ExecutionMode.PAPIR)
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
-            assertEquals(result.treeResult.ruleOutcome, Outcomes.INNTIL_8_DAGER)
+            assertEquals(result.treeResult.getOutcome(), Outcomes.INNTIL_8_DAGER)
         }
 
         @Test
@@ -301,7 +302,7 @@ class TilbakedateringRulesTest {
                 ),
             )
 
-            assertNull(result.treeResult.ruleOutcome)
+            assertNull(result.treeResult.getOutcome())
         }
 
         @Test
@@ -458,7 +459,7 @@ class TilbakedateringRulesTest {
                 ),
             )
 
-            assertEquals(result.treeResult.ruleOutcome, Outcomes.MINDRE_ENN_1_MAANED)
+            assertEquals(result.treeResult.getOutcome(), Outcomes.MINDRE_ENN_1_MAANED)
         }
 
         @Test

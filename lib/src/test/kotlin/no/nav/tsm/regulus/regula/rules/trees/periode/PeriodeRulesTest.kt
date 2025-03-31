@@ -6,6 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
+import no.nav.tsm.regulus.regula.dsl.getOutcome
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
@@ -57,7 +58,7 @@ class PeriodeRulesTest {
                 "inneholderBehandlingsDager" to false,
             ),
         )
-        assertNull(result.treeResult.ruleOutcome)
+        assertNull(result.treeResult.getOutcome())
     }
 
     @Test
@@ -70,7 +71,7 @@ class PeriodeRulesTest {
 
         assertEquals(result.ruleInputs, mapOf("perioder" to emptyList<Aktivitet>()))
 
-        assertEquals(result.treeResult.ruleOutcome, PeriodeRule.Outcomes.PERIODER_MANGLER)
+        assertEquals(result.treeResult.getOutcome(), PeriodeRule.Outcomes.PERIODER_MANGLER)
     }
 
     @Test
@@ -95,7 +96,7 @@ class PeriodeRulesTest {
 
         assertEquals(result.ruleInputs, mapOf("perioder" to perioder))
 
-        assertEquals(result.treeResult.ruleOutcome, PeriodeRule.Outcomes.FRADATO_ETTER_TILDATO)
+        assertEquals(result.treeResult.getOutcome(), PeriodeRule.Outcomes.FRADATO_ETTER_TILDATO)
     }
 
     @Test
@@ -128,7 +129,7 @@ class PeriodeRulesTest {
 
         assertEquals(result.ruleInputs, mapOf("perioder" to perioder))
 
-        assertEquals(result.treeResult.ruleOutcome, PeriodeRule.Outcomes.OVERLAPPENDE_PERIODER)
+        assertEquals(result.treeResult.getOutcome(), PeriodeRule.Outcomes.OVERLAPPENDE_PERIODER)
     }
 
     @Test
@@ -170,7 +171,7 @@ class PeriodeRulesTest {
 
         assertEquals(result.ruleInputs, mapOf("perioder" to perioder))
 
-        assertEquals(result.treeResult.ruleOutcome, PeriodeRule.Outcomes.OPPHOLD_MELLOM_PERIODER)
+        assertEquals(result.treeResult.getOutcome(), PeriodeRule.Outcomes.OPPHOLD_MELLOM_PERIODER)
     }
 
     @Test
@@ -198,7 +199,7 @@ class PeriodeRulesTest {
 
         assertEquals(result.ruleInputs, mapOf("perioder" to perioder))
 
-        assertEquals(result.treeResult.ruleOutcome, PeriodeRule.Outcomes.IKKE_DEFINERT_PERIODE)
+        assertEquals(result.treeResult.getOutcome(), PeriodeRule.Outcomes.IKKE_DEFINERT_PERIODE)
     }
 
     @Test
@@ -239,7 +240,7 @@ class PeriodeRulesTest {
         )
 
         assertEquals(
-            result.treeResult.ruleOutcome,
+            result.treeResult.getOutcome(),
             PeriodeRule.Outcomes.BEHANDLINGSDATO_ETTER_MOTTATTDATO,
         )
     }
@@ -288,7 +289,7 @@ class PeriodeRulesTest {
         )
 
         assertEquals(
-            result.treeResult.ruleOutcome,
+            result.treeResult.getOutcome(),
             PeriodeRule.Outcomes.AVVENTENDE_SYKMELDING_KOMBINERT,
         )
     }
@@ -335,7 +336,7 @@ class PeriodeRulesTest {
         )
 
         assertEquals(
-            result.treeResult.ruleOutcome,
+            result.treeResult.getOutcome(),
             PeriodeRule.Outcomes.MANGLENDE_INNSPILL_TIL_ARBEIDSGIVER,
         )
     }
@@ -383,7 +384,7 @@ class PeriodeRulesTest {
         )
 
         assertEquals(
-            result.treeResult.ruleOutcome,
+            result.treeResult.getOutcome(),
             PeriodeRule.Outcomes.AVVENTENDE_SYKMELDING_OVER_16_DAGER,
         )
     }
@@ -434,7 +435,7 @@ class PeriodeRulesTest {
         )
 
         assertEquals(
-            result.treeResult.ruleOutcome,
+            result.treeResult.getOutcome(),
             PeriodeRule.Outcomes.FOR_MANGE_BEHANDLINGSDAGER_PER_UKE,
         )
     }
@@ -481,7 +482,7 @@ class PeriodeRulesTest {
         )
 
         assertEquals(
-            result.treeResult.ruleOutcome,
+            result.treeResult.getOutcome(),
             PeriodeRule.Outcomes.GRADERT_SYKMELDING_OVER_99_PROSENT,
         )
     }
@@ -536,7 +537,7 @@ class PeriodeRulesTest {
         )
 
         assertEquals(
-            result.treeResult.ruleOutcome,
+            result.treeResult.getOutcome(),
             PeriodeRule.Outcomes.SYKMELDING_MED_BEHANDLINGSDAGER,
         )
     }

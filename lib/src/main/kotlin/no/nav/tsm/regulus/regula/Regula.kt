@@ -3,6 +3,7 @@
 package no.nav.tsm.regulus.regula
 
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
+import no.nav.tsm.regulus.regula.dsl.getOutcome
 import no.nav.tsm.regulus.regula.dsl.getRulePath
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
@@ -54,7 +55,7 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
 
     val ruleHits: List<RegulaOutcome> =
         executedChain
-            .mapNotNull { (result) -> result.treeResult.ruleOutcome }
+            .mapNotNull { (result) -> result.treeResult.getOutcome() }
             .map {
                 RegulaOutcome(
                     status = it.status.toRegulaStatus(),
@@ -68,7 +69,7 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
         executedChain.map { (result) ->
             TreeResult(
                 outcome =
-                    result.treeResult.ruleOutcome?.let {
+                    result.treeResult.getOutcome()?.let {
                         RegulaOutcome(
                             status = it.status.toRegulaStatus(),
                             rule = it.rule,

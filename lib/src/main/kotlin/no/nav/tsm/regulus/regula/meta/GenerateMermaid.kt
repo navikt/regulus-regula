@@ -2,6 +2,7 @@ package no.nav.tsm.regulus.regula.meta
 
 import no.nav.tsm.regulus.regula.dsl.*
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
+import no.nav.tsm.regulus.regula.dsl.TreeNode.*
 import no.nav.tsm.regulus.regula.juridisk.MedJuridisk
 import no.nav.tsm.regulus.regula.juridisk.UtenJuridisk
 import no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet.arbeidsuforhetRuleTree
@@ -70,15 +71,15 @@ private fun <Enum> TreeNode<Enum>.traverseTree(
     nodeKey: String,
 ) {
     when (this) {
-        is ResultNode -> {
+        is LeafNode -> {
             // Is handled by parent node
             return
         }
 
         is RuleNode -> {
             val currentNodeKey = "${nodeKey}_$rule"
-            if (yes is ResultNode) {
-                val childResult = (yes as ResultNode<Enum>).result.status
+            if (yes is LeafNode) {
+                val childResult = (yes as LeafNode).status
                 val childKey = "${currentNodeKey}_$childResult"
 
                 if (childResult == RuleStatus.INVALID) {
@@ -108,8 +109,8 @@ private fun <Enum> TreeNode<Enum>.traverseTree(
                 builder.append("    $thisNodeKey($rule) -->|Ja| $childKey($childRule)\n")
                 yes.traverseTree(builder, childKey, currentNodeKey)
             }
-            if (no is ResultNode) {
-                val childResult = (no as ResultNode<Enum>).result.status
+            if (no is LeafNode) {
+                val childResult = (no as LeafNode).status
                 val childKey = "${currentNodeKey}_$childResult"
                 if (childResult == RuleStatus.INVALID) {
                     builder.append(

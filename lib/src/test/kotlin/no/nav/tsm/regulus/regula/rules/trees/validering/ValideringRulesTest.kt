@@ -4,6 +4,7 @@ import java.time.LocalDate
 import kotlin.test.*
 import kotlin.test.Test
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
+import no.nav.tsm.regulus.regula.dsl.getOutcome
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
@@ -55,7 +56,7 @@ class ValideringRulesTest {
             ),
         )
 
-        assertNull(result.treeResult.ruleOutcome)
+        assertNull(result.treeResult.getOutcome())
     }
 
     @Test
@@ -81,7 +82,7 @@ class ValideringRulesTest {
         assertEquals(result.ruleInputs, mapOf("rulesetVersion" to "69"))
 
         assertEquals(
-            result.treeResult.ruleOutcome,
+            result.treeResult.getOutcome(),
             ValideringRule.Outcomes.UGYLDIG_REGELSETTVERSJON,
         )
     }
@@ -123,7 +124,7 @@ class ValideringRulesTest {
         )
 
         assertEquals(
-            result.treeResult.ruleOutcome,
+            result.treeResult.getOutcome(),
             ValideringRule.Outcomes.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39,
         )
     }
@@ -168,7 +169,7 @@ class ValideringRulesTest {
             ),
         )
 
-        assertEquals(result.treeResult.ruleOutcome, ValideringRule.Outcomes.UGYLDIG_ORGNR_LENGDE)
+        assertEquals(result.treeResult.getOutcome(), ValideringRule.Outcomes.UGYLDIG_ORGNR_LENGDE)
     }
 
     @Test
@@ -214,7 +215,7 @@ class ValideringRulesTest {
         )
 
         assertEquals(
-            result.treeResult.ruleOutcome,
+            result.treeResult.getOutcome(),
             ValideringRule.Outcomes.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR,
         )
     }
@@ -264,7 +265,7 @@ class ValideringRulesTest {
         )
 
         assertEquals(
-            result.treeResult.ruleOutcome,
+            result.treeResult.getOutcome(),
             ValideringRule.Outcomes.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR,
         )
     }

@@ -4,6 +4,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.test.*
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
+import no.nav.tsm.regulus.regula.dsl.getOutcome
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
@@ -48,7 +49,7 @@ class DatoRulesTest {
             result.ruleInputs,
         )
 
-        assertNull(result.treeResult.ruleOutcome)
+        assertNull(result.treeResult.getOutcome())
     }
 
     @Test
@@ -84,7 +85,7 @@ class DatoRulesTest {
             result.ruleInputs,
         )
 
-        assertEquals(result.treeResult.ruleOutcome, DatoRule.Outcomes.FREMDATERT)
+        assertEquals(result.treeResult.getOutcome(), DatoRule.Outcomes.FREMDATERT)
     }
 
     @Test
@@ -131,6 +132,6 @@ class DatoRulesTest {
             result.ruleInputs,
         )
 
-        assertEquals(result.treeResult.ruleOutcome, DatoRule.Outcomes.TOTAL_VARIGHET_OVER_ETT_AAR)
+        assertEquals(result.treeResult.getOutcome(), DatoRule.Outcomes.TOTAL_VARIGHET_OVER_ETT_AAR)
     }
 }

@@ -4,9 +4,8 @@ import kotlin.test.Test
 import no.nav.tsm.regulus.regula.dsl.RuleOutcome
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
-import no.nav.tsm.regulus.regula.dsl.no
+import no.nav.tsm.regulus.regula.dsl.TreeNode.LeafNode.*
 import no.nav.tsm.regulus.regula.dsl.tree
-import no.nav.tsm.regulus.regula.dsl.yes
 import no.nav.tsm.regulus.regula.juridisk.JuridiskHenvisning
 import no.nav.tsm.regulus.regula.juridisk.Lovverk
 import no.nav.tsm.regulus.regula.juridisk.MedJuridisk
@@ -41,15 +40,15 @@ private enum class TestEnumRule {
 }
 
 private val testTree =
-    tree<TestEnumRule>(TestEnumRule.RULE_1) {
+    tree(TestEnumRule.RULE_1) {
         yes(TestEnumRule.RULE_2) {
             yes(TestEnumRule.RULE_3) {
-                yes(RuleStatus.OK)
-                no(RuleStatus.INVALID, TestEnumRule.Outcomes.CERTAIN_DEATH)
+                yes(OK())
+                no(INVALID(TestEnumRule.Outcomes.CERTAIN_DEATH))
             }
-            no(RuleStatus.MANUAL_PROCESSING, TestEnumRule.Outcomes.ITS_NOT_LOOKING_GOOD)
+            no(MANUAL(TestEnumRule.Outcomes.ITS_NOT_LOOKING_GOOD))
         }
-        no(RuleStatus.OK)
+        no(OK())
     } to
         MedJuridisk(
             JuridiskHenvisning(
