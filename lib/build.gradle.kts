@@ -90,7 +90,36 @@ tasks.register<JavaExec>("generateMermaid") {
     }
 }
 
+tasks.register<JavaExec>("generateMermaidFull") {
+    val output = ByteArrayOutputStream()
+    mainClass.set("no.nav.tsm.regulus.regula.meta.GenerateMermaidKt")
+    environment("JURIDISK_HENVISNING", true)
+    classpath = sourceSets["main"].runtimeClasspath
+    group = "documentation"
+    description = "Generates mermaid diagram source of rules"
+    standardOutput = output
+    doLast {
+        val readme = File("RULE-TREE.md")
+        val lines = readme.readLines()
+
+        val starterTag = "<!-- RULE_MARKER_START -->"
+        val endTag = "<!-- RULE_MARKER_END -->"
+
+        val start = lines.indexOfFirst { it.contains(starterTag) }
+        val end = lines.indexOfFirst { it.contains(endTag) }
+
+        val newLines: List<String> =
+            lines.subList(0, start) +
+                listOf(starterTag) +
+                output.toString().split("\n") +
+                listOf(endTag) +
+                lines.subList(end + 1, lines.size)
+        readme.writeText(newLines.joinToString("\n"))
+    }
+}
+
 tasks.named("build") {
     dependsOn("lintTrees")
     dependsOn("generateMermaid")
+    dependsOn("generateMermaidFull")
 }

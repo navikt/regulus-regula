@@ -3,6 +3,7 @@ package no.nav.tsm.regulus.regula.meta
 import no.nav.tsm.regulus.regula.dsl.*
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.TreeNode.*
+import no.nav.tsm.regulus.regula.juridisk.JuridiskHenvisning
 import no.nav.tsm.regulus.regula.juridisk.MedJuridisk
 import no.nav.tsm.regulus.regula.juridisk.UtenJuridisk
 import no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet.arbeidsuforhetRuleTree
@@ -13,6 +14,8 @@ import no.nav.tsm.regulus.regula.rules.trees.pasientUnder13.pasientUnder13RuleTr
 import no.nav.tsm.regulus.regula.rules.trees.periode.periodeRuleTree
 import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.tilbakedateringRuleTree
 import no.nav.tsm.regulus.regula.rules.trees.validering.valideringRuleTree
+
+private val renderJuridiskHenvisning = System.getenv("JURIDISK_HENVISNING")?.toBoolean() ?: false
 
 fun main() {
     val ruleTrees =
@@ -70,10 +73,22 @@ private fun <Enum> TreeNode<Enum>.traverseTree(
                             )
                         }\n"
                     )
+                    if (yesNode.juridisk.juridisk is MedJuridisk && renderJuridiskHenvisning) {
+                        val henvisning = yesNode.juridisk.juridisk.juridiskHenvisning
+                        builder.append(
+                            "    click ${childKey} \"${henvisning.hyperlenke()}\" \"Gå til lovdata\"\n"
+                        )
+                    }
                     builder.append(
                         "    $thisNodeKey($rule) -->|\"Ja (papir)\"| ${childKey}_papir(${RuleStatus.MANUAL_PROCESSING.norsk()}${yesNode.juridisk.folkelig()})${getStyle(
                             RuleStatus.MANUAL_PROCESSING)}\n"
                     )
+                    if (yesNode.juridisk.juridisk is MedJuridisk && renderJuridiskHenvisning) {
+                        val henvisning = yesNode.juridisk.juridisk.juridiskHenvisning
+                        builder.append(
+                            "    click ${childKey}_papir \"${henvisning.hyperlenke()}\" \"Gå til lovdata\"\n"
+                        )
+                    }
                 } else {
                     builder.append(
                         "    $thisNodeKey($rule) -->|Ja| $childKey(${childResult.norsk()}${yesNode.juridisk.folkelig()})${
@@ -82,6 +97,12 @@ private fun <Enum> TreeNode<Enum>.traverseTree(
                             )
                         }\n"
                     )
+                    if (yesNode.juridisk.juridisk is MedJuridisk && renderJuridiskHenvisning) {
+                        val henvisning = yesNode.juridisk.juridisk.juridiskHenvisning
+                        builder.append(
+                            "    click ${childKey} \"${henvisning.hyperlenke()}\" \"Gå til lovdata\"\n"
+                        )
+                    }
                 }
             } else {
                 val childRule = (yesNode as RuleNode<Enum>).rule
@@ -90,19 +111,20 @@ private fun <Enum> TreeNode<Enum>.traverseTree(
                 yes.traverseTree(builder, childKey, currentNodeKey)
             }
 
-            if (no is LeafNode) {
-                val childResult = (no as LeafNode).status
+            val noNode = no
+            if (noNode is LeafNode) {
+                val childResult = noNode.status
                 val childKey = "${currentNodeKey}_$childResult"
                 if (childResult == RuleStatus.INVALID) {
                     builder.append(
-                        "    $thisNodeKey($rule) -->|Nei| $childKey(${childResult.norsk()})${
+                        "    $thisNodeKey($rule) -->|Nei| $childKey(${childResult.norsk()}${noNode.juridisk.folkelig()})${
                             getStyle(
                                 childResult
                             )
                         }\n"
                     )
                     builder.append(
-                        "    $thisNodeKey($rule) -->|\"Nei (papir)\"| ${childKey}_papir(${RuleStatus.MANUAL_PROCESSING.norsk()})${
+                        "    $thisNodeKey($rule) -->|\"Nei (papir)\"| ${childKey}_papir(${RuleStatus.MANUAL_PROCESSING.norsk()}${noNode.juridisk.folkelig()})${
                             getStyle(
                                 RuleStatus.MANUAL_PROCESSING
                             )
@@ -110,12 +132,18 @@ private fun <Enum> TreeNode<Enum>.traverseTree(
                     )
                 } else {
                     builder.append(
-                        "    $thisNodeKey($rule) -->|Nei| $childKey(${childResult.norsk()})${
+                        "    $thisNodeKey($rule) -->|Nei| $childKey(${childResult.norsk()}${noNode.juridisk.folkelig()})${
                             getStyle(
                                 childResult
                             )
                         }\n"
                     )
+                    if (noNode.juridisk.juridisk is MedJuridisk && renderJuridiskHenvisning) {
+                        val henvisning = noNode.juridisk.juridisk.juridiskHenvisning
+                        builder.append(
+                            "    click ${childKey} \"${henvisning.hyperlenke()}\" \"Gå til lovdata\"\n"
+                        )
+                    }
                 }
             } else {
                 val childRule = (no as RuleNode<Enum>).rule
@@ -127,14 +155,20 @@ private fun <Enum> TreeNode<Enum>.traverseTree(
     }
 }
 
-private fun RuleJuridisk.folkelig(): String =
-    when (this.juridisk) {
+private fun JuridiskHenvisning.hyperlenke(): String =
+    "https://lovdata.no/nav/folketrygdloven/kap${this.paragraf.split("-").first()}#PARAGRAF_${this.paragraf}"
+
+private fun RuleJuridisk.folkelig(): String {
+    if (!renderJuridiskHenvisning) return ""
+
+    return when (this.juridisk) {
         is UtenJuridisk -> ""
         is MedJuridisk -> {
             val it = this.juridisk.juridiskHenvisning
             buildString {
                 append("\n")
-                append(it.lovverk.navn)
+                append(it.lovverk.kortnavn)
+                append("\n")
                 append(" § ${it.paragraf}")
                 it.ledd?.let { ledd -> append("-$ledd") }
                 it.punktum?.let { pkt -> append(" ${pkt}.") }
@@ -142,6 +176,7 @@ private fun RuleJuridisk.folkelig(): String =
             }
         }
     }
+}
 
 private fun RuleStatus.norsk(): String =
     when (this) {
