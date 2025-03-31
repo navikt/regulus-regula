@@ -1,7 +1,7 @@
 package no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.extras
 
 import java.time.LocalDate
-import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
+import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 import org.slf4j.LoggerFactory
 
@@ -16,7 +16,7 @@ internal data class Ettersendelse(
 
 internal fun isEttersending(
     sykmeldingId: String,
-    perioder: List<SykmeldingPeriode>,
+    perioder: List<Aktivitet>,
     harMedisinskVurdering: Boolean,
     tidligereSykmeldinger: List<TidligereSykmelding>,
 ): Ettersendelse? {
@@ -30,14 +30,14 @@ internal fun isEttersending(
     }
 
     val periode = perioder.first()
-    val tidligerePerioder: List<Pair<SykmeldingPeriode, TidligereSykmelding>> =
+    val tidligerePerioder: List<Pair<Aktivitet, TidligereSykmelding>> =
         tidligereSykmeldinger
             .map { tidligereSykmelding ->
-                tidligereSykmelding.perioder.map { it to tidligereSykmelding }
+                tidligereSykmelding.aktivitet.map { it to tidligereSykmelding }
             }
             .flatten()
 
-    val tidligereSykmeldingEttersendelse: Pair<SykmeldingPeriode, TidligereSykmelding>? =
+    val tidligereSykmeldingEttersendelse: Pair<Aktivitet, TidligereSykmelding>? =
         tidligerePerioder.firstOrNull { (tidligerePeriode) ->
             periode.ettersendingmessigEqual(tidligerePeriode)
         }
@@ -59,18 +59,17 @@ internal fun isEttersending(
             // latestTom
             fom = periode.fom,
             tom = periode.tom,
-            gradert = if (periode is SykmeldingPeriode.Gradert) periode.grad else null,
+            gradert = if (periode is Aktivitet.Gradert) periode.grad else null,
         )
     }
 }
 
-private fun SykmeldingPeriode.ettersendingmessigEqual(other: SykmeldingPeriode): Boolean {
+private fun Aktivitet.ettersendingmessigEqual(other: Aktivitet): Boolean {
     val overallEqual = this.type == other.type && this.fom == other.fom && this.tom == other.tom
     if (!overallEqual) return false
 
     return when {
-        this is SykmeldingPeriode.Gradert && other is SykmeldingPeriode.Gradert ->
-            this.grad == other.grad
+        this is Aktivitet.Gradert && other is Aktivitet.Gradert -> this.grad == other.grad
         else -> true
     }
 }

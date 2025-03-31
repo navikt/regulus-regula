@@ -37,8 +37,8 @@ internal fun relevanteDatoer(
     tidligereSykmeldinger: List<TidligereSykmelding>,
 ): List<LocalDate> {
     return tidligereSykmeldinger
-        .filter { it.perioder.latestTom() > earliestFom.minusWeeks(40).minusDays(0) }
-        .filter { it.perioder.earliestFom() < earliestFom }
+        .filter { it.aktivitet.latestTom() > earliestFom.minusWeeks(40).minusDays(0) }
+        .filter { it.aktivitet.earliestFom() < earliestFom }
         // TODO: Put this responsibility on the consumer of the lib?
         // .filter { it.behandlingsutfall.status != RegelStatusDTO.INVALID }
         // TODO: Put this responsibility on the consumer of the lib?
@@ -53,7 +53,7 @@ internal fun relevanteDatoer(
         // TODO: Put this responsibility on the consumer of the lib?
         // .filter { it.sykmeldingStatus.statusEvent != "AVBRUTT" }
         .map { it ->
-            it.perioder
+            it.aktivitet
                 .filter { it.type != SykmeldingPeriodeType.AVVENTENDE }
                 .flatMap { allDaysBetween(it.fom, it.tom) }
         }

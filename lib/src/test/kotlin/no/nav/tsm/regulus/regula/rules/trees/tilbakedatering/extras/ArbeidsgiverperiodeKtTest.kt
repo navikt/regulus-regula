@@ -6,8 +6,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import no.nav.helse.diagnosekoder.Diagnosekoder
+import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.Diagnose
-import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 import no.nav.tsm.regulus.regula.testutils.april
 import no.nav.tsm.regulus.regula.testutils.january
@@ -140,5 +140,5 @@ private fun testTidligereSykmelding(fom: LocalDate, tom: LocalDate, id: String =
     TidligereSykmelding(
         sykmeldingId = id,
         hoveddiagnose = Diagnose(kode = "L89", system = Diagnosekoder.ICPC2_CODE),
-        perioder = listOf(SykmeldingPeriode.AktivitetIkkeMulig(fom, tom)),
+        aktivitet = listOf(Aktivitet.IkkeMulig(fom, tom)),
     )

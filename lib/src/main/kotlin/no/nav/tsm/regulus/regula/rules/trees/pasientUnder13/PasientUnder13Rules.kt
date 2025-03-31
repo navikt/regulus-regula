@@ -22,7 +22,7 @@ private typealias PasientUnder13RuleFn =
 private val Rules =
     object {
         val pasientUnder13Aar: PasientUnder13RuleFn = { payload ->
-            val sisteTomDato = payload.perioder.latestTom()
+            val sisteTomDato = payload.aktivitet.latestTom()
             val pasientFodselsdato = payload.pasientFodselsdato
 
             val pasientUnder13Aar = sisteTomDato < pasientFodselsdato.plusYears(13)

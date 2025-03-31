@@ -19,7 +19,7 @@ internal fun RegulaPayload.toLegeSuspensjonRulePayload(): LegeSuspensjonRulePayl
 internal fun RegulaPayload.toValideringRulePayload(): ValideringRulePayload {
     return ValideringRulePayload(
         sykmeldingId = sykmeldingId,
-        perioder = perioder,
+        aktivitet = aktivitet,
         utdypendeOpplysninger = utdypendeOpplysninger,
         rulesetVersion = if (meta is RegulaMeta.LegacyMeta) meta.rulesetVersion else "3",
         legekontorOrgnr = behandler.legekontorOrgnr,
@@ -32,7 +32,7 @@ internal fun RegulaPayload.toValideringRulePayload(): ValideringRulePayload {
 internal fun RegulaPayload.toPeriodeRulePayload(): PeriodeRulePayload {
     return PeriodeRulePayload(
         sykmeldingId = sykmeldingId,
-        perioder = perioder,
+        aktivitet = aktivitet,
         behandletTidspunkt = behandletTidspunkt,
         mottattDato =
             when (meta) {
@@ -46,7 +46,7 @@ internal fun RegulaPayload.toHprRulePayload(): HprRulePayload {
     return HprRulePayload(
         sykmeldingId = sykmeldingId,
         behandlerGodkjenninger = behandler.godkjenninger,
-        perioder = perioder,
+        aktivitet = aktivitet,
         signaturdato =
             when (meta) {
                 is RegulaMeta.LegacyMeta -> meta.signaturdato
@@ -68,7 +68,7 @@ internal fun RegulaPayload.toArbeidsuforhetRulePayload(): ArbeidsuforhetRulePayl
 internal fun RegulaPayload.toPasientUnder13RulePayload(): PasientUnder13RulePayload {
     return PasientUnder13RulePayload(
         sykmeldingId = sykmeldingId,
-        perioder = perioder,
+        aktivitet = aktivitet,
         pasientFodselsdato = pasient.fodselsdato,
     )
 }
@@ -76,7 +76,7 @@ internal fun RegulaPayload.toPasientUnder13RulePayload(): PasientUnder13RulePayl
 internal fun RegulaPayload.toDatoRulePayload(): DatoRulePayload {
     return DatoRulePayload(
         sykmeldingId = sykmeldingId,
-        perioder = perioder,
+        aktivitet = aktivitet,
         signaturdato =
             when (meta) {
                 is RegulaMeta.LegacyMeta -> meta.signaturdato
@@ -88,7 +88,7 @@ internal fun RegulaPayload.toDatoRulePayload(): DatoRulePayload {
 internal fun RegulaPayload.toTilbakedateringRulePayload(): TilbakedateringRulePayload {
     return TilbakedateringRulePayload(
         sykmeldingId = sykmeldingId,
-        perioder = perioder,
+        aktivitet = aktivitet,
         tidligereSykmeldinger = tidligereSykmeldinger,
         signaturdato =
             when (meta) {

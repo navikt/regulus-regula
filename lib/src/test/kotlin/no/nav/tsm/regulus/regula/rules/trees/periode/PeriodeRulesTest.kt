@@ -7,7 +7,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.RuleStatus
-import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
+import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
 
 class PeriodeRulesTest {
@@ -68,7 +68,7 @@ class PeriodeRulesTest {
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(result.rulePath, listOf(PeriodeRule.PERIODER_MANGLER to true))
 
-        assertEquals(result.ruleInputs, mapOf("perioder" to emptyList<SykmeldingPeriode>()))
+        assertEquals(result.ruleInputs, mapOf("perioder" to emptyList<Aktivitet>()))
 
         assertEquals(result.treeResult.ruleOutcome, PeriodeRule.Outcomes.PERIODER_MANGLER)
     }
@@ -177,10 +177,7 @@ class PeriodeRulesTest {
     fun `Ikke definert periode, Status INVALID`() {
         val perioder =
             listOf(
-                SykmeldingPeriode.Ugyldig(
-                    fom = LocalDate.of(2018, 2, 1),
-                    tom = LocalDate.of(2018, 2, 2),
-                )
+                Aktivitet.Ugyldig(fom = LocalDate.of(2018, 2, 1), tom = LocalDate.of(2018, 2, 2))
             )
 
         val payload = testPeriodeRulePayload(perioder = perioder)
@@ -238,7 +235,7 @@ class PeriodeRulesTest {
 
         assertEquals(
             result.ruleInputs,
-            mapOf("perioder" to payload.perioder, "behandslingsDatoEtterMottatDato" to true),
+            mapOf("perioder" to payload.aktivitet, "behandslingsDatoEtterMottatDato" to true),
         )
 
         assertEquals(

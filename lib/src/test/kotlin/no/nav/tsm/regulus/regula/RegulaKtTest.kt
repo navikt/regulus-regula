@@ -6,11 +6,11 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
+import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.AnnenFravarsArsak
 import no.nav.tsm.regulus.regula.payload.BehandlerGodkjenning
 import no.nav.tsm.regulus.regula.payload.BehandlerKode
 import no.nav.tsm.regulus.regula.payload.Diagnose
-import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 
 class RegulaKtTest {
@@ -28,9 +28,9 @@ class RegulaKtTest {
                             grunn = listOf("Annen årsak"),
                             beskrivelse = "Beskrivelse av annen årsak",
                         ),
-                    perioder =
+                    aktivitet =
                         listOf(
-                            SykmeldingPeriode.AktivitetIkkeMulig(
+                            Aktivitet.IkkeMulig(
                                 fom = LocalDate.now().minusDays(10),
                                 tom = LocalDate.now().plusDays(10),
                             )
@@ -49,9 +49,9 @@ class RegulaKtTest {
                         listOf(
                             TidligereSykmelding(
                                 sykmeldingId = "987654321",
-                                perioder =
+                                aktivitet =
                                     listOf(
-                                        SykmeldingPeriode.AktivitetIkkeMulig(
+                                        Aktivitet.IkkeMulig(
                                             fom = LocalDate.now().minusDays(30),
                                             tom = LocalDate.now().minusDays(11),
                                         )
@@ -106,9 +106,9 @@ class RegulaKtTest {
                 RegulaPayload(
                     sykmeldingId = "123456789",
                     hoveddiagnose = Diagnose(kode = "A01", system = Diagnosekoder.ICPC2_CODE),
-                    perioder =
+                    aktivitet =
                         listOf(
-                            SykmeldingPeriode.AktivitetIkkeMulig(
+                            Aktivitet.IkkeMulig(
                                 fom = LocalDate.now().minusDays(0),
                                 tom = LocalDate.now().plusDays(7),
                             )

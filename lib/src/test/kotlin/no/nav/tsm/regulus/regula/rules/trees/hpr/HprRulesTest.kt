@@ -6,11 +6,11 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.RuleStatus
+import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.BehandlerGodkjenning
 import no.nav.tsm.regulus.regula.payload.BehandlerKode
 import no.nav.tsm.regulus.regula.payload.BehandlerPeriode
 import no.nav.tsm.regulus.regula.payload.BehandlerTilleggskompetanse
-import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
 import no.nav.tsm.regulus.regula.testutils.december
@@ -20,14 +20,14 @@ import no.nav.tsm.regulus.regula.testutils.testTidligereSykmelding
 class HprRulesTest {
     private fun createHprRulePayload(
         behandlerGodkjenninger: List<BehandlerGodkjenning>,
-        perioder: List<SykmeldingPeriode> = emptyList(),
+        perioder: List<Aktivitet> = emptyList(),
         tidligereSykmeldinger: List<TidligereSykmelding> = emptyList(),
         signaturdato: LocalDateTime = LocalDateTime.now(),
     ) =
         HprRulePayload(
             sykmeldingId = "test-sykmelding-id",
             behandlerGodkjenninger = behandlerGodkjenninger,
-            perioder = perioder,
+            aktivitet = perioder,
             tidligereSykmeldinger = tidligereSykmeldinger,
             signaturdato = signaturdato,
         )
@@ -62,12 +62,7 @@ class HprRulesTest {
     fun `LEGE har aktiv autorisasjon, Status OK`() {
         val behandler = testBehandlerGodkjenninger(BehandlerScenarios.AKTIV_LEGE)
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    LocalDate.of(2020, 1, 1),
-                    LocalDate.of(2020, 1, 2),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
         val (result) =
             HprRules(
@@ -95,12 +90,7 @@ class HprRulesTest {
     fun `Manuellterapeut har aktiv autorisasjon, Status OK`() {
         val behandler = testBehandlerGodkjenninger(BehandlerScenarios.AKTIV_MANUELLTERAPEUT)
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    LocalDate.of(2020, 1, 1),
-                    LocalDate.of(2020, 1, 2),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
         val (result) =
             HprRules(
@@ -139,12 +129,7 @@ class HprRulesTest {
     fun `TANNLEGE har aktiv autorisasjon, Status OK`() {
         val behandler = testBehandlerGodkjenninger(BehandlerScenarios.AKTIV_TANNLEGE)
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    LocalDate.of(2020, 1, 1),
-                    LocalDate.of(2020, 1, 2),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
         val (result) =
             HprRules(
@@ -173,12 +158,7 @@ class HprRulesTest {
     fun `Manuellterapeut har aktiv autorisasjon, sykefravær over 12 uker, Status INVALID`() {
         val behandler = testBehandlerGodkjenninger(BehandlerScenarios.AKTIV_MANUELLTERAPEUT)
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    LocalDate.of(2020, 1, 1),
-                    LocalDate.of(2020, 1, 2),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val tidligereSykmeldinger = testTidligereSykmelding(9.october(2019), 31.december(2019))
 
         val startdato =
@@ -222,12 +202,7 @@ class HprRulesTest {
     fun `Fysioterapeut uten tilleggskompetanse, Status INVALID`() {
         val behandler = testBehandlerGodkjenninger(BehandlerScenarios.AKTIV_FYSIOTERAPEUT)
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    LocalDate.of(2020, 1, 1),
-                    LocalDate.of(2020, 4, 2),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 4, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
         val (result) =
             HprRules(
@@ -265,12 +240,7 @@ class HprRulesTest {
                 BehandlerScenarios.AKTIV_FYSIOTERAPEUT_MED_TILLEGGSKOMPETANSE
             )
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    LocalDate.of(2020, 1, 1),
-                    LocalDate.of(2020, 1, 2),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
         val (result) =
             HprRules(
@@ -304,12 +274,7 @@ class HprRulesTest {
                 BehandlerScenarios.AKTIV_FYSIOTERAPEUT_MED_TILLEGGSKOMPETANSE
             )
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    LocalDate.of(2020, 1, 1),
-                    LocalDate.of(2020, 1, 2),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val tidligereSykmeldinger = testTidligereSykmelding(9.october(2019), 31.december(2019))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
         val (result) =
@@ -355,12 +320,7 @@ class HprRulesTest {
     fun `Kiropraktor uten tilleggskompetanse, Status INVALID`() {
         val behandler = testBehandlerGodkjenninger(BehandlerScenarios.AKTIV_KIROPRAKTOR)
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    LocalDate.of(2020, 1, 1),
-                    LocalDate.of(2020, 4, 2),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 4, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
         val (result) =
             HprRules(
@@ -396,12 +356,7 @@ class HprRulesTest {
         val behandler =
             testBehandlerGodkjenninger(BehandlerScenarios.AKTIV_KIROPRAKTOR_MED_TILLEGGSKOMPETANSE)
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    LocalDate.of(2020, 1, 1),
-                    LocalDate.of(2020, 1, 2),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
         val (result) =
             HprRules(
@@ -434,12 +389,7 @@ class HprRulesTest {
         val behandler =
             testBehandlerGodkjenninger(BehandlerScenarios.AKTIV_KIROPRAKTOR_MED_TILLEGGSKOMPETANSE)
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    LocalDate.of(2020, 1, 1),
-                    LocalDate.of(2020, 1, 2),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val tidligereSykmeldinger = testTidligereSykmelding(9.october(2019), 31.december(2019))
         val startdato =
             LocalDate.of(2020, 1, 2).minusDays(85) // More than 12 weeks (84 days) before tom date
@@ -507,12 +457,7 @@ class HprRulesTest {
             )
 
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    LocalDate.of(2020, 1, 1),
-                    LocalDate.of(2020, 1, 2),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val (result) =
             HprRules(
                     createHprRulePayload(
@@ -561,12 +506,7 @@ class HprRulesTest {
             )
 
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    LocalDate.of(2020, 1, 1),
-                    LocalDate.of(2020, 1, 2),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val (result) =
             HprRules(
                     createHprRulePayload(
@@ -625,12 +565,7 @@ class HprRulesTest {
             )
 
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    LocalDate.of(2020, 1, 1),
-                    LocalDate.of(2020, 1, 2),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val (result) =
             HprRules(
                     createHprRulePayload(
@@ -689,12 +624,7 @@ class HprRulesTest {
             )
 
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    LocalDate.of(2020, 1, 1),
-                    LocalDate.of(2020, 1, 2),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val (result) =
             HprRules(
                     createHprRulePayload(
@@ -727,12 +657,7 @@ class HprRulesTest {
                 BehandlerScenarios.AKTIV_FYSIOTERAPEUT_MED_FEIL_TILLEGGSKOMPETANSE_TYPE
             )
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    LocalDate.of(2020, 1, 1),
-                    LocalDate.of(2020, 1, 2),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
         val (result) =
             HprRules(
@@ -770,12 +695,7 @@ class HprRulesTest {
                 BehandlerScenarios.AKTIV_FYSIOTERAPEUT_MED_INAKTIV_TILLEGGSKOMPETANSE
             )
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    LocalDate.of(2020, 1, 1),
-                    LocalDate.of(2020, 1, 2),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
         val (result) =
             HprRules(
@@ -811,12 +731,7 @@ class HprRulesTest {
         val behandler =
             testBehandlerGodkjenninger(BehandlerScenarios.AKTIV_KIROPRAKTOR_MED_TILLEGGSKOMPETANSE)
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    LocalDate.of(2020, 1, 1),
-                    LocalDate.of(2020, 1, 2),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
         val (result) =
             HprRules(
@@ -852,12 +767,7 @@ class HprRulesTest {
                     .AKTIV_KIROPRAKTOR_MED_TILLEGGSKOMPETANSE_OG_ANNEN_HELSEPERSONELLKATEGORI
             )
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    LocalDate.of(2020, 1, 1),
-                    LocalDate.of(2020, 1, 2),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
         val (result) =
             HprRules(

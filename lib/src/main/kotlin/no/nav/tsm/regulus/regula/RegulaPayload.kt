@@ -2,10 +2,10 @@ package no.nav.tsm.regulus.regula
 
 import java.time.LocalDate
 import java.time.LocalDateTime
+import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.AnnenFravarsArsak
 import no.nav.tsm.regulus.regula.payload.BehandlerGodkjenning
 import no.nav.tsm.regulus.regula.payload.Diagnose
-import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 
 /** The entire payload is needed to apply the rules to this specific sykmelding. */
@@ -17,7 +17,7 @@ data class RegulaPayload(
     /** Provided by the health care professional in the sykmelding. */
     val bidiagnoser: List<Diagnose>?,
     val annenFravarsArsak: AnnenFravarsArsak?,
-    val perioder: List<SykmeldingPeriode>,
+    val aktivitet: List<Aktivitet>,
     val behandletTidspunkt: LocalDateTime,
     val utdypendeOpplysninger: Map<String, Map<String, Map<String, String>>>?,
     val tidligereSykmeldinger: List<TidligereSykmelding>,

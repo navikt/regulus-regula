@@ -25,7 +25,7 @@ private typealias DatoRuleFn = (payload: DatoRulePayload) -> RuleOutput<DatoRule
 private val Rules =
     object {
         val fremdatertOver30Dager: DatoRuleFn = { payload ->
-            val forsteFomDato = payload.perioder.earliestFom()
+            val forsteFomDato = payload.aktivitet.earliestFom()
             val genereringsTidspunkt = payload.signaturdato
 
             val fremdatert = forsteFomDato > genereringsTidspunkt.plusDays(30).toLocalDate()
@@ -43,8 +43,8 @@ private val Rules =
         }
 
         val varighetOver1AAr: DatoRuleFn = { payload ->
-            val forsteFomDato = payload.perioder.earliestFom()
-            val sisteTomDato = payload.perioder.latestTom()
+            val forsteFomDato = payload.aktivitet.earliestFom()
+            val sisteTomDato = payload.aktivitet.latestTom()
 
             val varighetOver1AAr = ChronoUnit.DAYS.between(forsteFomDato, sisteTomDato) > 365
 
@@ -61,7 +61,7 @@ private val Rules =
         }
 
         val tilbakeDatertOver3Ar: DatoRuleFn = { payload ->
-            val forsteFomDato = payload.perioder.earliestFom()
+            val forsteFomDato = payload.aktivitet.earliestFom()
             val tilbakeDatertMerEnn3AAr = forsteFomDato.isBefore(LocalDate.now().minusYears(3))
             val genereringsTidspunkt = payload.signaturdato
 

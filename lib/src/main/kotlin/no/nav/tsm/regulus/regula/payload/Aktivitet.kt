@@ -12,34 +12,34 @@ enum class SykmeldingPeriodeType {
 }
 
 /**
- * A more complex representation of the sykmeldingsperioder, with a distinct union on the 5 types of
- * periods.
+ * A more complex representation of the sykmeldingsperioder (aktivitet), with a distinct union on
+ * the 5 types of periods.
  */
-sealed class SykmeldingPeriode(
+sealed class Aktivitet(
     val type: SykmeldingPeriodeType,
     open val fom: LocalDate,
     open val tom: LocalDate,
 ) : ClosedRange<LocalDate> {
-    data class AktivitetIkkeMulig(override val fom: LocalDate, override val tom: LocalDate) :
-        SykmeldingPeriode(SykmeldingPeriodeType.AKTIVITET_IKKE_MULIG, fom = fom, tom = tom)
+    data class IkkeMulig(override val fom: LocalDate, override val tom: LocalDate) :
+        Aktivitet(SykmeldingPeriodeType.AKTIVITET_IKKE_MULIG, fom = fom, tom = tom)
 
     data class Avventende(
         override val fom: LocalDate,
         override val tom: LocalDate,
         val avventendeInnspillTilArbeidsgiver: String?,
-    ) : SykmeldingPeriode(SykmeldingPeriodeType.AVVENTENDE, fom = fom, tom = tom)
+    ) : Aktivitet(SykmeldingPeriodeType.AVVENTENDE, fom = fom, tom = tom)
 
     data class Behandlingsdager(
         override val fom: LocalDate,
         override val tom: LocalDate,
         val behandlingsdager: Int,
-    ) : SykmeldingPeriode(SykmeldingPeriodeType.BEHANDLINGSDAGER, fom = fom, tom = tom)
+    ) : Aktivitet(SykmeldingPeriodeType.BEHANDLINGSDAGER, fom = fom, tom = tom)
 
     data class Gradert(override val fom: LocalDate, override val tom: LocalDate, val grad: Int) :
-        SykmeldingPeriode(SykmeldingPeriodeType.GRADERT, fom = fom, tom = tom)
+        Aktivitet(SykmeldingPeriodeType.GRADERT, fom = fom, tom = tom)
 
     data class Reisetilskudd(override val fom: LocalDate, override val tom: LocalDate) :
-        SykmeldingPeriode(SykmeldingPeriodeType.REISETILSKUDD, fom = fom, tom = tom)
+        Aktivitet(SykmeldingPeriodeType.REISETILSKUDD, fom = fom, tom = tom)
 
     /**
      * Brukes for å representere ugyldige unions i gammel arkitektur. For eksempel sykmeldinger som
@@ -47,7 +47,7 @@ sealed class SykmeldingPeriode(
      * istedenfor at konsumeren av dette biblioteket skal krasje.
      */
     data class Ugyldig(override val fom: LocalDate, override val tom: LocalDate) :
-        SykmeldingPeriode(SykmeldingPeriodeType.INVALID, fom = fom, tom = tom)
+        Aktivitet(SykmeldingPeriodeType.INVALID, fom = fom, tom = tom)
 
     override val start: LocalDate
         get() = fom

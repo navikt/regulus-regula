@@ -42,7 +42,7 @@ private typealias TilbakedateringRuleFn =
 private val Rules =
     object {
         val tilbakedatering: TilbakedateringRuleFn = { payload ->
-            val fom = payload.perioder.earliestFom()
+            val fom = payload.aktivitet.earliestFom()
             val genereringstidspunkt = payload.signaturdato.toLocalDate()
 
             RuleOutput(
@@ -53,7 +53,7 @@ private val Rules =
         }
 
         val tilbakedateringInntil4Dager: TilbakedateringRuleFn = { payload ->
-            val fom = payload.perioder.earliestFom()
+            val fom = payload.aktivitet.earliestFom()
             val genereringstidspunkt = payload.signaturdato.toLocalDate()
             val daysBetween = ChronoUnit.DAYS.between(fom, genereringstidspunkt)
 
@@ -65,7 +65,7 @@ private val Rules =
         }
 
         val tilbakedateringMindreEnn1Maaned: TilbakedateringRuleFn = { payload ->
-            val fom = payload.perioder.earliestFom()
+            val fom = payload.aktivitet.earliestFom()
             val genereringstidspunkt = payload.signaturdato.toLocalDate()
             RuleOutput(
                 ruleInputs = mapOf("fom" to fom, "genereringstidspunkt" to genereringstidspunkt),
@@ -75,7 +75,7 @@ private val Rules =
         }
 
         val tilbakedateringInntil8Dager: TilbakedateringRuleFn = { payload ->
-            val fom = payload.perioder.earliestFom()
+            val fom = payload.aktivitet.earliestFom()
             val genereringstidspunkt = payload.signaturdato.toLocalDate()
             RuleOutput(
                 ruleInputs = mapOf("fom" to fom, "genereringstidspunkt" to genereringstidspunkt),
@@ -85,8 +85,8 @@ private val Rules =
         }
 
         val arbeidsgiverperiode: TilbakedateringRuleFn = { payload ->
-            val earliestFom = payload.perioder.earliestFom()
-            val latestTom = payload.perioder.latestTom()
+            val earliestFom = payload.aktivitet.earliestFom()
+            val latestTom = payload.aktivitet.latestTom()
             val arbeidsgiverperiode =
                 isArbeidsgiverperiode(
                     earliestFom = earliestFom,
@@ -132,7 +132,7 @@ private val Rules =
             val ettersendingAv =
                 isEttersending(
                     sykmeldingId = payload.sykmeldingId,
-                    perioder = payload.perioder,
+                    perioder = payload.aktivitet,
                     harMedisinskVurdering = payload.hoveddiagnose != null,
                     tidligereSykmeldinger = payload.tidligereSykmeldinger,
                 )
@@ -152,7 +152,7 @@ private val Rules =
         val forlengelse: TilbakedateringRuleFn = { payload ->
             val forlengelseAv: Forlengelse? =
                 isForlengelse(
-                        perioder = payload.perioder,
+                        perioder = payload.aktivitet,
                         hoveddiagnose = payload.hoveddiagnose,
                         tidligereSykmeldinger = payload.tidligereSykmeldinger,
                     )
