@@ -3,7 +3,6 @@ package no.nav.tsm.regulus.regula.rules.trees
 import kotlin.test.assertEquals
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.dsl.TreeOutput
-import no.nav.tsm.regulus.regula.juridisk.Juridisk
 
 internal fun <T> assertPath(result: List<RuleOutput<T>>, expectedPath: List<Pair<T, Boolean>>) {
     val pathMap = result.map { it.rule to it.ruleResult }
@@ -11,16 +10,20 @@ internal fun <T> assertPath(result: List<RuleOutput<T>>, expectedPath: List<Pair
     assertEquals(pathMap, expectedPath)
 }
 
-internal fun <Enum> TreeOutput<Enum>.debugPath() {
+internal fun <Enum> TreeOutput<Enum>.debugPath(): TreeOutput<Enum> {
     println("[DEBUG] Tree was ${this.treeResult}, path:")
     println(
         this.rulePath.joinToString(separator = "\n") {
             "→ ${it.rule}(${if (it.ruleResult) "yes" else "no"}) \n\t ${it.ruleInputs.map { (k, v) -> "$k: $v" }}"
         }
     )
+
+    return this
 }
 
-internal fun <Enum> TreeOutput<Enum>.debugPath(expectedPath: List<Pair<Enum, Boolean>>) {
+internal fun <Enum> TreeOutput<Enum>.debugPath(
+    expectedPath: List<Pair<Enum, Boolean>>
+): TreeOutput<Enum> {
     println("[DEBUG] Tree was ${this.treeResult}, path:")
 
     var ruleIndex = -1
@@ -37,17 +40,7 @@ internal fun <Enum> TreeOutput<Enum>.debugPath(expectedPath: List<Pair<Enum, Boo
             }
         }
     )
-}
 
-internal fun <Enum> Pair<TreeOutput<Enum>, Juridisk>.debugPath(): Pair<TreeOutput<Enum>, Juridisk> {
-    this.first.debugPath()
-    return this
-}
-
-internal fun <Enum> Pair<TreeOutput<Enum>, Juridisk>.debugPath(
-    expectedPath: List<Pair<Enum, Boolean>>
-): Pair<TreeOutput<Enum>, Juridisk> {
-    this.first.debugPath(expectedPath)
     return this
 }
 

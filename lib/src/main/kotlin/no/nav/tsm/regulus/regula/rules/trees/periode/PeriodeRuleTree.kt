@@ -1,8 +1,9 @@
 package no.nav.tsm.regulus.regula.rules.trees.periode
 
-import no.nav.tsm.regulus.regula.dsl.TreeNode.LeafNode.*
+import no.nav.tsm.regulus.regula.dsl.RuleJuridisk
+import no.nav.tsm.regulus.regula.dsl.RuleOutcome
+import no.nav.tsm.regulus.regula.dsl.TreeNode.LeafNode
 import no.nav.tsm.regulus.regula.dsl.tree
-import no.nav.tsm.regulus.regula.juridisk.UtenJuridisk
 
 internal val periodeRuleTree =
     tree(PeriodeRule.PERIODER_MANGLER) {
@@ -65,4 +66,12 @@ internal val periodeRuleTree =
                 }
             }
         }
-    } to UtenJuridisk
+    }
+
+private fun INVALID(outcome: RuleOutcome): LeafNode.INVALID<PeriodeRule> =
+    LeafNode.INVALID(outcome, RuleJuridisk.INGEN)
+
+private fun MANUAL(outcome: RuleOutcome): LeafNode.MANUAL<PeriodeRule> =
+    LeafNode.MANUAL(outcome, RuleJuridisk.INGEN)
+
+private fun OK(): LeafNode.OK<PeriodeRule> = LeafNode.OK(RuleJuridisk.INGEN)

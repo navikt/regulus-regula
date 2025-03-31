@@ -17,7 +17,7 @@ class DatoRulesTest {
         val perioder =
             listOf(Aktivitet.IkkeMulig(fom = LocalDate.now(), tom = LocalDate.now().plusDays(7)))
 
-        val (result) =
+        val result =
             DatoRules(
                     DatoRulePayload(
                         sykmeldingId = "sykmeldingId",
@@ -63,7 +63,7 @@ class DatoRulesTest {
                 )
             )
 
-        val (result) =
+        val result =
             DatoRules(
                     DatoRulePayload(
                         sykmeldingId = "sykmeldingId",
@@ -100,7 +100,7 @@ class DatoRulesTest {
                 ),
             )
 
-        val (result) =
+        val result =
             DatoRules(
                     DatoRulePayload(
                         sykmeldingId = "sykmeldingId",

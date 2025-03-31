@@ -1,12 +1,10 @@
 package no.nav.tsm.regulus.regula.rules.trees.hpr
 
-import no.nav.tsm.regulus.regula.dsl.TreeNode.LeafNode.INVALID
-import no.nav.tsm.regulus.regula.dsl.TreeNode.LeafNode.OK
+import no.nav.tsm.regulus.regula.dsl.RuleJuridisk
+import no.nav.tsm.regulus.regula.dsl.RuleOutcome
+import no.nav.tsm.regulus.regula.dsl.TreeNode.LeafNode
 import no.nav.tsm.regulus.regula.dsl.TreeNode.RuleNode
 import no.nav.tsm.regulus.regula.dsl.tree
-import no.nav.tsm.regulus.regula.juridisk.JuridiskHenvisning
-import no.nav.tsm.regulus.regula.juridisk.Lovverk
-import no.nav.tsm.regulus.regula.juridisk.MedJuridisk
 
 internal val hprRuleTree =
     tree(HprRule.BEHANDLER_GYLIDG_I_HPR) {
@@ -30,16 +28,7 @@ internal val hprRuleTree =
                 }
             }
         }
-    } to
-        MedJuridisk(
-            JuridiskHenvisning(
-                lovverk = Lovverk.FOLKETRYGDLOVEN,
-                paragraf = "8-7",
-                ledd = 1,
-                punktum = null,
-                bokstav = null,
-            )
-        )
+    }
 
 private fun RuleNode<HprRule>.yesThenSykefravarOver12Uker() {
     yes(HprRule.SYKEFRAVAR_OVER_12_UKER) {
@@ -47,3 +36,8 @@ private fun RuleNode<HprRule>.yesThenSykefravarOver12Uker() {
         no(OK())
     }
 }
+
+private fun INVALID(outcome: RuleOutcome): LeafNode.INVALID<HprRule> =
+    LeafNode.INVALID(outcome, RuleJuridisk.FOLKETRYGDLOVEN_8_4)
+
+private fun OK(): LeafNode.OK<HprRule> = LeafNode.OK(RuleJuridisk.FOLKETRYGDLOVEN_8_7_1)

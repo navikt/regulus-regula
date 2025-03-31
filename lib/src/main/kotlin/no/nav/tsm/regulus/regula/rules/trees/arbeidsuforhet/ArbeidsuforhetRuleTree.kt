@@ -1,11 +1,11 @@
 package no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet
 
-import no.nav.tsm.regulus.regula.dsl.TreeNode.LeafNode.*
+import no.nav.tsm.regulus.regula.dsl.RuleJuridisk
+import no.nav.tsm.regulus.regula.dsl.RuleOutcome
+import no.nav.tsm.regulus.regula.dsl.TreeNode.LeafNode
 import no.nav.tsm.regulus.regula.dsl.tree
-import no.nav.tsm.regulus.regula.juridisk.JuridiskHenvisning
-import no.nav.tsm.regulus.regula.juridisk.Lovverk
-import no.nav.tsm.regulus.regula.juridisk.MedJuridisk
 
+/** All juridisk henvisning refer the same henvisning in this tree. */
 internal val arbeidsuforhetRuleTree =
     tree(ArbeidsuforhetRule.HOVEDDIAGNOSE_MANGLER) {
         yes(ArbeidsuforhetRule.FRAVAERSGRUNN_MANGLER) {
@@ -25,13 +25,9 @@ internal val arbeidsuforhetRuleTree =
                 }
             }
         }
-    } to
-        MedJuridisk(
-            JuridiskHenvisning(
-                lovverk = Lovverk.FOLKETRYGDLOVEN,
-                paragraf = "8-4",
-                ledd = 1,
-                punktum = null,
-                bokstav = null,
-            )
-        )
+    }
+
+private fun INVALID(outcome: RuleOutcome): LeafNode.INVALID<ArbeidsuforhetRule> =
+    LeafNode.INVALID(outcome, RuleJuridisk.FOLKETRYGDLOVEN_8_4)
+
+private fun OK(): LeafNode.OK<ArbeidsuforhetRule> = LeafNode.OK(RuleJuridisk.FOLKETRYGDLOVEN_8_4)

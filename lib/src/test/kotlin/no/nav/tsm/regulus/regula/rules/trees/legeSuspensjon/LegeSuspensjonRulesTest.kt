@@ -11,7 +11,7 @@ import no.nav.tsm.regulus.regula.rules.trees.assertPath
 class LegeSuspensjonRulesTest {
     @Test
     fun `Er ikkje suspendert, Status OK`() {
-        val (result) =
+        val result =
             LegeSuspensjonRules(
                     LegeSuspensjonRulePayload(sykmeldingId = "foo-bar", behandlerSuspendert = false)
                 )
@@ -26,7 +26,7 @@ class LegeSuspensjonRulesTest {
 
     @Test
     fun `Er suspendert, Status INVALID`() {
-        val (result) =
+        val result =
             LegeSuspensjonRules(
                     LegeSuspensjonRulePayload(sykmeldingId = "foo-bar", behandlerSuspendert = true)
                 )

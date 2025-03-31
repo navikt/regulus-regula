@@ -13,7 +13,6 @@ import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
-import no.nav.tsm.regulus.regula.rules.trees.debugPath
 import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.TilbakedateringRule.*
 import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.extras.Ettersendelse
 import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.extras.Forlengelse
@@ -36,7 +35,7 @@ class TilbakedateringRulesTest {
                     signaturdato = LocalDateTime.now(),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(result.rulePath, listOf(TILBAKEDATERING to false))
@@ -60,13 +59,14 @@ class TilbakedateringRulesTest {
                     signaturdato = LocalDateTime.now(),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
                 result.rulePath,
                 listOf(
                     TILBAKEDATERING to true,
+                    SPESIALISTHELSETJENESTEN to false,
                     ETTERSENDING to false,
                     TILBAKEDATERT_INNTIL_4_DAGER to true,
                 ),
@@ -75,6 +75,8 @@ class TilbakedateringRulesTest {
             assertEquals(
                 result.ruleInputs,
                 mapOf(
+                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                 ),
@@ -90,13 +92,14 @@ class TilbakedateringRulesTest {
                     signaturdato = LocalDateTime.now(),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
                 result.rulePath,
                 listOf(
                     TILBAKEDATERING to true,
+                    SPESIALISTHELSETJENESTEN to false,
                     ETTERSENDING to false,
                     TILBAKEDATERT_INNTIL_4_DAGER to true,
                 ),
@@ -105,6 +108,8 @@ class TilbakedateringRulesTest {
             assertEquals(
                 result.ruleInputs,
                 mapOf(
+                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                 ),
@@ -130,14 +135,23 @@ class TilbakedateringRulesTest {
                     hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
-            assertPath(result.rulePath, listOf(TILBAKEDATERING to true, ETTERSENDING to true))
+            assertPath(
+                result.rulePath,
+                listOf(
+                    TILBAKEDATERING to true,
+                    SPESIALISTHELSETJENESTEN to false,
+                    ETTERSENDING to true,
+                ),
+            )
 
             assertEquals(
                 result.ruleInputs,
                 mapOf(
+                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "ettersending" to
@@ -167,13 +181,14 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = "Det er begrunna!",
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
                 result.rulePath,
                 listOf(
                     TILBAKEDATERING to true,
+                    SPESIALISTHELSETJENESTEN to false,
                     ETTERSENDING to false,
                     TILBAKEDATERT_INNTIL_4_DAGER to false,
                     TILBAKEDATERT_INNTIL_8_DAGER to true,
@@ -184,6 +199,8 @@ class TilbakedateringRulesTest {
             assertEquals(
                 result.ruleInputs,
                 mapOf(
+                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "3 ord",
@@ -201,18 +218,18 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = null,
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
                 result.rulePath,
                 listOf(
                     TILBAKEDATERING to true,
+                    SPESIALISTHELSETJENESTEN to false,
                     ETTERSENDING to false,
                     TILBAKEDATERT_INNTIL_4_DAGER to false,
                     TILBAKEDATERT_INNTIL_8_DAGER to true,
                     BEGRUNNELSE_MIN_1_ORD to false,
                     FORLENGELSE to false,
-                    SPESIALISTHELSETJENESTEN to false,
                 ),
             )
 
@@ -239,7 +256,7 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = null,
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.PAPIR)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.PAPIR)
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertEquals(result.treeResult.getOutcome(), Outcomes.INNTIL_8_DAGER)
         }
@@ -271,13 +288,14 @@ class TilbakedateringRulesTest {
                         ),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
                 result.rulePath,
                 listOf(
                     TILBAKEDATERING to true,
+                    SPESIALISTHELSETJENESTEN to false,
                     ETTERSENDING to false,
                     TILBAKEDATERT_INNTIL_4_DAGER to false,
                     TILBAKEDATERT_INNTIL_8_DAGER to true,
@@ -289,6 +307,8 @@ class TilbakedateringRulesTest {
             assertEquals(
                 result.ruleInputs,
                 mapOf(
+                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "0 ord",
@@ -315,19 +335,19 @@ class TilbakedateringRulesTest {
                     tidligereSykmeldinger = listOf(),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
                 result.rulePath,
                 listOf(
                     TILBAKEDATERING to true,
+                    SPESIALISTHELSETJENESTEN to false,
                     ETTERSENDING to false,
                     TILBAKEDATERT_INNTIL_4_DAGER to false,
                     TILBAKEDATERT_INNTIL_8_DAGER to true,
                     BEGRUNNELSE_MIN_1_ORD to false,
                     FORLENGELSE to false,
-                    SPESIALISTHELSETJENESTEN to false,
                 ),
             )
 
@@ -354,20 +374,12 @@ class TilbakedateringRulesTest {
                     hoveddiagnose = Diagnose("X01", Diagnosekoder.ICD10_CODE),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
                 result.rulePath,
-                listOf(
-                    TILBAKEDATERING to true,
-                    ETTERSENDING to false,
-                    TILBAKEDATERT_INNTIL_4_DAGER to false,
-                    TILBAKEDATERT_INNTIL_8_DAGER to true,
-                    BEGRUNNELSE_MIN_1_ORD to false,
-                    FORLENGELSE to false,
-                    SPESIALISTHELSETJENESTEN to true,
-                ),
+                listOf(TILBAKEDATERING to true, SPESIALISTHELSETJENESTEN to true),
             )
 
             assertEquals(
@@ -375,7 +387,6 @@ class TilbakedateringRulesTest {
                 mapOf(
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
-                    "begrunnelse" to "0 ord",
                     "diagnosesystem" to Diagnosekoder.ICD10_CODE,
                     "spesialisthelsetjenesten" to true,
                 ),
@@ -396,27 +407,18 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = null,
                     hoveddiagnose = Diagnose("X01", Diagnosekoder.ICD10_CODE),
                 )
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
                 result.rulePath,
-                listOf(
-                    TILBAKEDATERING to true,
-                    ETTERSENDING to false,
-                    TILBAKEDATERT_INNTIL_4_DAGER to false,
-                    TILBAKEDATERT_INNTIL_8_DAGER to false,
-                    TILBAKEDATERT_MINDRE_ENN_1_MAANED to true,
-                    BEGRUNNELSE_MIN_1_ORD to false,
-                    SPESIALISTHELSETJENESTEN to true,
-                ),
+                listOf(TILBAKEDATERING to true, SPESIALISTHELSETJENESTEN to true),
             )
             assertEquals(
                 result.ruleInputs,
                 mapOf(
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
-                    "begrunnelse" to "0 ord",
                     "diagnosesystem" to Diagnosekoder.ICD10_CODE,
                     "spesialisthelsetjenesten" to true,
                 ),
@@ -432,25 +434,27 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = null,
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
                 result.rulePath,
                 listOf(
                     TILBAKEDATERING to true,
+                    SPESIALISTHELSETJENESTEN to false,
                     ETTERSENDING to false,
                     TILBAKEDATERT_INNTIL_4_DAGER to false,
                     TILBAKEDATERT_INNTIL_8_DAGER to false,
                     TILBAKEDATERT_MINDRE_ENN_1_MAANED to true,
                     BEGRUNNELSE_MIN_1_ORD to false,
-                    SPESIALISTHELSETJENESTEN to false,
                 ),
             )
 
             assertEquals(
                 result.ruleInputs,
                 mapOf(
+                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "0 ord",
@@ -470,19 +474,19 @@ class TilbakedateringRulesTest {
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = "12344123112341232....,,,..12",
                 )
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
                 result.rulePath,
                 listOf(
                     TILBAKEDATERING to true,
+                    SPESIALISTHELSETJENESTEN to false,
                     ETTERSENDING to false,
                     TILBAKEDATERT_INNTIL_4_DAGER to false,
                     TILBAKEDATERT_INNTIL_8_DAGER to false,
                     TILBAKEDATERT_MINDRE_ENN_1_MAANED to true,
                     BEGRUNNELSE_MIN_1_ORD to false,
-                    SPESIALISTHELSETJENESTEN to false,
                 ),
             )
 
@@ -524,13 +528,14 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                     hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
                 )
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
                 result.rulePath,
                 listOf(
                     TILBAKEDATERING to true,
+                    SPESIALISTHELSETJENESTEN to false,
                     ETTERSENDING to false,
                     TILBAKEDATERT_INNTIL_4_DAGER to false,
                     TILBAKEDATERT_INNTIL_8_DAGER to false,
@@ -543,6 +548,8 @@ class TilbakedateringRulesTest {
             assertEquals(
                 result.ruleInputs,
                 mapOf(
+                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "1 ord",
@@ -566,13 +573,14 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(
                 result.rulePath,
                 listOf(
                     TILBAKEDATERING to true,
+                    SPESIALISTHELSETJENESTEN to false,
                     ETTERSENDING to false,
                     TILBAKEDATERT_INNTIL_4_DAGER to false,
                     TILBAKEDATERT_INNTIL_8_DAGER to false,
@@ -580,7 +588,6 @@ class TilbakedateringRulesTest {
                     BEGRUNNELSE_MIN_1_ORD to true,
                     FORLENGELSE to false,
                     ARBEIDSGIVERPERIODE to false,
-                    SPESIALISTHELSETJENESTEN to false,
                 ),
             )
 
@@ -606,13 +613,14 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
                 result.rulePath,
                 listOf(
                     TILBAKEDATERING to true,
+                    SPESIALISTHELSETJENESTEN to false,
                     ETTERSENDING to false,
                     TILBAKEDATERT_INNTIL_4_DAGER to false,
                     TILBAKEDATERT_INNTIL_8_DAGER to false,
@@ -628,6 +636,8 @@ class TilbakedateringRulesTest {
                 mapOf(
                     "fom" to payload.aktivitet.earliestFom(),
                     "tom" to payload.aktivitet.latestTom(),
+                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "spesialisthelsetjenesten" to false,
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "1 ord",
                 ),
@@ -644,13 +654,14 @@ class TilbakedateringRulesTest {
                     tidligereSykmeldinger = listOf(),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(
                 result.rulePath,
                 listOf(
                     TILBAKEDATERING to true,
+                    SPESIALISTHELSETJENESTEN to false,
                     ETTERSENDING to false,
                     TILBAKEDATERT_INNTIL_4_DAGER to false,
                     TILBAKEDATERT_INNTIL_8_DAGER to false,
@@ -658,7 +669,6 @@ class TilbakedateringRulesTest {
                     BEGRUNNELSE_MIN_1_ORD to true,
                     FORLENGELSE to false,
                     ARBEIDSGIVERPERIODE to false,
-                    SPESIALISTHELSETJENESTEN to false,
                 ),
             )
 
@@ -700,28 +710,14 @@ class TilbakedateringRulesTest {
                         ),
                 )
 
-            val (result) =
-                TilbakedateringRules(payload)
-                    .execute(ExecutionMode.NORMAL)
-                    .debugPath(
-                        listOf(
-                            TILBAKEDATERING to true,
-                            ETTERSENDING to false,
-                            TILBAKEDATERT_INNTIL_4_DAGER to false,
-                            TILBAKEDATERT_INNTIL_8_DAGER to false,
-                            TILBAKEDATERT_MINDRE_ENN_1_MAANED to true,
-                            BEGRUNNELSE_MIN_1_ORD to true,
-                            FORLENGELSE to false,
-                            ARBEIDSGIVERPERIODE to false,
-                            SPESIALISTHELSETJENESTEN to false,
-                        )
-                    )
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(
                 result.rulePath,
                 listOf(
                     TILBAKEDATERING to true,
+                    SPESIALISTHELSETJENESTEN to false,
                     ETTERSENDING to false,
                     TILBAKEDATERT_INNTIL_4_DAGER to false,
                     TILBAKEDATERT_INNTIL_8_DAGER to false,
@@ -729,7 +725,6 @@ class TilbakedateringRulesTest {
                     BEGRUNNELSE_MIN_1_ORD to true,
                     FORLENGELSE to false,
                     ARBEIDSGIVERPERIODE to false,
-                    SPESIALISTHELSETJENESTEN to false,
                 ),
             )
 
@@ -757,31 +752,19 @@ class TilbakedateringRulesTest {
                     tidligereSykmeldinger = listOf(),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
                 result.rulePath,
-                listOf(
-                    TILBAKEDATERING to true,
-                    ETTERSENDING to false,
-                    TILBAKEDATERT_INNTIL_4_DAGER to false,
-                    TILBAKEDATERT_INNTIL_8_DAGER to false,
-                    TILBAKEDATERT_MINDRE_ENN_1_MAANED to true,
-                    BEGRUNNELSE_MIN_1_ORD to true,
-                    FORLENGELSE to false,
-                    ARBEIDSGIVERPERIODE to false,
-                    SPESIALISTHELSETJENESTEN to true,
-                ),
+                listOf(TILBAKEDATERING to true, SPESIALISTHELSETJENESTEN to true),
             )
 
             assertEquals(
-                result.ruleInputs - "dagerForArbeidsgiverperiode",
+                result.ruleInputs,
                 mapOf(
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
-                    "begrunnelse" to "1 ord",
-                    "tom" to payload.aktivitet.latestTom(),
                     "diagnosesystem" to Diagnosekoder.ICD10_CODE,
                     "spesialisthelsetjenesten" to true,
                 ),
@@ -801,13 +784,14 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = "Veldig bra begrunnels!",
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(
                 result.rulePath,
                 listOf(
                     TILBAKEDATERING to true,
+                    SPESIALISTHELSETJENESTEN to false,
                     ETTERSENDING to false,
                     TILBAKEDATERT_INNTIL_4_DAGER to false,
                     TILBAKEDATERT_INNTIL_8_DAGER to false,
@@ -819,6 +803,8 @@ class TilbakedateringRulesTest {
             assertEquals(
                 result.ruleInputs,
                 mapOf(
+                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "3 ord",
@@ -834,25 +820,27 @@ class TilbakedateringRulesTest {
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = "Dårlig begrunnels>:(",
                 )
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
                 result.rulePath,
                 listOf(
                     TILBAKEDATERING to true,
+                    SPESIALISTHELSETJENESTEN to false,
                     ETTERSENDING to false,
                     TILBAKEDATERT_INNTIL_4_DAGER to false,
                     TILBAKEDATERT_INNTIL_8_DAGER to false,
                     TILBAKEDATERT_MINDRE_ENN_1_MAANED to false,
                     BEGRUNNELSE_MIN_3_ORD to false,
-                    SPESIALISTHELSETJENESTEN to false,
                 ),
             )
 
             assertEquals(
                 result.ruleInputs,
                 mapOf(
+                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "2 ord",
@@ -863,7 +851,7 @@ class TilbakedateringRulesTest {
         }
 
         @Test
-        fun `Fra spesialisthelsetjenesten, MANUELL`() {
+        fun `Fra spesialisthelsetjenesten, OK`() {
             val payload =
                 testTilbakedateringRulePayload(
                     perioder = testPeriode(-31, 0),
@@ -871,20 +859,12 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = "abcdefghijklmno",
                     hoveddiagnose = Diagnose("X01", Diagnosekoder.ICD10_CODE),
                 )
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
-            assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
+            assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
                 result.rulePath,
-                listOf(
-                    TILBAKEDATERING to true,
-                    ETTERSENDING to false,
-                    TILBAKEDATERT_INNTIL_4_DAGER to false,
-                    TILBAKEDATERT_INNTIL_8_DAGER to false,
-                    TILBAKEDATERT_MINDRE_ENN_1_MAANED to false,
-                    BEGRUNNELSE_MIN_3_ORD to false,
-                    SPESIALISTHELSETJENESTEN to true,
-                ),
+                listOf(TILBAKEDATERING to true, SPESIALISTHELSETJENESTEN to true),
             )
 
             assertEquals(
@@ -892,7 +872,6 @@ class TilbakedateringRulesTest {
                 mapOf(
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
-                    "begrunnelse" to "1 ord",
                     "diagnosesystem" to Diagnosekoder.ICD10_CODE,
                     "spesialisthelsetjenesten" to true,
                 ),
@@ -915,25 +894,26 @@ class TilbakedateringRulesTest {
                     hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
                 result.rulePath,
                 listOf(
                     TILBAKEDATERING to true,
+                    SPESIALISTHELSETJENESTEN to false,
                     ETTERSENDING to false,
                     TILBAKEDATERT_INNTIL_4_DAGER to false,
                     TILBAKEDATERT_INNTIL_8_DAGER to false,
                     TILBAKEDATERT_MINDRE_ENN_1_MAANED to false,
                     BEGRUNNELSE_MIN_3_ORD to false,
-                    SPESIALISTHELSETJENESTEN to false,
                 ),
             )
 
             assertEquals(
                 result.ruleInputs,
                 mapOf(
+                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "1 ord",
@@ -958,13 +938,14 @@ class TilbakedateringRulesTest {
                     begrunnelseIkkeKontakt = "abcghgfgh",
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
                 result.rulePath,
                 listOf(
                     TILBAKEDATERING to true,
+                    SPESIALISTHELSETJENESTEN to false,
                     ETTERSENDING to false,
                     TILBAKEDATERT_INNTIL_4_DAGER to false,
                     TILBAKEDATERT_INNTIL_8_DAGER to false,
@@ -978,6 +959,8 @@ class TilbakedateringRulesTest {
             assertEquals(
                 result.ruleInputs,
                 mapOf(
+                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "1 ord",
@@ -989,7 +972,7 @@ class TilbakedateringRulesTest {
         }
 
         @Test
-        fun `ikke mindre enn én måned, men 29 dager`() {
+        fun `spesialisthelsetjenesten, ikke mindre enn én måned, men 29 dager, OK`() {
             val payload =
                 testTilbakedateringRulePayload(
                     perioder =
@@ -1004,20 +987,12 @@ class TilbakedateringRulesTest {
                     hoveddiagnose = Diagnose("X01", Diagnosekoder.ICD10_CODE),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
-            assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
+            assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
                 result.rulePath,
-                listOf(
-                    TILBAKEDATERING to true,
-                    ETTERSENDING to false,
-                    TILBAKEDATERT_INNTIL_4_DAGER to false,
-                    TILBAKEDATERT_INNTIL_8_DAGER to false,
-                    TILBAKEDATERT_MINDRE_ENN_1_MAANED to false,
-                    BEGRUNNELSE_MIN_3_ORD to false,
-                    SPESIALISTHELSETJENESTEN to true,
-                ),
+                listOf(TILBAKEDATERING to true, SPESIALISTHELSETJENESTEN to true),
             )
 
             assertEquals(
@@ -1025,7 +1000,6 @@ class TilbakedateringRulesTest {
                 mapOf(
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
-                    "begrunnelse" to "1 ord",
                     "diagnosesystem" to Diagnosekoder.ICD10_CODE,
                     "spesialisthelsetjenesten" to true,
                 ),

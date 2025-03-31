@@ -35,7 +35,7 @@ class HprRulesTest {
     @Test
     fun `har ikke aktiv autorisasjon, Status INVALID`() {
         val behandler = testBehandlerGodkjenninger(BehandlerScenarios.INAKTIV_LEGE)
-        val (result) = HprRules(createHprRulePayload(behandler)).execute(ExecutionMode.NORMAL)
+        val result = HprRules(createHprRulePayload(behandler)).execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.INVALID, result.treeResult.status)
         assertPath(result.rulePath, listOf(HprRule.BEHANDLER_GYLIDG_I_HPR to false))
@@ -45,7 +45,7 @@ class HprRulesTest {
     @Test
     fun `mangler autorisasjon, Status INVALID`() {
         val behandler = testBehandlerGodkjenninger(BehandlerScenarios.UGYLDIG_AUTORISASJON)
-        val (result) = HprRules(createHprRulePayload(behandler)).execute(ExecutionMode.NORMAL)
+        val result = HprRules(createHprRulePayload(behandler)).execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.INVALID, result.treeResult.status)
         assertPath(
@@ -64,7 +64,7 @@ class HprRulesTest {
         val perioder =
             listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
-        val (result) =
+        val result =
             HprRules(
                     createHprRulePayload(
                         behandlerGodkjenninger = behandler,
@@ -92,7 +92,7 @@ class HprRulesTest {
         val perioder =
             listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
-        val (result) =
+        val result =
             HprRules(
                     createHprRulePayload(
                         behandlerGodkjenninger = behandler,
@@ -131,7 +131,7 @@ class HprRulesTest {
         val perioder =
             listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
-        val (result) =
+        val result =
             HprRules(
                     createHprRulePayload(
                         behandlerGodkjenninger = behandler,
@@ -164,7 +164,7 @@ class HprRulesTest {
         val startdato =
             LocalDate.of(2020, 1, 2).minusDays(85) // More than 12 weeks (84 days) before tom date
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
-        val (result) =
+        val result =
             HprRules(
                     createHprRulePayload(
                         behandlerGodkjenninger = behandler,
@@ -204,7 +204,7 @@ class HprRulesTest {
         val perioder =
             listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 4, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
-        val (result) =
+        val result =
             HprRules(
                     createHprRulePayload(
                         behandlerGodkjenninger = behandler,
@@ -242,7 +242,7 @@ class HprRulesTest {
         val perioder =
             listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
-        val (result) =
+        val result =
             HprRules(
                     createHprRulePayload(
                         behandlerGodkjenninger = behandler,
@@ -277,7 +277,7 @@ class HprRulesTest {
             listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val tidligereSykmeldinger = testTidligereSykmelding(9.october(2019), 31.december(2019))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
-        val (result) =
+        val result =
             HprRules(
                     createHprRulePayload(
                         behandlerGodkjenninger = behandler,
@@ -322,7 +322,7 @@ class HprRulesTest {
         val perioder =
             listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 4, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
-        val (result) =
+        val result =
             HprRules(
                     createHprRulePayload(
                         behandlerGodkjenninger = behandler,
@@ -358,7 +358,7 @@ class HprRulesTest {
         val perioder =
             listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
-        val (result) =
+        val result =
             HprRules(
                     createHprRulePayload(
                         behandlerGodkjenninger = behandler,
@@ -394,7 +394,7 @@ class HprRulesTest {
         val startdato =
             LocalDate.of(2020, 1, 2).minusDays(85) // More than 12 weeks (84 days) before tom date
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
-        val (result) =
+        val result =
             HprRules(
                     createHprRulePayload(
                         behandlerGodkjenninger = behandler,
@@ -458,7 +458,7 @@ class HprRulesTest {
 
         val perioder =
             listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
-        val (result) =
+        val result =
             HprRules(
                     createHprRulePayload(
                         behandlerGodkjenninger = behandlerWithCustomGyldig,
@@ -507,7 +507,7 @@ class HprRulesTest {
 
         val perioder =
             listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
-        val (result) =
+        val result =
             HprRules(
                     createHprRulePayload(
                         behandlerGodkjenninger = behandlerWithCustomGyldig,
@@ -566,7 +566,7 @@ class HprRulesTest {
 
         val perioder =
             listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
-        val (result) =
+        val result =
             HprRules(
                     createHprRulePayload(
                         behandlerWithCustomGyldig,
@@ -625,7 +625,7 @@ class HprRulesTest {
 
         val perioder =
             listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
-        val (result) =
+        val result =
             HprRules(
                     createHprRulePayload(
                         behandlerWithCustomGyldig,
@@ -659,7 +659,7 @@ class HprRulesTest {
         val perioder =
             listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
-        val (result) =
+        val result =
             HprRules(
                     createHprRulePayload(
                         behandlerGodkjenninger = behandler,
@@ -697,7 +697,7 @@ class HprRulesTest {
         val perioder =
             listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
-        val (result) =
+        val result =
             HprRules(
                     createHprRulePayload(
                         behandlerGodkjenninger = behandler,
@@ -733,7 +733,7 @@ class HprRulesTest {
         val perioder =
             listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
-        val (result) =
+        val result =
             HprRules(
                     createHprRulePayload(
                         behandlerGodkjenninger = behandler,
@@ -769,7 +769,7 @@ class HprRulesTest {
         val perioder =
             listOf(Aktivitet.IkkeMulig(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 1, 2)))
         val signaturdato = LocalDate.of(2020, 1, 3).atStartOfDay()
-        val (result) =
+        val result =
             HprRules(
                     createHprRulePayload(
                         behandlerGodkjenninger = behandler,

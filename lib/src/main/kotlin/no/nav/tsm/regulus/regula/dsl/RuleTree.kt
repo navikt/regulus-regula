@@ -15,14 +15,18 @@ internal interface RuleOutcome {
 
 internal sealed class TreeNode<Enum> {
 
-    internal sealed class LeafNode<Enum>(val status: RuleStatus) : TreeNode<Enum>() {
-        internal class OK<Enum> : LeafNode<Enum>(RuleStatus.OK)
+    internal sealed class LeafNode<Enum>(val status: RuleStatus, val juridisk: RuleJuridisk) :
+        TreeNode<Enum>() {
+        internal class OK<Enum> internal constructor(juridisk: RuleJuridisk) :
+            LeafNode<Enum>(RuleStatus.OK, juridisk)
 
-        internal class MANUAL<Enum> internal constructor(val outcome: RuleOutcome) :
-            LeafNode<Enum>(RuleStatus.MANUAL_PROCESSING)
+        internal class MANUAL<Enum>
+        internal constructor(val outcome: RuleOutcome, juridisk: RuleJuridisk) :
+            LeafNode<Enum>(RuleStatus.MANUAL_PROCESSING, juridisk)
 
-        internal class INVALID<Enum> internal constructor(val outcome: RuleOutcome) :
-            LeafNode<Enum>(RuleStatus.INVALID)
+        internal class INVALID<Enum>
+        internal constructor(val outcome: RuleOutcome, juridisk: RuleJuridisk) :
+            LeafNode<Enum>(RuleStatus.INVALID, juridisk)
 
         override fun toString(): String {
             val ruleOutcome =
