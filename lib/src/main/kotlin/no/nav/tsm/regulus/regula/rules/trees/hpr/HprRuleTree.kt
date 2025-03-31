@@ -1,12 +1,11 @@
 package no.nav.tsm.regulus.regula.rules.trees.hpr
 
 import no.nav.tsm.regulus.regula.dsl.RuleNode
+import no.nav.tsm.regulus.regula.dsl.RuleStatus.INVALID
+import no.nav.tsm.regulus.regula.dsl.RuleStatus.OK
+import no.nav.tsm.regulus.regula.dsl.no
 import no.nav.tsm.regulus.regula.dsl.tree
-import no.nav.tsm.regulus.regula.executor.RuleResult
-import no.nav.tsm.regulus.regula.executor.RuleStatus.INVALID
-import no.nav.tsm.regulus.regula.executor.RuleStatus.OK
-import no.nav.tsm.regulus.regula.executor.no
-import no.nav.tsm.regulus.regula.executor.yes
+import no.nav.tsm.regulus.regula.dsl.yes
 import no.nav.tsm.regulus.regula.juridisk.JuridiskHenvisning
 import no.nav.tsm.regulus.regula.juridisk.Lovverk
 import no.nav.tsm.regulus.regula.juridisk.MedJuridisk
@@ -44,7 +43,7 @@ internal val hprRuleTree =
             )
         )
 
-private fun RuleNode<HprRule, RuleResult>.yesThenSykefravarOver12Uker() {
+private fun RuleNode<HprRule>.yesThenSykefravarOver12Uker() {
     yes(HprRule.SYKEFRAVAR_OVER_12_UKER) {
         yes(INVALID, HprRule.Outcomes.BEHANDLER_MT_FT_KI_OVER_12_UKER)
         no(OK)

@@ -3,10 +3,10 @@ package no.nav.tsm.regulus.regula.executor
 import no.nav.tsm.regulus.regula.dsl.ResultNode
 import no.nav.tsm.regulus.regula.dsl.RuleNode
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
+import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.TreeNode
 import no.nav.tsm.regulus.regula.dsl.TreeOutput
-import no.nav.tsm.regulus.regula.dsl.join
-import no.nav.tsm.regulus.regula.dsl.printRulePath
+import no.nav.tsm.regulus.regula.dsl.getRulePath
 import no.nav.tsm.regulus.regula.juridisk.Juridisk
 import org.slf4j.LoggerFactory
 
@@ -25,18 +25,18 @@ enum class ExecutionMode {
  * - a payload specific to the rules/tree
  */
 internal abstract class TreeExecutor<RuleEnum, Payload : BasePayload>(
-    private val tree: Pair<RuleNode<RuleEnum, RuleResult>, Juridisk>,
+    private val tree: Pair<RuleNode<RuleEnum>, Juridisk>,
     private val payload: Payload,
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     abstract fun getRule(rule: RuleEnum): (Payload) -> RuleOutput<RuleEnum>
 
-    fun execute(mode: ExecutionMode): Pair<TreeOutput<RuleEnum, RuleResult>, Juridisk> {
+    fun execute(mode: ExecutionMode): Pair<TreeOutput<RuleEnum>, Juridisk> {
         val executedTreeResult =
-            tree.first.evaluate(payload).also { treeOutput: TreeOutput<RuleEnum, RuleResult> ->
+            tree.first.evaluate(payload).also { treeOutput: TreeOutput<RuleEnum> ->
                 logger.info(
-                    "Rules (mode=${mode.name}) ${payload.sykmeldingId}, ${treeOutput.printRulePath()}"
+                    "Rules (mode=${mode.name}) ${payload.sykmeldingId}, ${treeOutput.getRulePath()}"
                 )
             }
 
@@ -47,8 +47,7 @@ internal abstract class TreeExecutor<RuleEnum, Payload : BasePayload>(
         }
     }
 
-    private fun TreeOutput<RuleEnum, RuleResult>.flipInvalidToManuell():
-        TreeOutput<RuleEnum, RuleResult> {
+    private fun TreeOutput<RuleEnum>.flipInvalidToManuell(): TreeOutput<RuleEnum> {
         if (treeResult.status != RuleStatus.INVALID) {
             return this
         }
@@ -56,9 +55,7 @@ internal abstract class TreeExecutor<RuleEnum, Payload : BasePayload>(
         return copy(treeResult = treeResult.copy(status = RuleStatus.MANUAL_PROCESSING))
     }
 
-    private fun TreeNode<RuleEnum, RuleResult>.evaluate(
-        payload: Payload
-    ): TreeOutput<RuleEnum, RuleResult> =
+    private fun TreeNode<RuleEnum>.evaluate(payload: Payload): TreeOutput<RuleEnum> =
         when (this) {
             is ResultNode -> TreeOutput(treeResult = result)
             is RuleNode -> {
@@ -69,3 +66,10 @@ internal abstract class TreeExecutor<RuleEnum, Payload : BasePayload>(
             }
         }
 }
+
+private infix fun <Enum> RuleOutput<Enum>.join(rulesOutput: TreeOutput<Enum>) =
+    TreeOutput(
+        ruleInputs = ruleInputs + rulesOutput.ruleInputs,
+        rulePath = listOf(this) + rulesOutput.rulePath,
+        treeResult = rulesOutput.treeResult,
+    )

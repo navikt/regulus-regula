@@ -1,10 +1,10 @@
 package no.nav.tsm.regulus.regula.rules.trees.validering
 
+import no.nav.tsm.regulus.regula.dsl.RuleStatus.INVALID
+import no.nav.tsm.regulus.regula.dsl.RuleStatus.OK
+import no.nav.tsm.regulus.regula.dsl.no
 import no.nav.tsm.regulus.regula.dsl.tree
-import no.nav.tsm.regulus.regula.executor.RuleStatus.INVALID
-import no.nav.tsm.regulus.regula.executor.RuleStatus.OK
-import no.nav.tsm.regulus.regula.executor.no
-import no.nav.tsm.regulus.regula.executor.yes
+import no.nav.tsm.regulus.regula.dsl.yes
 import no.nav.tsm.regulus.regula.juridisk.UtenJuridisk
 
 internal val valideringRuleTree =

@@ -1,7 +1,7 @@
 package no.nav.tsm.regulus.regula.rules.trees.hpr
 
-import no.nav.tsm.regulus.regula.executor.RuleOutcome
-import no.nav.tsm.regulus.regula.executor.RuleStatus
+import no.nav.tsm.regulus.regula.dsl.RuleOutcome
+import no.nav.tsm.regulus.regula.dsl.RuleStatus
 
 internal enum class HprRule {
     BEHANDLER_GYLIDG_I_HPR,

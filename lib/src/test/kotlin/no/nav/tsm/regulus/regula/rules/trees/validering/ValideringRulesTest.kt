@@ -3,8 +3,8 @@ package no.nav.tsm.regulus.regula.rules.trees.validering
 import java.time.LocalDate
 import kotlin.test.*
 import kotlin.test.Test
+import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
-import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
 import no.nav.tsm.regulus.regula.testutils.generatePersonNumber
