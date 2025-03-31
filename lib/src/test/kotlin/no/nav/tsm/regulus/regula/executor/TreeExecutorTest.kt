@@ -1,14 +1,12 @@
 package no.nav.tsm.regulus.regula.executor
 
 import kotlin.test.Test
+import no.nav.tsm.regulus.regula.dsl.RuleJuridisk
 import no.nav.tsm.regulus.regula.dsl.RuleOutcome
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.TreeNode.LeafNode.*
 import no.nav.tsm.regulus.regula.dsl.tree
-import no.nav.tsm.regulus.regula.juridisk.JuridiskHenvisning
-import no.nav.tsm.regulus.regula.juridisk.Lovverk
-import no.nav.tsm.regulus.regula.juridisk.MedJuridisk
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Nested
@@ -43,22 +41,13 @@ private val testTree =
     tree(TestEnumRule.RULE_1) {
         yes(TestEnumRule.RULE_2) {
             yes(TestEnumRule.RULE_3) {
-                yes(OK())
-                no(INVALID(TestEnumRule.Outcomes.CERTAIN_DEATH))
+                yes(OK(RuleJuridisk.INGEN))
+                no(INVALID(TestEnumRule.Outcomes.CERTAIN_DEATH, RuleJuridisk.INGEN))
             }
-            no(MANUAL(TestEnumRule.Outcomes.ITS_NOT_LOOKING_GOOD))
+            no(MANUAL(TestEnumRule.Outcomes.ITS_NOT_LOOKING_GOOD, RuleJuridisk.INGEN))
         }
-        no(OK())
-    } to
-        MedJuridisk(
-            JuridiskHenvisning(
-                lovverk = Lovverk.FOLKETRYGDLOVEN,
-                paragraf = "8-4",
-                ledd = 1,
-                punktum = null,
-                bokstav = null,
-            )
-        )
+        no(OK(RuleJuridisk.INGEN))
+    }
 
 private class TestRules(
     payload: TestPayload,
@@ -90,7 +79,7 @@ class TreeExecutorTest {
                     { _ -> RuleOutput(ruleInputs = emptyMap(), rule = it, ruleResult = result) }
                 }
 
-            val (result) = executor.execute(ExecutionMode.NORMAL)
+            val result = executor.execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
@@ -117,7 +106,7 @@ class TreeExecutorTest {
                     { _ -> RuleOutput(ruleInputs = emptyMap(), rule = it, ruleResult = result) }
                 }
 
-            val (result) = executor.execute(ExecutionMode.NORMAL)
+            val result = executor.execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
@@ -144,7 +133,7 @@ class TreeExecutorTest {
                     { _ -> RuleOutput(ruleInputs = emptyMap(), rule = it, ruleResult = result) }
                 }
 
-            val (result) = executor.execute(ExecutionMode.NORMAL)
+            val result = executor.execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(
@@ -171,7 +160,7 @@ class TreeExecutorTest {
                     { _ -> RuleOutput(ruleInputs = emptyMap(), rule = it, ruleResult = result) }
                 }
 
-            val (result) = executor.execute(ExecutionMode.PAPIR)
+            val result = executor.execute(ExecutionMode.PAPIR)
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
@@ -198,7 +187,7 @@ class TreeExecutorTest {
                     { _ -> RuleOutput(ruleInputs = emptyMap(), rule = it, ruleResult = result) }
                 }
 
-            val (result) = executor.execute(ExecutionMode.PAPIR)
+            val result = executor.execute(ExecutionMode.PAPIR)
 
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(
@@ -225,7 +214,7 @@ class TreeExecutorTest {
                     { _ -> RuleOutput(ruleInputs = emptyMap(), rule = it, ruleResult = result) }
                 }
 
-            val (result) = executor.execute(ExecutionMode.PAPIR)
+            val result = executor.execute(ExecutionMode.PAPIR)
 
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(

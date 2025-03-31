@@ -14,7 +14,7 @@ class PasientUnder13RulesTest {
     @Test
     fun `Alt ok, Status OK`() {
         val person14Years = LocalDate.now().minusYears(14)
-        val (result) =
+        val result =
             PasientUnder13Rules(
                     PasientUnder13RulePayload(
                         pasientFodselsdato = person14Years,
@@ -40,7 +40,7 @@ class PasientUnder13RulesTest {
     @Test
     fun `Pasient under 13 Aar, Status INVALID`() {
         val person12Years = LocalDate.now().minusYears(12)
-        val (result) =
+        val result =
             PasientUnder13Rules(
                     PasientUnder13RulePayload(
                         pasientFodselsdato = person12Years,

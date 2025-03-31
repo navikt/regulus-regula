@@ -20,7 +20,7 @@ class ArbeidsuforhetRulesTest {
         fun `Hoveddiagnose is null and annen Fraværsårsak is null`() {
             val payload = testArbeidsuforhetPayload(hoveddiagnose = null, annenFravarsArsak = null)
 
-            val (result) = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
+            val result = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
@@ -44,7 +44,7 @@ class ArbeidsuforhetRulesTest {
         fun `Papirmode - Hoveddiagnose is null and annen Fraværsårsak is null`() {
             val payload = testArbeidsuforhetPayload(hoveddiagnose = null, annenFravarsArsak = null)
 
-            val (result) = ArbeidsuforhetRules(payload).execute(ExecutionMode.PAPIR)
+            val result = ArbeidsuforhetRules(payload).execute(ExecutionMode.PAPIR)
 
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(
@@ -76,7 +76,7 @@ class ArbeidsuforhetRulesTest {
                         ),
                 )
 
-            val (result) = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
+            val result = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
 
             assertPath(
                 result.rulePath,
@@ -106,7 +106,7 @@ class ArbeidsuforhetRulesTest {
                     annenFravarsArsak = AnnenFravarsArsak(beskrivelse = null, grunn = emptyList()),
                 )
 
-            val (result) = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
+            val result = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
@@ -137,7 +137,7 @@ class ArbeidsuforhetRulesTest {
                         listOf(Diagnose(system = "2.16.578.1.12.4.1.1.7170", kode = "R222222")),
                 )
 
-            val (result) = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
+            val result = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
             assertPath(
@@ -170,7 +170,7 @@ class ArbeidsuforhetRulesTest {
                     bidiagnoser = listOf(Diagnose(system = Diagnosekoder.ICPC2_CODE, kode = "R24")),
                 )
 
-            val (result) = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
+            val result = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
@@ -202,7 +202,7 @@ class ArbeidsuforhetRulesTest {
                 hoveddiagnose = Diagnose(system = "2.16.578.1.12.4.1.1.9999", kode = "A09")
             )
 
-        val (result) = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
+        val result = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -229,7 +229,7 @@ class ArbeidsuforhetRulesTest {
                 hoveddiagnose = Diagnose(system = Diagnosekoder.ICPC2_CODE, kode = "Z09")
             )
 
-        val (result) = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
+        val result = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -256,7 +256,7 @@ class ArbeidsuforhetRulesTest {
         // TODO: This is exactly the same as one of the tests in DiagnoseTester, should be removed
         val payload = testArbeidsuforhetPayload(hoveddiagnose = null, annenFravarsArsak = null)
 
-        val (result) = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
+        val result = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -284,7 +284,7 @@ class ArbeidsuforhetRulesTest {
                 bidiagnoser = listOf(Diagnose(system = "2.16.578.1.12.4.1.1.7110", kode = "S09")),
             )
 
-        val (result) = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
+        val result = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -318,7 +318,7 @@ class ArbeidsuforhetRulesTest {
                 hoveddiagnose = Diagnose(system = "2.16.578.1.12.4.1.1.7110", kode = "Z09")
             )
 
-        val (result) = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
+        val result = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(

@@ -3,8 +3,6 @@ package no.nav.tsm.regulus.regula.meta
 import no.nav.tsm.regulus.regula.dsl.*
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.TreeNode.*
-import no.nav.tsm.regulus.regula.juridisk.MedJuridisk
-import no.nav.tsm.regulus.regula.juridisk.UtenJuridisk
 import no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet.arbeidsuforhetRuleTree
 import no.nav.tsm.regulus.regula.rules.trees.dato.datoRuleTree
 import no.nav.tsm.regulus.regula.rules.trees.hpr.hprRuleTree
@@ -31,31 +29,9 @@ fun main() {
         val builder = StringBuilder()
         builder.append("## $idx. $name\n\n") // section headers with added index number
 
-        when (val juridiskInfo = ruleTree.second) {
-            is MedJuridisk -> {
-                // separator
-                builder.append("---\n\n")
-
-                val henvisning = juridiskInfo.juridiskHenvisning
-                builder.append("- ### Juridisk Henvisning:\n") // sub-section header
-                henvisning.lovverk.let { builder.append("  - **Lovverk**: $it\n") }
-                henvisning.paragraf.let { builder.append("  - **Paragraf**: $it\n") }
-                henvisning.ledd?.let { builder.append("  - **Ledd**: $it\n") }
-                henvisning.punktum?.let { builder.append("  - **Punktum**: $it\n") }
-                henvisning.bokstav?.let { builder.append("  - **Bokstav**: $it\n") }
-
-                // separator
-                builder.append("\n---\n\n")
-            }
-
-            is UtenJuridisk -> {
-                // Handle the case when no `MedJuridisk` info is present
-            }
-        }
-
         builder.append("```mermaid\n")
         builder.append("graph TD\n")
-        ruleTree.first.traverseTree(builder, "root", "root")
+        ruleTree.traverseTree(builder, "root", "root")
         builder.append("    classDef ok fill:#c3ff91,stroke:#004a00,color: black;\n")
         builder.append("    classDef invalid fill:#ff7373,stroke:#ff0000,color: black;\n")
         builder.append("    classDef manuell fill:#ffe24f,stroke:#ffd500,color: #473c00;\n")

@@ -45,7 +45,7 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
 
     val overallStatus: RegulaStatus =
         executedChain
-            .map { (result) -> result.treeResult.status }
+            .map { it.treeResult.status }
             .let {
                 it.firstOrNull { status -> status == RuleStatus.INVALID }
                     ?: it.firstOrNull { status -> status == RuleStatus.MANUAL_PROCESSING }
@@ -55,7 +55,7 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
 
     val ruleHits: List<RegulaOutcome> =
         executedChain
-            .mapNotNull { (result) -> result.treeResult.getOutcome() }
+            .mapNotNull { it.treeResult.getOutcome() }
             .map {
                 RegulaOutcome(
                     status = it.status.toRegulaStatus(),
@@ -66,18 +66,18 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
             }
 
     val results: List<TreeResult> =
-        executedChain.map { (result) ->
+        executedChain.map {
             TreeResult(
                 outcome =
-                    result.treeResult.getOutcome()?.let {
+                    it.treeResult.getOutcome()?.let { outcome ->
                         RegulaOutcome(
-                            status = it.status.toRegulaStatus(),
-                            rule = it.rule,
-                            messageForSender = it.messageForSender,
-                            messageForUser = it.messageForUser,
+                            status = outcome.status.toRegulaStatus(),
+                            rule = outcome.rule,
+                            messageForSender = outcome.messageForSender,
+                            messageForUser = outcome.messageForUser,
                         )
                     },
-                rulePath = result.getRulePath(),
+                rulePath = it.getRulePath(),
             )
         }
 

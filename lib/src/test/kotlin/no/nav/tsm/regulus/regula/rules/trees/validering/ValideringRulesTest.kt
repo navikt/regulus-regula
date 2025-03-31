@@ -16,7 +16,7 @@ class ValideringRulesTest {
         val person14Years = LocalDate.now().minusYears(14)
         val pasientFnr = generatePersonNumber(person14Years)
 
-        val (result) =
+        val result =
             ValideringRules(
                     ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
@@ -61,7 +61,7 @@ class ValideringRulesTest {
 
     @Test
     fun `Ugyldig regelsettversjon, Status INVALID`() {
-        val (result) =
+        val result =
             ValideringRules(
                     ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
@@ -91,7 +91,7 @@ class ValideringRulesTest {
     fun `Mangelde dynamiske sporsmaal versjon 2 uke39, Status INVALID`() {
         val perioderMedFomForDritlengesiden =
             listOf(Aktivitet.IkkeMulig(fom = LocalDate.now().minusDays(274), tom = LocalDate.now()))
-        val (result) =
+        val result =
             ValideringRules(
                     ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
@@ -134,7 +134,7 @@ class ValideringRulesTest {
         val person31Years = LocalDate.now().minusYears(31)
         val pasientFnr = generatePersonNumber(person31Years, false)
 
-        val (result) =
+        val result =
             ValideringRules(
                     ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
@@ -176,7 +176,7 @@ class ValideringRulesTest {
     fun `Avsender samme som pasient, Status INVALID`() {
         val pasientFnr = generatePersonNumber(LocalDate.now().minusYears(31), false)
 
-        val (result) =
+        val result =
             ValideringRules(
                     ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
@@ -224,7 +224,7 @@ class ValideringRulesTest {
     fun `Behandler samme som pasient, Status INVALID`() {
         val pasientFnr = generatePersonNumber(LocalDate.now().minusYears(31), false)
 
-        val (result) =
+        val result =
             ValideringRules(
                     ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",

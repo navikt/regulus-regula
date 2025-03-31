@@ -1,8 +1,9 @@
 package no.nav.tsm.regulus.regula.rules.trees.validering
 
-import no.nav.tsm.regulus.regula.dsl.TreeNode.LeafNode.*
+import no.nav.tsm.regulus.regula.dsl.RuleJuridisk
+import no.nav.tsm.regulus.regula.dsl.RuleOutcome
+import no.nav.tsm.regulus.regula.dsl.TreeNode.LeafNode
 import no.nav.tsm.regulus.regula.dsl.tree
-import no.nav.tsm.regulus.regula.juridisk.UtenJuridisk
 
 internal val valideringRuleTree =
     tree(ValideringRule.UGYLDIG_REGELSETTVERSJON) {
@@ -20,4 +21,9 @@ internal val valideringRuleTree =
                 }
             }
         }
-    } to UtenJuridisk
+    }
+
+private fun INVALID(outcome: RuleOutcome): LeafNode.INVALID<ValideringRule> =
+    LeafNode.INVALID(outcome, RuleJuridisk.INGEN)
+
+private fun OK(): LeafNode.OK<ValideringRule> = LeafNode.OK(RuleJuridisk.INGEN)

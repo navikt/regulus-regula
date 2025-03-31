@@ -7,7 +7,6 @@ import no.nav.tsm.regulus.regula.dsl.TreeNode.*
 import no.nav.tsm.regulus.regula.dsl.TreeNode.LeafNode.*
 import no.nav.tsm.regulus.regula.dsl.TreeOutput
 import no.nav.tsm.regulus.regula.dsl.getRulePath
-import no.nav.tsm.regulus.regula.juridisk.Juridisk
 import org.slf4j.LoggerFactory
 
 enum class ExecutionMode {
@@ -25,25 +24,25 @@ enum class ExecutionMode {
  * - a payload specific to the rules/tree
  */
 internal abstract class TreeExecutor<RuleEnum, Payload : BasePayload>(
-    private val tree: Pair<RuleNode<RuleEnum>, Juridisk>,
+    private val tree: RuleNode<RuleEnum>,
     private val payload: Payload,
 ) {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
     abstract fun getRule(rule: RuleEnum): (Payload) -> RuleOutput<RuleEnum>
 
-    fun execute(mode: ExecutionMode): Pair<TreeOutput<RuleEnum>, Juridisk> {
+    fun execute(mode: ExecutionMode): TreeOutput<RuleEnum> {
         val executedTreeResult =
-            tree.first.evaluate(payload).also { treeOutput: TreeOutput<RuleEnum> ->
+            tree.evaluate(payload).also { treeOutput: TreeOutput<RuleEnum> ->
                 logger.info(
                     "Rules (mode=${mode.name}) ${payload.sykmeldingId}, ${treeOutput.getRulePath()}"
                 )
             }
 
         return if (mode == ExecutionMode.PAPIR) {
-            executedTreeResult.flipInvalidToManuell() to tree.second
+            executedTreeResult.flipInvalidToManuell()
         } else {
-            executedTreeResult to tree.second
+            executedTreeResult
         }
     }
 
@@ -56,7 +55,7 @@ internal abstract class TreeExecutor<RuleEnum, Payload : BasePayload>(
             when (treeResult) {
                 is OK<*> -> return this
                 is MANUAL<*> -> return this
-                is INVALID<*> -> MANUAL<RuleEnum>(this.treeResult.outcome)
+                is INVALID<*> -> MANUAL<RuleEnum>(this.treeResult.outcome, this.treeResult.juridisk)
             }
 
         return copy(treeResult = flippedResult)
