@@ -38,6 +38,6 @@ private fun RuleNode<HprRule>.yesThenSykefravarOver12Uker() {
 }
 
 private fun INVALID(outcome: RuleOutcome): LeafNode.INVALID<HprRule> =
-    LeafNode.INVALID(outcome, RuleJuridisk.FOLKETRYGDLOVEN_8_4)
+    LeafNode.INVALID(outcome, RuleJuridisk.FOLKETRYGDLOVEN_8_7_1)
 
 private fun OK(): LeafNode.OK<HprRule> = LeafNode.OK(RuleJuridisk.FOLKETRYGDLOVEN_8_7_1)

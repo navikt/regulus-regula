@@ -34,6 +34,26 @@ fun main() {
         val builder = StringBuilder()
         builder.append("## $idx. $name\n\n") // section headers with added index number
 
+        val juridiskeHenvisninger: List<JuridiskHenvisning> =
+            ruleTree.extractJuridiskHenvisninger().distinctBy { it.paragraf }
+
+        require(juridiskeHenvisninger.size <= 1) {
+            "There are two different paragraphs used in $name tree!\n " +
+                "Please check the rule tree and make sure that only one paragraph is used.\n" +
+                "Found: ${juridiskeHenvisninger.joinToString { it.paragraf }}"
+        }
+
+        if (juridiskeHenvisninger.size == 1) {
+            val henvisning = juridiskeHenvisninger.first()
+
+            builder.append("---\n\n")
+            builder.append("- ### Juridisk Henvisning:\n") // sub-section header
+            henvisning.lovverk.let { builder.append("  - **Lovverk**: $it\n") }
+            henvisning.paragraf.let { builder.append("  - **Paragraf**: $it\n") }
+
+            builder.append("\n---\n\n")
+        }
+
         builder.append("```mermaid\n")
         builder.append("graph TD\n")
         ruleTree.traverseTree(builder, "root", "root")
@@ -43,6 +63,24 @@ fun main() {
         builder.append("```\n\n")
 
         println(builder.toString())
+    }
+}
+
+private fun <Enum> TreeNode<Enum>.extractJuridiskHenvisninger(): List<JuridiskHenvisning> {
+    return when (this) {
+        is LeafNode -> {
+            if (juridisk.juridisk is MedJuridisk) {
+                listOf(juridisk.juridisk.juridiskHenvisning)
+            } else {
+                emptyList()
+            }
+        }
+
+        is RuleNode -> {
+            val yesJuridisk = yes.extractJuridiskHenvisninger()
+            val noJuridisk = no.extractJuridiskHenvisninger()
+            yesJuridisk + noJuridisk
+        }
     }
 }
 

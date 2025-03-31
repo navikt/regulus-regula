@@ -99,6 +99,14 @@ graph TD
 
 ## 3. Behandler i HPR
 
+---
+
+- ### Juridisk Henvisning:
+  - **Lovverk**: FOLKETRYGDLOVEN
+  - **Paragraf**: 8-7
+
+---
+
 ```mermaid
 graph TD
     root(BEHANDLER_GYLIDG_I_HPR) -->|Ja| root_BEHANDLER_GYLIDG_I_HPR_BEHANDLER_HAR_AUTORISASJON_I_HPR(BEHANDLER_HAR_AUTORISASJON_I_HPR)
@@ -135,6 +143,14 @@ graph TD
 
 ## 4. Arbeidsuførhet
 
+---
+
+- ### Juridisk Henvisning:
+  - **Lovverk**: FOLKETRYGDLOVEN
+  - **Paragraf**: 8-4
+
+---
+
 ```mermaid
 graph TD
     root(HOVEDDIAGNOSE_MANGLER) -->|Ja| root_HOVEDDIAGNOSE_MANGLER_FRAVAERSGRUNN_MANGLER(FRAVAERSGRUNN_MANGLER)
@@ -161,6 +177,14 @@ graph TD
 
 
 ## 5. Pasient under 13
+
+---
+
+- ### Juridisk Henvisning:
+  - **Lovverk**: FOLKETRYGDLOVEN
+  - **Paragraf**: 8-3
+
+---
 
 ```mermaid
 graph TD
@@ -193,6 +217,14 @@ graph TD
 
 
 ## 7. Tilbakedatering
+
+---
+
+- ### Juridisk Henvisning:
+  - **Lovverk**: FOLKETRYGDLOVEN
+  - **Paragraf**: 8-7
+
+---
 
 ```mermaid
 graph TD
