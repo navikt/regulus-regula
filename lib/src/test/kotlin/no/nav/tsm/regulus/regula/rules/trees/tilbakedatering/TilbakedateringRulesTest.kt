@@ -12,6 +12,7 @@ import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
+import no.nav.tsm.regulus.regula.rules.trees.debugPath
 import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.TilbakedateringRule.*
 import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.extras.Ettersendelse
 import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.extras.Forlengelse
@@ -687,23 +688,37 @@ class TilbakedateringRulesTest {
                     signaturdato = LocalDateTime.now().plusDays(10),
                     begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                     hoveddiagnose = hoveddiagnose,
-                    tidligereSykmeldinger =
-                        listOf(
-                            TidligereSykmelding(
-                                sykmeldingId = "tidligere-sykmelding-1",
-                                perioder =
-                                    listOf(
-                                        SykmeldingPeriode.AktivitetIkkeMulig(
-                                            fom = LocalDate.now().minusDays(20),
-                                            tom = LocalDate.now().minusDays(3),
-                                        )
-                                    ),
-                                hoveddiagnose = hoveddiagnose,
-                            )
-                        ),
+                    tidligereSykmeldinger = listOf(
+                        TidligereSykmelding(
+                            sykmeldingId = "dette-er-en-forlengelse",
+                            perioder =
+                                listOf(
+                                    SykmeldingPeriode.AktivitetIkkeMulig(
+                                        fom = LocalDate.now().minusDays(21),
+                                        tom = LocalDate.now().minusDays(4),
+                                    )
+                                ),
+                            hoveddiagnose = hoveddiagnose,
+                        )
+                    ),
                 )
 
-            val (result) = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val (result) =
+                TilbakedateringRules(payload)
+                    .execute(ExecutionMode.NORMAL)
+                    .debugPath(
+                        listOf(
+                            TILBAKEDATERING to true,
+                            ETTERSENDING to false,
+                            TILBAKEDATERT_INNTIL_4_DAGER to false,
+                            TILBAKEDATERT_INNTIL_8_DAGER to false,
+                            TILBAKEDATERT_MINDRE_ENN_1_MAANED to true,
+                            BEGRUNNELSE_MIN_1_ORD to true,
+                            FORLENGELSE to false,
+                            ARBEIDSGIVERPERIODE to false,
+                            SPESIALISTHELSETJENESTEN to false,
+                        )
+                    )
 
             assertEquals(result.treeResult.status, RuleStatus.MANUAL_PROCESSING)
             assertPath(
