@@ -11,7 +11,7 @@ internal fun <T> assertPath(result: List<RuleOutput<T>>, expectedPath: List<Pair
     assertEquals(pathMap, expectedPath)
 }
 
-internal fun <T, S> TreeOutput<T, S>.debugPath() {
+internal fun <Enum> TreeOutput<Enum>.debugPath() {
     println("[DEBUG] Tree was ${this.treeResult}, path:")
     println(
         this.rulePath.joinToString(separator = "\n") {
@@ -20,7 +20,7 @@ internal fun <T, S> TreeOutput<T, S>.debugPath() {
     )
 }
 
-internal fun <T, S> TreeOutput<T, S>.debugPath(expectedPath: List<Pair<T, Boolean>>) {
+internal fun <Enum> TreeOutput<Enum>.debugPath(expectedPath: List<Pair<Enum, Boolean>>) {
     println("[DEBUG] Tree was ${this.treeResult}, path:")
 
     var ruleIndex = -1
@@ -39,14 +39,14 @@ internal fun <T, S> TreeOutput<T, S>.debugPath(expectedPath: List<Pair<T, Boolea
     )
 }
 
-internal fun <T, S> Pair<TreeOutput<T, S>, Juridisk>.debugPath(): Pair<TreeOutput<T, S>, Juridisk> {
+internal fun <Enum> Pair<TreeOutput<Enum>, Juridisk>.debugPath(): Pair<TreeOutput<Enum>, Juridisk> {
     this.first.debugPath()
     return this
 }
 
-internal fun <T, S> Pair<TreeOutput<T, S>, Juridisk>.debugPath(
-    expectedPath: List<Pair<T, Boolean>>
-): Pair<TreeOutput<T, S>, Juridisk> {
+internal fun <Enum> Pair<TreeOutput<Enum>, Juridisk>.debugPath(
+    expectedPath: List<Pair<Enum, Boolean>>
+): Pair<TreeOutput<Enum>, Juridisk> {
     this.first.debugPath(expectedPath)
     return this
 }

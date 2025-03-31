@@ -1,7 +1,7 @@
 package no.nav.tsm.regulus.regula.rules.trees.pasientUnder13
 
-import no.nav.tsm.regulus.regula.executor.RuleOutcome
-import no.nav.tsm.regulus.regula.executor.RuleStatus
+import no.nav.tsm.regulus.regula.dsl.RuleOutcome
+import no.nav.tsm.regulus.regula.dsl.RuleStatus
 
 internal enum class PasientUnder13Rule {
     PASIENT_YNGRE_ENN_13;

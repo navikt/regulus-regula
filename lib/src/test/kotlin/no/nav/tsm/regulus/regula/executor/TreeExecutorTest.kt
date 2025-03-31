@@ -1,8 +1,12 @@
 package no.nav.tsm.regulus.regula.executor
 
 import kotlin.test.Test
+import no.nav.tsm.regulus.regula.dsl.RuleOutcome
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
+import no.nav.tsm.regulus.regula.dsl.RuleStatus
+import no.nav.tsm.regulus.regula.dsl.no
 import no.nav.tsm.regulus.regula.dsl.tree
+import no.nav.tsm.regulus.regula.dsl.yes
 import no.nav.tsm.regulus.regula.juridisk.JuridiskHenvisning
 import no.nav.tsm.regulus.regula.juridisk.Lovverk
 import no.nav.tsm.regulus.regula.juridisk.MedJuridisk

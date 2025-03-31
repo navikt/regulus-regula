@@ -2,9 +2,9 @@
 
 package no.nav.tsm.regulus.regula
 
-import no.nav.tsm.regulus.regula.dsl.printRulePath
+import no.nav.tsm.regulus.regula.dsl.RuleStatus
+import no.nav.tsm.regulus.regula.dsl.getRulePath
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
-import no.nav.tsm.regulus.regula.executor.RuleStatus
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.executor.runRules
 import no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet.ArbeidsuforhetRulePayload
@@ -76,7 +76,7 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
                             messageForUser = it.messageForUser,
                         )
                     },
-                rulePath = result.printRulePath(),
+                rulePath = result.getRulePath(),
             )
         }
 

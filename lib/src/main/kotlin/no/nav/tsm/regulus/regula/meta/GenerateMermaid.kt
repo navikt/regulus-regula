@@ -1,8 +1,7 @@
 package no.nav.tsm.regulus.regula.meta
 
 import no.nav.tsm.regulus.regula.dsl.*
-import no.nav.tsm.regulus.regula.executor.RuleResult
-import no.nav.tsm.regulus.regula.executor.RuleStatus
+import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.juridisk.MedJuridisk
 import no.nav.tsm.regulus.regula.juridisk.UtenJuridisk
 import no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet.arbeidsuforhetRuleTree
@@ -65,7 +64,7 @@ fun main() {
     }
 }
 
-private fun <T> TreeNode<T, RuleResult>.traverseTree(
+private fun <Enum> TreeNode<Enum>.traverseTree(
     builder: StringBuilder,
     thisNodeKey: String,
     nodeKey: String,
@@ -79,7 +78,7 @@ private fun <T> TreeNode<T, RuleResult>.traverseTree(
         is RuleNode -> {
             val currentNodeKey = "${nodeKey}_$rule"
             if (yes is ResultNode) {
-                val childResult = (yes as ResultNode<T, RuleResult>).result.status
+                val childResult = (yes as ResultNode<Enum>).result.status
                 val childKey = "${currentNodeKey}_$childResult"
 
                 if (childResult == RuleStatus.INVALID) {
@@ -91,7 +90,8 @@ private fun <T> TreeNode<T, RuleResult>.traverseTree(
                         }\n"
                     )
                     builder.append(
-                        "    $thisNodeKey($rule) -->|\"Ja (papir)\"| ${childKey}_papir(${RuleStatus.MANUAL_PROCESSING.norsk()})${getStyle(RuleStatus.MANUAL_PROCESSING)}\n"
+                        "    $thisNodeKey($rule) -->|\"Ja (papir)\"| ${childKey}_papir(${RuleStatus.MANUAL_PROCESSING.norsk()})${getStyle(
+                            RuleStatus.MANUAL_PROCESSING)}\n"
                     )
                 } else {
                     builder.append(
@@ -103,13 +103,13 @@ private fun <T> TreeNode<T, RuleResult>.traverseTree(
                     )
                 }
             } else {
-                val childRule = (yes as RuleNode<T, RuleResult>).rule
+                val childRule = (yes as RuleNode<Enum>).rule
                 val childKey = "${currentNodeKey}_$childRule"
                 builder.append("    $thisNodeKey($rule) -->|Ja| $childKey($childRule)\n")
                 yes.traverseTree(builder, childKey, currentNodeKey)
             }
             if (no is ResultNode) {
-                val childResult = (no as ResultNode<T, RuleResult>).result.status
+                val childResult = (no as ResultNode<Enum>).result.status
                 val childKey = "${currentNodeKey}_$childResult"
                 if (childResult == RuleStatus.INVALID) {
                     builder.append(
@@ -136,7 +136,7 @@ private fun <T> TreeNode<T, RuleResult>.traverseTree(
                     )
                 }
             } else {
-                val childRule = (no as RuleNode<T, RuleResult>).rule
+                val childRule = (no as RuleNode<Enum>).rule
                 val childKey = "${currentNodeKey}_$childRule"
                 builder.append("    $thisNodeKey($rule) -->|Nei| $childKey($childRule)\n")
                 no.traverseTree(builder, "${currentNodeKey}_$childRule", currentNodeKey)
