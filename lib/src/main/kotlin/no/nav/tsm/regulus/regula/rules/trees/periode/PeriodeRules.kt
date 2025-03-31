@@ -4,7 +4,7 @@ import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
-import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
+import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriodeType
 import no.nav.tsm.regulus.regula.utils.daysBetween
 import no.nav.tsm.regulus.regula.utils.workdaysBetween
@@ -37,7 +37,7 @@ private typealias PeriodeRuleFn = (payload: PeriodeRulePayload) -> RuleOutput<Pe
 private val Rules =
     object {
         val periodeMangler: PeriodeRuleFn = { payload ->
-            val perioder = payload.perioder
+            val perioder = payload.aktivitet
             val periodeMangler = perioder.isEmpty()
 
             RuleOutput(
@@ -48,7 +48,7 @@ private val Rules =
         }
 
         val fraDatoEtterTilDato: PeriodeRuleFn = { payload ->
-            val perioder = payload.perioder
+            val perioder = payload.aktivitet
 
             val fraDatoEtterTilDato = perioder.any { it.fom.isAfter(it.tom) }
 
@@ -60,7 +60,7 @@ private val Rules =
         }
 
         val overlappendePerioder: PeriodeRuleFn = { payload ->
-            val perioder = payload.perioder
+            val perioder = payload.aktivitet
 
             val overlappendePerioder =
                 perioder.any { periodA ->
@@ -77,7 +77,7 @@ private val Rules =
         }
 
         val oppholdMellomPerioder: PeriodeRuleFn = { payload ->
-            val periodeRanges = payload.perioder.sortedBy { it.fom }.map { it.fom to it.tom }
+            val periodeRanges = payload.aktivitet.sortedBy { it.fom }.map { it.fom to it.tom }
 
             var oppholdMellomPerioder = false
             for (i in 1 until periodeRanges.size) {
@@ -89,14 +89,14 @@ private val Rules =
             }
 
             RuleOutput(
-                ruleInputs = mapOf("perioder" to payload.perioder),
+                ruleInputs = mapOf("perioder" to payload.aktivitet),
                 rule = PeriodeRule.OPPHOLD_MELLOM_PERIODER,
                 ruleResult = oppholdMellomPerioder,
             )
         }
 
         val ikkeDefinertPeriode: PeriodeRuleFn = { payload ->
-            val perioder = payload.perioder
+            val perioder = payload.aktivitet
             val ikkeDefinertPeriode = perioder.any { it.type == SykmeldingPeriodeType.INVALID }
 
             RuleOutput(
@@ -121,7 +121,7 @@ private val Rules =
         }
 
         val avventendeKombinert: PeriodeRuleFn = { payload ->
-            val perioder = payload.perioder
+            val perioder = payload.aktivitet
 
             val antallAvventende = perioder.count { it.type == SykmeldingPeriodeType.AVVENTENDE }
             val avventendeKombinert = antallAvventende != 0 && perioder.size > 1
@@ -138,10 +138,10 @@ private val Rules =
         }
 
         val manglendeInnspillArbeidsgiver: PeriodeRuleFn = { payload ->
-            val perioder = payload.perioder
+            val perioder = payload.aktivitet
             val manglendeInnspillArbeidsgiver =
                 perioder.any {
-                    it is SykmeldingPeriode.Avventende &&
+                    it is Aktivitet.Avventende &&
                         it.avventendeInnspillTilArbeidsgiver?.trim().isNullOrEmpty()
                 }
 
@@ -157,7 +157,7 @@ private val Rules =
         }
 
         val avventendeOver16Dager: PeriodeRuleFn = { payload ->
-            val perioder = payload.perioder
+            val perioder = payload.aktivitet
 
             val avventendeOver16Dager =
                 perioder
@@ -172,11 +172,11 @@ private val Rules =
         }
 
         val forMangeBehandlingsDagerPrUke: PeriodeRuleFn = { payload ->
-            val perioder = payload.perioder
+            val perioder = payload.aktivitet
 
             val forMangeBehandlingsDagerPrUke =
                 perioder.any {
-                    it is SykmeldingPeriode.Behandlingsdager &&
+                    it is Aktivitet.Behandlingsdager &&
                         it.behandlingsdager > it.startedWeeksBetween()
                 }
 
@@ -189,10 +189,9 @@ private val Rules =
         }
 
         val gradertOver99Prosent: PeriodeRuleFn = { payload ->
-            val perioder = payload.perioder
+            val perioder = payload.aktivitet
 
-            val gradertOver99Prosent =
-                perioder.any { it is SykmeldingPeriode.Gradert && it.grad > 99 }
+            val gradertOver99Prosent = perioder.any { it is Aktivitet.Gradert && it.grad > 99 }
 
             RuleOutput(
                 ruleInputs =
@@ -206,7 +205,7 @@ private val Rules =
         }
 
         val inneholderBehandlingsDager: PeriodeRuleFn = { payload ->
-            val perioder = payload.perioder
+            val perioder = payload.aktivitet
 
             val inneholderBehandlingsDager =
                 perioder.any { it.type == SykmeldingPeriodeType.BEHANDLINGSDAGER }

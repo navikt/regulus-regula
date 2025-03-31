@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 import kotlin.test.*
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.RuleStatus
-import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
+import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
 
 class DatoRulesTest {
@@ -14,18 +14,13 @@ class DatoRulesTest {
     fun `Alt ok, Status OK`() {
         val now = LocalDateTime.now()
         val perioder =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    fom = LocalDate.now(),
-                    tom = LocalDate.now().plusDays(7),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(fom = LocalDate.now(), tom = LocalDate.now().plusDays(7)))
 
         val (result) =
             DatoRules(
                     DatoRulePayload(
                         sykmeldingId = "sykmeldingId",
-                        perioder = perioder,
+                        aktivitet = perioder,
                         signaturdato = now,
                     )
                 )
@@ -61,7 +56,7 @@ class DatoRulesTest {
         val now = LocalDateTime.now()
         val perioder =
             listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
+                Aktivitet.IkkeMulig(
                     fom = LocalDate.now().plusDays(31),
                     tom = LocalDate.now().plusDays(37),
                 )
@@ -71,7 +66,7 @@ class DatoRulesTest {
             DatoRules(
                     DatoRulePayload(
                         sykmeldingId = "sykmeldingId",
-                        perioder = perioder,
+                        aktivitet = perioder,
                         signaturdato = now,
                     )
                 )
@@ -97,8 +92,8 @@ class DatoRulesTest {
         val now = LocalDateTime.now()
         val perioder =
             listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(fom = LocalDate.now(), tom = LocalDate.now()),
-                SykmeldingPeriode.AktivitetIkkeMulig(
+                Aktivitet.IkkeMulig(fom = LocalDate.now(), tom = LocalDate.now()),
+                Aktivitet.IkkeMulig(
                     fom = LocalDate.now().plusDays(1),
                     tom = LocalDate.now().plusDays(366),
                 ),
@@ -108,7 +103,7 @@ class DatoRulesTest {
             DatoRules(
                     DatoRulePayload(
                         sykmeldingId = "sykmeldingId",
-                        perioder = perioder,
+                        aktivitet = perioder,
                         signaturdato = now,
                     )
                 )

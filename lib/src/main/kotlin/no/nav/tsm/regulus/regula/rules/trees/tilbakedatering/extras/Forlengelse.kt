@@ -1,8 +1,8 @@
 package no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.extras
 
 import java.time.LocalDate
+import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.Diagnose
-import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriodeType
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 import no.nav.tsm.regulus.regula.utils.earliestFom
@@ -17,7 +17,7 @@ internal data class Forlengelse(
 )
 
 internal fun isForlengelse(
-    perioder: List<SykmeldingPeriode>,
+    perioder: List<Aktivitet>,
     hoveddiagnose: Diagnose?,
     tidligereSykmeldinger: List<TidligereSykmelding>,
 ): List<Forlengelse> {
@@ -27,8 +27,8 @@ internal fun isForlengelse(
     val tidligerePerioderFomTom =
         tidligereSykmeldinger
             .filter { it.hoveddiagnose?.kode == hoveddiagnose?.kode }
-            .filter { it.perioder.size == 1 }
-            .map { it.sykmeldingId to it.perioder.first() }
+            .filter { it.aktivitet.size == 1 }
+            .map { it.sykmeldingId to it.aktivitet.first() }
             .filter { (_, periode) ->
                 periode.type == SykmeldingPeriodeType.AKTIVITET_IKKE_MULIG ||
                     periode.type == SykmeldingPeriodeType.GRADERT
@@ -38,7 +38,7 @@ internal fun isForlengelse(
                     id,
                     fom = periode.fom,
                     tom = periode.tom,
-                    gradert = if (periode is SykmeldingPeriode.Gradert) periode.grad else null,
+                    gradert = if (periode is Aktivitet.Gradert) periode.grad else null,
                 )
             }
 

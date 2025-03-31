@@ -36,7 +36,7 @@ private val Rules =
 
         val manglendeDynamiskesporsmaalversjon2uke39: ValideringRuleFn = { payload ->
             val rulesetVersion = payload.rulesetVersion
-            val sykmeldingPerioder = payload.perioder
+            val sykmeldingPerioder = payload.aktivitet
             val utdypendeOpplysinger = payload.utdypendeOpplysninger
 
             val shouldHaveAllSporsmals =

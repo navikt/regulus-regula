@@ -1,12 +1,12 @@
 package no.nav.tsm.regulus.regula.rules.trees.validering
 
 import no.nav.tsm.regulus.regula.executor.BasePayload
-import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
+import no.nav.tsm.regulus.regula.payload.Aktivitet
 
 internal data class ValideringRulePayload(
     override val sykmeldingId: String,
     val rulesetVersion: String?,
-    val perioder: List<SykmeldingPeriode>,
+    val aktivitet: List<Aktivitet>,
     val legekontorOrgnr: String?,
     val behandlerFnr: String,
     val avsenderFnr: String,

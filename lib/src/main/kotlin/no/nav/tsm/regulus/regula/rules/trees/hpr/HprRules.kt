@@ -152,8 +152,8 @@ private val Rules =
         }
 
         val sykefravarOver12Uker: HprRuleFn = { payload ->
-            val forsteFomDato = payload.perioder.earliestFom()
-            val sisteTomDato = payload.perioder.latestTom()
+            val forsteFomDato = payload.aktivitet.earliestFom()
+            val sisteTomDato = payload.aktivitet.latestTom()
             val behandlerGodkjenninger = payload.behandlerGodkjenninger
             val startdato =
                 getStartdatoFromTidligereSykmeldinger(forsteFomDato, payload.tidligereSykmeldinger)

@@ -5,7 +5,7 @@ import kotlin.test.*
 import kotlin.test.Test
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.RuleStatus
-import no.nav.tsm.regulus.regula.payload.SykmeldingPeriode
+import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
 import no.nav.tsm.regulus.regula.testutils.generatePersonNumber
 
@@ -20,7 +20,7 @@ class ValideringRulesTest {
                     ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
                         rulesetVersion = "2",
-                        perioder = emptyList(),
+                        aktivitet = emptyList(),
                         legekontorOrgnr = "123123123",
                         behandlerFnr = "08201023912",
                         avsenderFnr = "01912391932",
@@ -65,7 +65,7 @@ class ValideringRulesTest {
                     ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
                         rulesetVersion = "69",
-                        perioder = emptyList(),
+                        aktivitet = emptyList(),
                         legekontorOrgnr = "123123123",
                         behandlerFnr = "08201023912",
                         avsenderFnr = "01912391932",
@@ -89,18 +89,13 @@ class ValideringRulesTest {
     @Test
     fun `Mangelde dynamiske sporsmaal versjon 2 uke39, Status INVALID`() {
         val perioderMedFomForDritlengesiden =
-            listOf(
-                SykmeldingPeriode.AktivitetIkkeMulig(
-                    fom = LocalDate.now().minusDays(274),
-                    tom = LocalDate.now(),
-                )
-            )
+            listOf(Aktivitet.IkkeMulig(fom = LocalDate.now().minusDays(274), tom = LocalDate.now()))
         val (result) =
             ValideringRules(
                     ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
                         rulesetVersion = "2",
-                        perioder = perioderMedFomForDritlengesiden,
+                        aktivitet = perioderMedFomForDritlengesiden,
                         legekontorOrgnr = "123123123",
                         behandlerFnr = "08201023912",
                         avsenderFnr = "01912391932",
@@ -143,7 +138,7 @@ class ValideringRulesTest {
                     ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
                         rulesetVersion = "2",
-                        perioder = emptyList(),
+                        aktivitet = emptyList(),
                         legekontorOrgnr = "1232344",
                         behandlerFnr = "08201023912",
                         avsenderFnr = "2",
@@ -185,7 +180,7 @@ class ValideringRulesTest {
                     ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
                         rulesetVersion = "3",
-                        perioder = emptyList(),
+                        aktivitet = emptyList(),
                         legekontorOrgnr = null,
                         behandlerFnr = "08201023912",
                         avsenderFnr = pasientFnr,
@@ -233,7 +228,7 @@ class ValideringRulesTest {
                     ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
                         rulesetVersion = "2",
-                        perioder = emptyList(),
+                        aktivitet = emptyList(),
                         legekontorOrgnr = null,
                         behandlerFnr = pasientFnr,
                         pasientIdent = pasientFnr,
