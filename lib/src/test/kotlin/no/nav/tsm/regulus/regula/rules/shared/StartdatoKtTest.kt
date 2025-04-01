@@ -2,6 +2,8 @@ package no.nav.tsm.regulus.regula.rules.shared
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import no.nav.tsm.regulus.regula.RegulaStatus
+import no.nav.tsm.regulus.regula.payload.RelevanteMerknader
 import no.nav.tsm.regulus.regula.testutils.*
 
 class StartdatoKtTest {
@@ -191,6 +193,102 @@ class StartdatoKtTest {
                             16.january(2023) to 31.january(2023)
                             // 1.jan til 15.jan filtreres bort
                         )
+                    ),
+            )
+
+        assertEquals(startdato, 16.january(2023))
+    }
+
+    @Test
+    fun `Shall remove sykmeldinger that are invalid`() {
+        val startdato =
+            getStartdatoFromTidligereSykmeldinger(
+                earliestFom = 1.february(2023),
+                tidligereSykmeldinger =
+                    testTidligereSykmelding(
+                        dates =
+                            listOf(
+                                16.january(2023) to 31.january(2023),
+                                1.february(2023) to 28.february(2023),
+                            ),
+                        status = RegulaStatus.INVALID,
+                    ),
+            )
+
+        assertEquals(startdato, 1.february(2023))
+    }
+
+    @Test
+    fun `Shall remove sykmeldinger that are avbrutt`() {
+        val startdato =
+            getStartdatoFromTidligereSykmeldinger(
+                earliestFom = 1.february(2023),
+                tidligereSykmeldinger =
+                    testTidligereSykmelding(
+                        dates =
+                            listOf(
+                                16.january(2023) to 31.january(2023),
+                                1.february(2023) to 28.february(2023),
+                            ),
+                        userAction = "AVBRUTT",
+                    ),
+            )
+
+        assertEquals(startdato, 1.february(2023))
+    }
+
+    @Test
+    fun `Shall remove sykmeldinger with relevant merknad`() {
+        val startdato =
+            getStartdatoFromTidligereSykmeldinger(
+                earliestFom = 1.february(2023),
+                tidligereSykmeldinger =
+                    testTidligereSykmelding(
+                        dates =
+                            listOf(
+                                16.january(2023) to 31.january(2023),
+                                1.february(2023) to 28.february(2023),
+                            ),
+                        merknader = listOf(RelevanteMerknader.UGYLDIG_TILBAKEDATERING),
+                    ),
+            )
+
+        assertEquals(startdato, 1.february(2023))
+    }
+
+    @Test
+    fun `Shall remove sykmeldinger with other relevant merknad`() {
+        val startdato =
+            getStartdatoFromTidligereSykmeldinger(
+                earliestFom = 1.february(2023),
+                tidligereSykmeldinger =
+                    testTidligereSykmelding(
+                        dates =
+                            listOf(
+                                16.january(2023) to 31.january(2023),
+                                1.february(2023) to 28.february(2023),
+                            ),
+                        merknader =
+                            listOf(RelevanteMerknader.TILBAKEDATERING_KREVER_FLERE_OPPLYSNINGER),
+                    ),
+            )
+
+        assertEquals(startdato, 1.february(2023))
+    }
+
+    @Test
+    fun `Shall NOT remove sykmeldinger with under behandling merknad`() {
+        val startdato =
+            getStartdatoFromTidligereSykmeldinger(
+                earliestFom = 1.february(2023),
+                tidligereSykmeldinger =
+                    testTidligereSykmelding(
+                        dates =
+                            listOf(
+                                16.january(2023) to 31.january(2023),
+                                1.february(2023) to 28.february(2023),
+                            ),
+                        merknader = listOf(RelevanteMerknader.UNDER_BEHANDLING),
                     ),
             )
 

@@ -4,6 +4,7 @@ import java.time.LocalDate
 import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.RegulaStatus
 import no.nav.tsm.regulus.regula.payload.Diagnose
+import no.nav.tsm.regulus.regula.payload.RelevanteMerknader
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 import no.nav.tsm.regulus.regula.payload.TidligereSykmeldingAktivitet
 import no.nav.tsm.regulus.regula.payload.TidligereSykmeldingMeta
@@ -25,7 +26,10 @@ internal fun testTidligereSykmelding(fom: LocalDate, tom: LocalDate): List<Tidli
 }
 
 internal fun testTidligereSykmelding(
-    dates: List<Pair<LocalDate, LocalDate>>
+    dates: List<Pair<LocalDate, LocalDate>>,
+    status: RegulaStatus = RegulaStatus.OK,
+    userAction: String = "SENDT",
+    merknader: List<RelevanteMerknader>? = null,
 ): List<TidligereSykmelding> {
     return dates.mapIndexed { index, fomTom ->
         TidligereSykmelding(
@@ -37,9 +41,9 @@ internal fun testTidligereSykmelding(
             hoveddiagnose = Diagnose(kode = "X01", system = Diagnosekoder.ICPC2_CODE),
             meta =
                 TidligereSykmeldingMeta(
-                    status = RegulaStatus.OK,
-                    userAction = "SENDT",
-                    merknader = null,
+                    status = status,
+                    userAction = userAction,
+                    merknader = merknader,
                 ),
         )
     }
