@@ -4,6 +4,7 @@ import java.time.LocalDate
 import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
+import no.nav.tsm.regulus.regula.payload.TidligereSykmeldingAktivitet
 import no.nav.tsm.regulus.regula.rules.shared.onlyRelevantWithSameDiagnosis
 import org.slf4j.LoggerFactory
 
@@ -33,7 +34,7 @@ internal fun isEttersending(
     }
 
     val periode = perioder.first()
-    val tidligerePerioder: List<Pair<Aktivitet, TidligereSykmelding>> =
+    val tidligerePerioder: List<Pair<TidligereSykmeldingAktivitet, TidligereSykmelding>> =
         tidligereSykmeldinger
             .onlyRelevantWithSameDiagnosis(hoveddiagnose)
             .map { tidligereSykmelding ->
@@ -41,7 +42,7 @@ internal fun isEttersending(
             }
             .flatten()
 
-    val tidligereSykmeldingEttersendelse: Pair<Aktivitet, TidligereSykmelding>? =
+    val tidligereSykmeldingEttersendelse: Pair<TidligereSykmeldingAktivitet, TidligereSykmelding>? =
         tidligerePerioder.firstOrNull { (tidligerePeriode) ->
             periode.ettersendingmessigEqual(tidligerePeriode)
         }
@@ -63,17 +64,18 @@ internal fun isEttersending(
             // latestTom
             fom = periode.fom,
             tom = periode.tom,
-            gradert = if (periode is Aktivitet.Gradert) periode.grad else null,
+            gradert = if (periode is TidligereSykmeldingAktivitet.Gradert) periode.grad else null,
         )
     }
 }
 
-private fun Aktivitet.ettersendingmessigEqual(other: Aktivitet): Boolean {
+private fun Aktivitet.ettersendingmessigEqual(other: TidligereSykmeldingAktivitet): Boolean {
     val overallEqual = this.type == other.type && this.fom == other.fom && this.tom == other.tom
     if (!overallEqual) return false
 
     return when {
-        this is Aktivitet.Gradert && other is Aktivitet.Gradert -> this.grad == other.grad
+        this is Aktivitet.Gradert && other is TidligereSykmeldingAktivitet.Gradert ->
+            this.grad == other.grad
         else -> true
     }
 }

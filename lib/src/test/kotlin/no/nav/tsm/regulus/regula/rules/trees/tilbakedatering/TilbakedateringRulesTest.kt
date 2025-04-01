@@ -13,6 +13,7 @@ import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
+import no.nav.tsm.regulus.regula.payload.TidligereSykmeldingAktivitet
 import no.nav.tsm.regulus.regula.payload.TidligereSykmeldingMeta
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
 import no.nav.tsm.regulus.regula.rules.trees.debugPath
@@ -34,7 +35,7 @@ class TilbakedateringRulesTest {
         fun `ikke tilbakedatert, Status OK`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(0, 1),
+                    perioder = testAktivitet(0, 1),
                     signaturdato = LocalDateTime.now(),
                 )
 
@@ -58,7 +59,7 @@ class TilbakedateringRulesTest {
         fun `tilbakedatert med en dag går fint`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-1, 0),
+                    perioder = testAktivitet(-1, 0),
                     signaturdato = LocalDateTime.now(),
                 )
 
@@ -91,7 +92,7 @@ class TilbakedateringRulesTest {
         fun `tilbakedatert inntil 4 dager går fint`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-4, 0),
+                    perioder = testAktivitet(-4, 0),
                     signaturdato = LocalDateTime.now(),
                 )
 
@@ -122,7 +123,7 @@ class TilbakedateringRulesTest {
         @Test
         fun `tilbakedatert forlengelse med ettersending`() {
             // Re-create periods, to ensure that equality is not based on reference
-            val makePerioder = { testPeriode(-8, -7) }
+            val makePerioder = { testAktivitet(-8, -7) }
             val payload =
                 testTilbakedateringRulePayload(
                     perioder = makePerioder(),
@@ -131,7 +132,7 @@ class TilbakedateringRulesTest {
                         listOf(
                             TidligereSykmelding(
                                 sykmeldingId = "dette-er-ettersendelse",
-                                aktivitet = makePerioder(),
+                                aktivitet = testTidligereAktivitet(-8, -7),
                                 hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
                                 TidligereSykmeldingMeta(
                                     status = RegulaStatus.OK,
@@ -193,7 +194,7 @@ class TilbakedateringRulesTest {
         fun `Med begrunnelse OK`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-5, 0),
+                    perioder = testAktivitet(-5, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = "Det er begrunna!",
                 )
@@ -230,7 +231,7 @@ class TilbakedateringRulesTest {
         fun `Uten begrunnelse, Invalid`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-5, 0),
+                    perioder = testAktivitet(-5, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = null,
                 )
@@ -268,7 +269,7 @@ class TilbakedateringRulesTest {
         fun `Papirmode - Uten begrunnelse, Manuell`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-5, 0),
+                    perioder = testAktivitet(-5, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = null,
                 )
@@ -295,7 +296,7 @@ class TilbakedateringRulesTest {
                                 sykmeldingId = "dette-er-en-forlengelse",
                                 aktivitet =
                                     listOf(
-                                        Aktivitet.IkkeMulig(
+                                        TidligereSykmeldingAktivitet.IkkeMulig(
                                             fom = 1.february(2023),
                                             tom = 15.february(2023),
                                         )
@@ -351,7 +352,7 @@ class TilbakedateringRulesTest {
         fun `Ikke forlengelse, INVALID`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-5, 0),
+                    perioder = testAktivitet(-5, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = null,
                     tidligereSykmeldinger = listOf(),
@@ -389,7 +390,7 @@ class TilbakedateringRulesTest {
         fun `Ikke forlengelse, men fra spesialishelsetjenesten, OK`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-5, 0),
+                    perioder = testAktivitet(-5, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = null,
                     tidligereSykmeldinger = emptyList(),
@@ -424,7 +425,7 @@ class TilbakedateringRulesTest {
         fun `Uten Begrunnelse, Fra Spesialhelsetjenesten, OK`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-9, 0),
+                    perioder = testAktivitet(-9, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = null,
                     hoveddiagnose = Diagnose("X01", Diagnosekoder.ICD10_CODE),
@@ -451,7 +452,7 @@ class TilbakedateringRulesTest {
         fun `Uten Begrunnelse, Ikke fra spesialhelsetjenesten, INVALID`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-9, 0),
+                    perioder = testAktivitet(-9, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = null,
                 )
@@ -492,7 +493,7 @@ class TilbakedateringRulesTest {
         fun `Med Begrunnelse, ikke god nok begrunnelse, INVALID`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-9, 0),
+                    perioder = testAktivitet(-9, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = "12344123112341232....,,,..12",
                 )
@@ -539,7 +540,7 @@ class TilbakedateringRulesTest {
                                 sykmeldingId = "dette-er-en-forlengelse",
                                 aktivitet =
                                     listOf(
-                                        Aktivitet.IkkeMulig(
+                                        TidligereSykmeldingAktivitet.IkkeMulig(
                                             fom = 1.february(2023),
                                             tom = 15.february(2023),
                                         )
@@ -595,7 +596,7 @@ class TilbakedateringRulesTest {
         fun `Med Begrunnelse, Ikke forlengelse, MANUELL`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-16, 0),
+                    perioder = testAktivitet(-16, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                 )
@@ -635,7 +636,7 @@ class TilbakedateringRulesTest {
         fun `Med Begrunnelse, Innenfor arbeidsgiverperioden, OK`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-9, 0),
+                    perioder = testAktivitet(-9, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                 )
@@ -675,7 +676,7 @@ class TilbakedateringRulesTest {
         fun `Med Begrunnelse, Utenfor arbeidsgiverperioden, MANUELL`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-19, 0),
+                    perioder = testAktivitet(-19, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                     tidligereSykmeldinger = listOf(),
@@ -717,7 +718,7 @@ class TilbakedateringRulesTest {
             val hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE)
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(0, 2),
+                    perioder = testAktivitet(0, 2),
                     signaturdato = LocalDate.now().plusDays(10).atStartOfDay(),
                     begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                     hoveddiagnose = hoveddiagnose,
@@ -727,7 +728,7 @@ class TilbakedateringRulesTest {
                                 sykmeldingId = "tidligere-sykmelding-1",
                                 aktivitet =
                                     listOf(
-                                        Aktivitet.IkkeMulig(
+                                        TidligereSykmeldingAktivitet.IkkeMulig(
                                             fom = LocalDate.now().minusDays(21),
                                             tom = LocalDate.now().minusDays(4),
                                         )
@@ -777,7 +778,7 @@ class TilbakedateringRulesTest {
         fun `Med Begrunnelse, Fra spesialisthelsetjenesten, OK`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-19, 0),
+                    perioder = testAktivitet(-19, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = "abcdefghijklmnopq",
                     hoveddiagnose = Diagnose("X01", Diagnosekoder.ICD10_CODE),
@@ -811,7 +812,7 @@ class TilbakedateringRulesTest {
         fun `Med begrunnelse, MANUELL`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-32, 0),
+                    perioder = testAktivitet(-32, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = "Veldig bra begrunnels!",
                 )
@@ -848,7 +849,7 @@ class TilbakedateringRulesTest {
         fun `Ikke god nok begrunnelse, INVALID`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-32, 0),
+                    perioder = testAktivitet(-32, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = "Dårlig begrunnels>:(",
                 )
@@ -886,7 +887,7 @@ class TilbakedateringRulesTest {
         fun `Fra spesialisthelsetjenesten, OK`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-31, 0),
+                    perioder = testAktivitet(-31, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = "abcdefghijklmno",
                     hoveddiagnose = Diagnose("X01", Diagnosekoder.ICD10_CODE),

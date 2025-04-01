@@ -8,6 +8,7 @@ import no.nav.tsm.regulus.regula.RegulaStatus
 import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
+import no.nav.tsm.regulus.regula.payload.TidligereSykmeldingAktivitet
 import no.nav.tsm.regulus.regula.payload.TidligereSykmeldingMeta
 import no.nav.tsm.regulus.regula.testutils.*
 
@@ -15,7 +16,7 @@ private fun testTidligereSykmelding(fom: LocalDate, tom: LocalDate) =
     TidligereSykmelding(
         sykmeldingId = "foo-bar",
         hoveddiagnose = Diagnose(kode = "L89", system = Diagnosekoder.ICPC2_CODE),
-        aktivitet = listOf(Aktivitet.IkkeMulig(fom, tom)),
+        aktivitet = listOf(TidligereSykmeldingAktivitet.IkkeMulig(fom, tom)),
         meta =
             TidligereSykmeldingMeta(
                 status = RegulaStatus.OK,

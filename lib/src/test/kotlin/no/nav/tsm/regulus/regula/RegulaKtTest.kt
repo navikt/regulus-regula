@@ -12,6 +12,7 @@ import no.nav.tsm.regulus.regula.payload.BehandlerGodkjenning
 import no.nav.tsm.regulus.regula.payload.BehandlerKode
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
+import no.nav.tsm.regulus.regula.payload.TidligereSykmeldingAktivitet
 import no.nav.tsm.regulus.regula.payload.TidligereSykmeldingMeta
 
 class RegulaKtTest {
@@ -52,7 +53,7 @@ class RegulaKtTest {
                                 sykmeldingId = "987654321",
                                 aktivitet =
                                     listOf(
-                                        Aktivitet.IkkeMulig(
+                                        TidligereSykmeldingAktivitet.IkkeMulig(
                                             fom = LocalDate.now().minusDays(30),
                                             tom = LocalDate.now().minusDays(11),
                                         )
