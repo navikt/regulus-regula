@@ -133,7 +133,7 @@ private val Rules =
                 isEttersending(
                     sykmeldingId = payload.sykmeldingId,
                     perioder = payload.aktivitet,
-                    harMedisinskVurdering = payload.hoveddiagnose != null,
+                    hoveddiagnose = payload.hoveddiagnose,
                     tidligereSykmeldinger = payload.tidligereSykmeldinger,
                 )
 

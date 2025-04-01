@@ -5,6 +5,7 @@ import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriodeType
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
+import no.nav.tsm.regulus.regula.rules.shared.onlyRelevantWithSameDiagnosis
 import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.isWorkingDaysBetween
 import no.nav.tsm.regulus.regula.utils.latestTom
@@ -26,6 +27,7 @@ internal fun isForlengelse(
 
     val tidligerePerioderFomTom =
         tidligereSykmeldinger
+            .onlyRelevantWithSameDiagnosis(hoveddiagnose)
             .filter { it.hoveddiagnose?.kode == hoveddiagnose?.kode }
             .filter { it.aktivitet.size == 1 }
             .map { it.sykmeldingId to it.aktivitet.first() }

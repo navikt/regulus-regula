@@ -6,13 +6,16 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import no.nav.helse.diagnosekoder.Diagnosekoder
+import no.nav.tsm.regulus.regula.RegulaStatus
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.getOutcome
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
+import no.nav.tsm.regulus.regula.payload.TidligereSykmeldingMeta
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
+import no.nav.tsm.regulus.regula.rules.trees.debugPath
 import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.TilbakedateringRule.*
 import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.extras.Ettersendelse
 import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.extras.Forlengelse
@@ -129,13 +132,27 @@ class TilbakedateringRulesTest {
                             TidligereSykmelding(
                                 sykmeldingId = "dette-er-ettersendelse",
                                 aktivitet = makePerioder(),
-                                hoveddiagnose = null,
+                                hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
+                                TidligereSykmeldingMeta(
+                                    status = RegulaStatus.OK,
+                                    userAction = "SENDT",
+                                    merknader = null,
+                                ),
                             )
                         ),
                     hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
                 )
 
-            val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
+            val result =
+                TilbakedateringRules(payload)
+                    .execute(ExecutionMode.NORMAL)
+                    .debugPath(
+                        listOf(
+                            TILBAKEDATERING to true,
+                            SPESIALISTHELSETJENESTEN to false,
+                            ETTERSENDING to true,
+                        )
+                    )
 
             assertEquals(result.treeResult.status, RuleStatus.OK)
             assertPath(
@@ -284,6 +301,11 @@ class TilbakedateringRulesTest {
                                         )
                                     ),
                                 hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
+                                TidligereSykmeldingMeta(
+                                    status = RegulaStatus.OK,
+                                    userAction = "SENDT",
+                                    merknader = null,
+                                ),
                             )
                         ),
                 )
@@ -523,6 +545,11 @@ class TilbakedateringRulesTest {
                                         )
                                     ),
                                 hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
+                                TidligereSykmeldingMeta(
+                                    status = RegulaStatus.OK,
+                                    userAction = "SENDT",
+                                    merknader = null,
+                                ),
                             )
                         ),
                     begrunnelseIkkeKontakt = "abcdefghijklmnopq",
@@ -706,6 +733,11 @@ class TilbakedateringRulesTest {
                                         )
                                     ),
                                 hoveddiagnose = hoveddiagnose,
+                                TidligereSykmeldingMeta(
+                                    status = RegulaStatus.OK,
+                                    userAction = "SENDT",
+                                    merknader = null,
+                                ),
                             )
                         ),
                 )
@@ -779,7 +811,7 @@ class TilbakedateringRulesTest {
         fun `Med begrunnelse, MANUELL`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-31, 0),
+                    perioder = testPeriode(-32, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = "Veldig bra begrunnels!",
                 )
@@ -816,7 +848,7 @@ class TilbakedateringRulesTest {
         fun `Ikke god nok begrunnelse, INVALID`() {
             val payload =
                 testTilbakedateringRulePayload(
-                    perioder = testPeriode(-31, 0),
+                    perioder = testPeriode(-32, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = "Dårlig begrunnels>:(",
                 )

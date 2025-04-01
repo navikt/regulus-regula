@@ -2,9 +2,11 @@ package no.nav.tsm.regulus.regula.testutils
 
 import java.time.LocalDate
 import no.nav.helse.diagnosekoder.Diagnosekoder
+import no.nav.tsm.regulus.regula.RegulaStatus
 import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
+import no.nav.tsm.regulus.regula.payload.TidligereSykmeldingMeta
 
 internal fun testTidligereSykmelding(fom: LocalDate, tom: LocalDate): List<TidligereSykmelding> {
     return listOf(
@@ -12,6 +14,12 @@ internal fun testTidligereSykmelding(fom: LocalDate, tom: LocalDate): List<Tidli
             sykmeldingId = "foo-bar-baz",
             aktivitet = listOf(Aktivitet.IkkeMulig(fom = fom, tom = tom)),
             hoveddiagnose = Diagnose(kode = "X01", system = Diagnosekoder.ICPC2_CODE),
+            meta =
+                TidligereSykmeldingMeta(
+                    status = RegulaStatus.OK,
+                    userAction = "SENDT",
+                    merknader = null,
+                ),
         )
     )
 }
@@ -24,6 +32,12 @@ internal fun testTidligereSykmelding(
             sykmeldingId = "foo-bar-baz-$index",
             aktivitet = listOf(Aktivitet.IkkeMulig(fom = fomTom.first, tom = fomTom.second)),
             hoveddiagnose = Diagnose(kode = "X01", system = Diagnosekoder.ICPC2_CODE),
+            meta =
+                TidligereSykmeldingMeta(
+                    status = RegulaStatus.OK,
+                    userAction = "SENDT",
+                    merknader = null,
+                ),
         )
     }
 }

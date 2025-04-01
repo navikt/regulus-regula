@@ -2,7 +2,9 @@ package no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.extras
 
 import java.time.LocalDate
 import no.nav.tsm.regulus.regula.payload.Aktivitet
+import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
+import no.nav.tsm.regulus.regula.rules.shared.onlyRelevantWithSameDiagnosis
 import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger("Ettersending")
@@ -17,14 +19,15 @@ internal data class Ettersendelse(
 internal fun isEttersending(
     sykmeldingId: String,
     perioder: List<Aktivitet>,
-    harMedisinskVurdering: Boolean,
+    hoveddiagnose: Diagnose?,
     tidligereSykmeldinger: List<TidligereSykmelding>,
 ): Ettersendelse? {
     if (perioder.size > 1) {
         logger.info("Flere perioder i periodelisten returnerer false ${sykmeldingId}")
         return null
     }
-    if (!harMedisinskVurdering) {
+
+    if (hoveddiagnose == null) {
         logger.info("Diagnosekode mangler for ${sykmeldingId}")
         return null
     }
@@ -32,6 +35,7 @@ internal fun isEttersending(
     val periode = perioder.first()
     val tidligerePerioder: List<Pair<Aktivitet, TidligereSykmelding>> =
         tidligereSykmeldinger
+            .onlyRelevantWithSameDiagnosis(hoveddiagnose)
             .map { tidligereSykmelding ->
                 tidligereSykmelding.aktivitet.map { it to tidligereSykmelding }
             }
