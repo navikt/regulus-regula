@@ -27,6 +27,7 @@ internal fun testTidligereSykmelding(fom: LocalDate, tom: LocalDate): List<Tidli
 
 internal fun testTidligereSykmelding(
     dates: List<Pair<LocalDate, LocalDate>>,
+    hoveddiagnose: Diagnose? = Diagnose(kode = "X01", system = Diagnosekoder.ICPC2_CODE),
     status: RegulaStatus = RegulaStatus.OK,
     userAction: String = "SENDT",
     merknader: List<RelevanteMerknader>? = null,
@@ -38,7 +39,7 @@ internal fun testTidligereSykmelding(
                 listOf(
                     TidligereSykmeldingAktivitet.IkkeMulig(fom = fomTom.first, tom = fomTom.second)
                 ),
-            hoveddiagnose = Diagnose(kode = "X01", system = Diagnosekoder.ICPC2_CODE),
+            hoveddiagnose = hoveddiagnose,
             meta =
                 TidligereSykmeldingMeta(
                     status = status,
