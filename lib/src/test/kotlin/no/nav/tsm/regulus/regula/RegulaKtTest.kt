@@ -12,6 +12,7 @@ import no.nav.tsm.regulus.regula.payload.BehandlerGodkjenning
 import no.nav.tsm.regulus.regula.payload.BehandlerKode
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
+import no.nav.tsm.regulus.regula.payload.TidligereSykmeldingMeta
 
 class RegulaKtTest {
 
@@ -57,6 +58,12 @@ class RegulaKtTest {
                                         )
                                     ),
                                 hoveddiagnose = Diagnose(kode = "A01", system = "ICD-10"),
+                                meta =
+                                    TidligereSykmeldingMeta(
+                                        status = RegulaStatus.OK,
+                                        userAction = "SENDT",
+                                        merknader = null,
+                                    ),
                             )
                         ),
                     kontaktPasientBegrunnelseIkkeKontakt = "Pasienten var ikke tilgjengelig",

@@ -2,6 +2,8 @@ package no.nav.tsm.regulus.regula.rules.shared
 
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
+import no.nav.tsm.regulus.regula.RegulaStatus
+import no.nav.tsm.regulus.regula.payload.RelevanteMerknader
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriodeType
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 import no.nav.tsm.regulus.regula.utils.allDaysBetween
@@ -39,19 +41,17 @@ internal fun relevanteDatoer(
     return tidligereSykmeldinger
         .filter { it.aktivitet.latestTom() > earliestFom.minusWeeks(40).minusDays(0) }
         .filter { it.aktivitet.earliestFom() < earliestFom }
-        // TODO: Put this responsibility on the consumer of the lib?
-        // .filter { it.behandlingsutfall.status != RegelStatusDTO.INVALID }
-        // TODO: Put this responsibility on the consumer of the lib?
-        // .filterNot {
-        //     !it.merknader.isNullOrEmpty() &&
-        //         it.merknader.any { merknad ->
-        //             merknad.type == MerknadType.UGYLDIG_TILBAKEDATERING.toString() ||
-        //                 merknad.type ==
-        //                     MerknadType.TILBAKEDATERING_KREVER_FLERE_OPPLYSNINGER.toString()
-        //         }
-        // }
-        // TODO: Put this responsibility on the consumer of the lib?
-        // .filter { it.sykmeldingStatus.statusEvent != "AVBRUTT" }
+        .filter { it.meta.status != RegulaStatus.INVALID }
+        .filter { it.meta.userAction != "AVBRUTT" }
+        .filter {
+            it.meta.merknader.isNullOrEmpty() ||
+                listOf(
+                        RelevanteMerknader.TILBAKEDATERING_KREVER_FLERE_OPPLYSNINGER,
+                        RelevanteMerknader.UGYLDIG_TILBAKEDATERING,
+                    )
+                    .intersect(it.meta.merknader)
+                    .isEmpty()
+        }
         .map { it ->
             it.aktivitet
                 .filter { it.type != SykmeldingPeriodeType.AVVENTENDE }

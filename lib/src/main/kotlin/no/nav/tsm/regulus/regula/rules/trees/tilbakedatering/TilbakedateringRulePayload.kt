@@ -12,6 +12,5 @@ internal data class TilbakedateringRulePayload(
     val aktivitet: List<Aktivitet>,
     val hoveddiagnose: Diagnose?,
     val tidligereSykmeldinger: List<TidligereSykmelding>,
-    // TODO: bedre strukturering?
     val begrunnelseIkkeKontakt: String?,
 ) : BasePayload
