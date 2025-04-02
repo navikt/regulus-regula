@@ -8,6 +8,7 @@ import no.nav.tsm.regulus.regula.dsl.getRulePath
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.executor.runRules
+import no.nav.tsm.regulus.regula.metrics.registerResultMetrics
 import no.nav.tsm.regulus.regula.metrics.registerVersionMetrics
 import no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet.ArbeidsuforhetRulePayload
 import no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet.ArbeidsuforhetRules
@@ -84,7 +85,11 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
             )
         }
 
-    return RegulaResult(status = overallStatus, ruleHits = ruleHits, results = results)
+    val regulaResult = RegulaResult(status = overallStatus, ruleHits = ruleHits, results = results)
+
+    registerResultMetrics(regulaResult)
+
+    return regulaResult
 }
 
 private fun RuleStatus.toRegulaStatus(): RegulaStatus =
