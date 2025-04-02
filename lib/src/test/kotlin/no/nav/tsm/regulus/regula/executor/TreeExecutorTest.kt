@@ -109,6 +109,7 @@ class TreeExecutorTest {
             val result = executor.execute(ExecutionMode.NORMAL)
 
             assertEquals(result.treeResult.status, RuleStatus.INVALID)
+            assertEquals(result.treeResult.juridisk, RuleJuridisk.INGEN)
             assertPath(
                 result.rulePath,
                 listOf(

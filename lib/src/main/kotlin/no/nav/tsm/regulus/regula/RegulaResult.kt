@@ -6,7 +6,11 @@ enum class RegulaStatus {
     INVALID,
 }
 
-data class TreeResult(val outcome: RegulaOutcome?, val rulePath: String)
+data class TreeResult(
+    val rulePath: String,
+    val outcome: RegulaOutcome?,
+    val juridisk: RegulaJuridiskHenvisning?,
+)
 
 data class RegulaResult(
     val status: RegulaStatus,

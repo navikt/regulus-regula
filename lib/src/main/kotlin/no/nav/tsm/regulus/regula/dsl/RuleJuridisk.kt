@@ -1,8 +1,8 @@
 package no.nav.tsm.regulus.regula.dsl
 
+import no.nav.tsm.regulus.regula.Lovverk
+import no.nav.tsm.regulus.regula.RegulaJuridiskHenvisning
 import no.nav.tsm.regulus.regula.juridisk.Juridisk
-import no.nav.tsm.regulus.regula.juridisk.JuridiskHenvisning
-import no.nav.tsm.regulus.regula.juridisk.Lovverk
 import no.nav.tsm.regulus.regula.juridisk.MedJuridisk
 import no.nav.tsm.regulus.regula.juridisk.UtenJuridisk
 
@@ -10,7 +10,7 @@ internal enum class RuleJuridisk(val juridisk: Juridisk) {
     INGEN(UtenJuridisk),
     FOLKETRYGDLOVEN_8_3_1(
         MedJuridisk(
-            JuridiskHenvisning(
+            RegulaJuridiskHenvisning(
                 lovverk = Lovverk.FOLKETRYGDLOVEN,
                 paragraf = "8-3",
                 ledd = 1,
@@ -21,7 +21,7 @@ internal enum class RuleJuridisk(val juridisk: Juridisk) {
     ),
     FOLKETRYGDLOVEN_8_4(
         MedJuridisk(
-            JuridiskHenvisning(
+            RegulaJuridiskHenvisning(
                 lovverk = Lovverk.FOLKETRYGDLOVEN,
                 paragraf = "8-4",
                 ledd = 1,
@@ -32,7 +32,7 @@ internal enum class RuleJuridisk(val juridisk: Juridisk) {
     ),
     FOLKETRYGDLOVEN_8_7(
         MedJuridisk(
-            JuridiskHenvisning(
+            RegulaJuridiskHenvisning(
                 lovverk = Lovverk.FOLKETRYGDLOVEN,
                 paragraf = "8-7",
                 ledd = null,
@@ -43,7 +43,7 @@ internal enum class RuleJuridisk(val juridisk: Juridisk) {
     ),
     FOLKETRYGDLOVEN_8_7_1(
         MedJuridisk(
-            JuridiskHenvisning(
+            RegulaJuridiskHenvisning(
                 lovverk = Lovverk.FOLKETRYGDLOVEN,
                 paragraf = "8-7",
                 ledd = 1,
@@ -54,7 +54,7 @@ internal enum class RuleJuridisk(val juridisk: Juridisk) {
     ),
     FOLKETRYGDLOVEN_8_7_1_1(
         MedJuridisk(
-            JuridiskHenvisning(
+            RegulaJuridiskHenvisning(
                 lovverk = Lovverk.FOLKETRYGDLOVEN,
                 paragraf = "8-7",
                 ledd = 1,
@@ -65,7 +65,7 @@ internal enum class RuleJuridisk(val juridisk: Juridisk) {
     ),
     FOLKETRYGDLOVEN_8_7_2_2(
         MedJuridisk(
-            JuridiskHenvisning(
+            RegulaJuridiskHenvisning(
                 lovverk = Lovverk.FOLKETRYGDLOVEN,
                 paragraf = "8-7",
                 ledd = 2,
@@ -74,4 +74,15 @@ internal enum class RuleJuridisk(val juridisk: Juridisk) {
             )
         )
     ),
+}
+
+internal fun RuleJuridisk.toRegulaJuridisk(): RegulaJuridiskHenvisning? {
+    return when (this) {
+        RuleJuridisk.INGEN -> null
+        else ->
+            when (juridisk) {
+                is MedJuridisk -> juridisk.juridiskHenvisning
+                UtenJuridisk -> null
+            }
+    }
 }

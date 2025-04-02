@@ -1,8 +1,8 @@
-package no.nav.tsm.regulus.regula.juridisk
+package no.nav.tsm.regulus.regula
 
 import java.time.LocalDate
 
-internal data class JuridiskHenvisning(
+data class RegulaJuridiskHenvisning(
     val lovverk: Lovverk,
     val paragraf: String,
     val ledd: Int?,
@@ -10,11 +10,7 @@ internal data class JuridiskHenvisning(
     val bokstav: String?,
 )
 
-internal enum class Lovverk(
-    val navn: String,
-    val kortnavn: String,
-    val lovverksversjon: LocalDate,
-) {
+enum class Lovverk(val navn: String, val kortnavn: String, val lovverksversjon: LocalDate) {
     FOLKETRYGDLOVEN(
         navn = "Lov om folketrygd",
         kortnavn = "Folketrygdloven",

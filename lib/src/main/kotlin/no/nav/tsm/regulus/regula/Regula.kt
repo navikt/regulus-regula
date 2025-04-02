@@ -5,6 +5,7 @@ package no.nav.tsm.regulus.regula
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.getOutcome
 import no.nav.tsm.regulus.regula.dsl.getRulePath
+import no.nav.tsm.regulus.regula.dsl.toRegulaJuridisk
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.executor.runRules
@@ -27,7 +28,12 @@ import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.TilbakedateringRule
 import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRulePayload
 import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRules
 
-/** Apply all the rules to the given sykmelding. */
+/**
+ * Executes the Regula rules based on the provided [RegulaPayload] and [ExecutionMode].
+ *
+ * Please follow the documentation for each proprety in the [RegulaPayload] to understand what data
+ * is required, and where it should come from.
+ */
 fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode): RegulaResult {
     registerVersionMetrics()
 
@@ -83,6 +89,7 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
                         )
                     },
                 rulePath = it.getRulePath(),
+                juridisk = it.treeResult.juridisk.toRegulaJuridisk(),
             )
         }
 

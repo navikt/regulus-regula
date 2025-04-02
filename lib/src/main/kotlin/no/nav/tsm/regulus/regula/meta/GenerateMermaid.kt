@@ -1,9 +1,9 @@
 package no.nav.tsm.regulus.regula.meta
 
+import no.nav.tsm.regulus.regula.RegulaJuridiskHenvisning
 import no.nav.tsm.regulus.regula.dsl.*
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.TreeNode.*
-import no.nav.tsm.regulus.regula.juridisk.JuridiskHenvisning
 import no.nav.tsm.regulus.regula.juridisk.MedJuridisk
 import no.nav.tsm.regulus.regula.juridisk.UtenJuridisk
 import no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet.arbeidsuforhetRuleTree
@@ -34,7 +34,7 @@ fun main() {
         val builder = StringBuilder()
         builder.append("## $idx. $name\n\n") // section headers with added index number
 
-        val juridiskeHenvisninger: List<JuridiskHenvisning> =
+        val juridiskeHenvisninger: List<RegulaJuridiskHenvisning> =
             ruleTree.extractJuridiskHenvisninger().distinctBy { it.paragraf }
 
         require(juridiskeHenvisninger.size <= 1) {
@@ -66,7 +66,7 @@ fun main() {
     }
 }
 
-private fun <Enum> TreeNode<Enum>.extractJuridiskHenvisninger(): List<JuridiskHenvisning> {
+private fun <Enum> TreeNode<Enum>.extractJuridiskHenvisninger(): List<RegulaJuridiskHenvisning> {
     return when (this) {
         is LeafNode -> {
             if (juridisk.juridisk is MedJuridisk) {
@@ -193,7 +193,7 @@ private fun <Enum> TreeNode<Enum>.traverseTree(
     }
 }
 
-private fun JuridiskHenvisning.hyperlenke(): String =
+private fun RegulaJuridiskHenvisning.hyperlenke(): String =
     "https://lovdata.no/nav/folketrygdloven/kap${this.paragraf.split("-").first()}#PARAGRAF_${this.paragraf}"
 
 private fun RuleJuridisk.folkelig(): String {
