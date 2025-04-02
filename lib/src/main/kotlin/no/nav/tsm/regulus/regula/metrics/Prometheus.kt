@@ -7,5 +7,5 @@ internal val libVersionMetric: Gauge =
         .namespace("regulus_regula")
         .name("library_version")
         .help("Current version of the library in apps")
-        .labelNames("pod_name")
+        .labelNames("app_name")
         .register()
