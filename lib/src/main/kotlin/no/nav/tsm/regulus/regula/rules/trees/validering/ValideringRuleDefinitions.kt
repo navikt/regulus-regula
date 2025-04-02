@@ -8,7 +8,8 @@ internal enum class ValideringRule {
     MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39,
     UGYLDIG_ORGNR_LENGDE,
     AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR,
-    BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR;
+    BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR,
+    PAPIRSYKMELDING;
 
     enum class Outcomes(
         override val rule: String,

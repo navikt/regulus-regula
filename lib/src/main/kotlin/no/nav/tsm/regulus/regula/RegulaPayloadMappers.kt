@@ -1,5 +1,6 @@
 package no.nav.tsm.regulus.regula
 
+import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet.ArbeidsuforhetRulePayload
 import no.nav.tsm.regulus.regula.rules.trees.dato.DatoRulePayload
 import no.nav.tsm.regulus.regula.rules.trees.hpr.HprRulePayload
@@ -16,12 +17,13 @@ internal fun RegulaPayload.toLegeSuspensjonRulePayload(): LegeSuspensjonRulePayl
     )
 }
 
-internal fun RegulaPayload.toValideringRulePayload(): ValideringRulePayload {
+internal fun RegulaPayload.toValideringRulePayload(mode: ExecutionMode): ValideringRulePayload {
     return ValideringRulePayload(
         sykmeldingId = sykmeldingId,
         aktivitet = aktivitet,
         utdypendeOpplysninger = utdypendeOpplysninger,
         rulesetVersion = if (meta is RegulaMeta.LegacyMeta) meta.rulesetVersion else "3",
+        papirsykmelding = mode == ExecutionMode.PAPIR,
         legekontorOrgnr = behandler.legekontorOrgnr,
         behandlerFnr = behandler.fnr,
         avsenderFnr = avsender.fnr,

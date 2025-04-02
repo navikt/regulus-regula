@@ -27,6 +27,7 @@ class ValideringRulesTest {
                         avsenderFnr = "01912391932",
                         pasientIdent = pasientFnr,
                         utdypendeOpplysninger = emptyMap(),
+                        papirsykmelding = false,
                     )
                 )
                 .execute(ExecutionMode.NORMAL)
@@ -35,9 +36,10 @@ class ValideringRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                ValideringRule.UGYLDIG_ORGNR_LENGDE to false,
+                ValideringRule.PAPIRSYKMELDING to false,
                 ValideringRule.UGYLDIG_REGELSETTVERSJON to false,
                 ValideringRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
-                ValideringRule.UGYLDIG_ORGNR_LENGDE to false,
                 ValideringRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR to false,
                 ValideringRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR to false,
             ),
@@ -47,6 +49,7 @@ class ValideringRulesTest {
             result.ruleInputs,
             mapOf(
                 "rulesetVersion" to "2",
+                "papirsykmelding" to false,
                 "sykmeldingPerioder" to emptyList<Any>(),
                 "utdypendeOpplysninger" to emptyMap<String, Any>(),
                 "pasientIdent" to pasientFnr,
@@ -72,14 +75,29 @@ class ValideringRulesTest {
                         avsenderFnr = "01912391932",
                         pasientIdent = "07091912345",
                         utdypendeOpplysninger = emptyMap(),
+                        papirsykmelding = false,
                     )
                 )
                 .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
-        assertPath(result.rulePath, listOf(ValideringRule.UGYLDIG_REGELSETTVERSJON to true))
+        assertPath(
+            result.rulePath,
+            listOf(
+                ValideringRule.UGYLDIG_ORGNR_LENGDE to false,
+                ValideringRule.PAPIRSYKMELDING to false,
+                ValideringRule.UGYLDIG_REGELSETTVERSJON to true,
+            ),
+        )
 
-        assertEquals(result.ruleInputs, mapOf("rulesetVersion" to "69"))
+        assertEquals(
+            result.ruleInputs,
+            mapOf(
+                "rulesetVersion" to "69",
+                "papirsykmelding" to false,
+                "legekontorOrgnr" to "123123123",
+            ),
+        )
 
         assertEquals(
             result.treeResult.getOutcome(),
@@ -102,6 +120,7 @@ class ValideringRulesTest {
                         avsenderFnr = "01912391932",
                         pasientIdent = "07091912345",
                         utdypendeOpplysninger = emptyMap(),
+                        papirsykmelding = false,
                     )
                 )
                 .execute(ExecutionMode.NORMAL)
@@ -110,6 +129,8 @@ class ValideringRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                ValideringRule.UGYLDIG_ORGNR_LENGDE to false,
+                ValideringRule.PAPIRSYKMELDING to false,
                 ValideringRule.UGYLDIG_REGELSETTVERSJON to false,
                 ValideringRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to true,
             ),
@@ -118,6 +139,8 @@ class ValideringRulesTest {
             result.ruleInputs,
             mapOf(
                 "rulesetVersion" to "2",
+                "legekontorOrgnr" to "123123123",
+                "papirsykmelding" to false,
                 "sykmeldingPerioder" to perioderMedFomForDritlengesiden,
                 "utdypendeOpplysninger" to emptyMap<String, Any>(),
             ),
@@ -145,29 +168,15 @@ class ValideringRulesTest {
                         avsenderFnr = "2",
                         pasientIdent = pasientFnr,
                         utdypendeOpplysninger = emptyMap(),
+                        papirsykmelding = false,
                     )
                 )
                 .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
-        assertPath(
-            result.rulePath,
-            listOf(
-                ValideringRule.UGYLDIG_REGELSETTVERSJON to false,
-                ValideringRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
-                ValideringRule.UGYLDIG_ORGNR_LENGDE to true,
-            ),
-        )
+        assertPath(result.rulePath, listOf(ValideringRule.UGYLDIG_ORGNR_LENGDE to true))
 
-        assertEquals(
-            result.ruleInputs,
-            mapOf(
-                "rulesetVersion" to "2",
-                "sykmeldingPerioder" to emptyList<Any>(),
-                "utdypendeOpplysninger" to emptyMap<String, Any>(),
-                "legekontorOrgnr" to "1232344",
-            ),
-        )
+        assertEquals(result.ruleInputs, mapOf("legekontorOrgnr" to "1232344"))
 
         assertEquals(result.treeResult.getOutcome(), ValideringRule.Outcomes.UGYLDIG_ORGNR_LENGDE)
     }
@@ -187,6 +196,7 @@ class ValideringRulesTest {
                         avsenderFnr = pasientFnr,
                         pasientIdent = pasientFnr,
                         utdypendeOpplysninger = emptyMap(),
+                        papirsykmelding = false,
                     )
                 )
                 .execute(ExecutionMode.NORMAL)
@@ -195,9 +205,10 @@ class ValideringRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                ValideringRule.UGYLDIG_ORGNR_LENGDE to false,
+                ValideringRule.PAPIRSYKMELDING to false,
                 ValideringRule.UGYLDIG_REGELSETTVERSJON to false,
                 ValideringRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
-                ValideringRule.UGYLDIG_ORGNR_LENGDE to false,
                 ValideringRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR to true,
             ),
         )
@@ -206,6 +217,7 @@ class ValideringRulesTest {
             result.ruleInputs,
             mapOf(
                 "rulesetVersion" to "3",
+                "papirsykmelding" to false,
                 "sykmeldingPerioder" to emptyList<Any>(),
                 "utdypendeOpplysninger" to emptyMap<String, Any>(),
                 "legekontorOrgnr" to "",
@@ -235,6 +247,7 @@ class ValideringRulesTest {
                         pasientIdent = pasientFnr,
                         avsenderFnr = "08201023912",
                         utdypendeOpplysninger = emptyMap(),
+                        papirsykmelding = false,
                     )
                 )
                 .execute(ExecutionMode.NORMAL)
@@ -243,9 +256,10 @@ class ValideringRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                ValideringRule.UGYLDIG_ORGNR_LENGDE to false,
+                ValideringRule.PAPIRSYKMELDING to false,
                 ValideringRule.UGYLDIG_REGELSETTVERSJON to false,
                 ValideringRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
-                ValideringRule.UGYLDIG_ORGNR_LENGDE to false,
                 ValideringRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR to false,
                 ValideringRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR to true,
             ),
@@ -255,6 +269,7 @@ class ValideringRulesTest {
             result.ruleInputs,
             mapOf(
                 "rulesetVersion" to "2",
+                "papirsykmelding" to false,
                 "sykmeldingPerioder" to emptyList<Any>(),
                 "utdypendeOpplysninger" to emptyMap<String, Any>(),
                 "legekontorOrgnr" to "",

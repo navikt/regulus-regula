@@ -32,7 +32,7 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
             sequence =
                 createSequence(
                     legeSuspensjonRulePayload = ruleExecutionPayload.toLegeSuspensjonRulePayload(),
-                    valideringRulePayload = ruleExecutionPayload.toValideringRulePayload(),
+                    valideringRulePayload = ruleExecutionPayload.toValideringRulePayload(mode),
                     periodeRulePayload = ruleExecutionPayload.toPeriodeRulePayload(),
                     hprRulePayload = ruleExecutionPayload.toHprRulePayload(),
                     arbeidsuforhetRulePayload = ruleExecutionPayload.toArbeidsuforhetRulePayload(),

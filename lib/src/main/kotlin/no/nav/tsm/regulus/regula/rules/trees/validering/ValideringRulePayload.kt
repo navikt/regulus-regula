@@ -6,6 +6,7 @@ import no.nav.tsm.regulus.regula.payload.Aktivitet
 internal data class ValideringRulePayload(
     override val sykmeldingId: String,
     val rulesetVersion: String?,
+    val papirsykmelding: Boolean,
     val aktivitet: List<Aktivitet>,
     val legekontorOrgnr: String?,
     val behandlerFnr: String,

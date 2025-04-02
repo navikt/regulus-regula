@@ -18,6 +18,7 @@ private fun getValideringRule(rules: ValideringRule): ValideringRuleFn =
         ValideringRule.UGYLDIG_ORGNR_LENGDE -> Rules.ugyldingOrgNummerLengde
         ValideringRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR -> Rules.avsenderSammeSomPasient
         ValideringRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR -> Rules.behandlerSammeSomPasient
+        ValideringRule.PAPIRSYKMELDING -> Rules.papirsykmelding
     }
 
 private typealias ValideringRuleFn = (payload: ValideringRulePayload) -> RuleOutput<ValideringRule>
@@ -99,6 +100,16 @@ private val Rules =
                     mapOf("behandlerFnr" to behandlerFnr, "pasientIdent" to pasientFodselsNummer),
                 rule = ValideringRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR,
                 ruleResult = behandlerSammeSomPasient,
+            )
+        }
+
+        val papirsykmelding: ValideringRuleFn = { payload ->
+            val papirsykmelding = payload.papirsykmelding
+
+            RuleOutput(
+                ruleInputs = mapOf("papirsykmelding" to papirsykmelding),
+                rule = ValideringRule.PAPIRSYKMELDING,
+                ruleResult = papirsykmelding,
             )
         }
     }
