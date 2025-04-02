@@ -57,7 +57,7 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
             }
             .toRegulaStatus()
 
-    val ruleHits: List<RegulaOutcome> =
+    val outcome: RegulaOutcome? =
         executedChain
             .mapNotNull { it.treeResult.getOutcome() }
             .map {
@@ -68,6 +68,7 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
                     messageForUser = it.messageForUser,
                 )
             }
+            .firstOrNull()
 
     val results: List<TreeResult> =
         executedChain.map {
@@ -85,7 +86,7 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
             )
         }
 
-    val regulaResult = RegulaResult(status = overallStatus, ruleHits = ruleHits, results = results)
+    val regulaResult = RegulaResult(status = overallStatus, outcome = outcome, results = results)
 
     registerResultMetrics(regulaResult)
 

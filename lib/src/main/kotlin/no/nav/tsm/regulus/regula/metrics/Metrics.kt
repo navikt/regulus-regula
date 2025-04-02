@@ -10,7 +10,7 @@ internal fun registerVersionMetrics() {
 
 internal fun registerResultMetrics(regulaResult: RegulaResult) {
     ruleNodeRuleHitCounter
-        .labels(regulaResult.status.name, regulaResult.ruleHits.firstOrNull()?.rule ?: "OK")
+        .labels(regulaResult.status.name, regulaResult.outcome?.rule ?: "OK")
         .inc()
 
     regulaResult.results.forEach { ruleNodeRulePathCounter.labels(it.rulePath).inc() }

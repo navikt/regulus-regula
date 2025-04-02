@@ -4,6 +4,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.payload.Aktivitet
@@ -104,7 +105,7 @@ class RegulaKtTest {
         // All 8 chains
         assertEquals(result.results.size, 8)
         assertEquals(result.status, RegulaStatus.OK)
-        assertEquals(result.ruleHits.size, 0)
+        assertNull(result.outcome)
     }
 
     @Test
@@ -162,6 +163,6 @@ class RegulaKtTest {
         // All 8 chains
         assertEquals(result.results.size, 8)
         assertEquals(result.status, RegulaStatus.OK)
-        assertEquals(result.ruleHits.size, 0)
+        assertNull(result.outcome)
     }
 }

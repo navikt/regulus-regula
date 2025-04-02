@@ -10,8 +10,7 @@ data class TreeResult(val outcome: RegulaOutcome?, val rulePath: String)
 
 data class RegulaResult(
     val status: RegulaStatus,
-    // TODO: Can this ever be anything else than one?
-    val ruleHits: List<RegulaOutcome>,
+    val outcome: RegulaOutcome?,
     val results: List<TreeResult>,
 )
 
