@@ -61,7 +61,7 @@ internal enum class ValideringRule {
             messageForSender =
                 "Sykmeldingen kan ikke rettes." +
                     " Pasienten har fått beskjed, den ble avvist grunnet følgende:" +
-                    "no.nav.tsm.regulus.regula.trees.hpr.Behandler fnr er det samme som pasient fnr",
+                    "Behandler fnr er det samme som pasient fnr",
             messageForUser = "Den som er behandler av sykmeldingen er også pasient.",
         ),
     }
