@@ -4,8 +4,6 @@ import no.nav.tsm.regulus.regula.RegulaJuridiskHenvisning
 import no.nav.tsm.regulus.regula.dsl.*
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.TreeNode.*
-import no.nav.tsm.regulus.regula.juridisk.MedJuridisk
-import no.nav.tsm.regulus.regula.juridisk.UtenJuridisk
 import no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet.arbeidsuforhetRuleTree
 import no.nav.tsm.regulus.regula.rules.trees.dato.datoRuleTree
 import no.nav.tsm.regulus.regula.rules.trees.hpr.hprRuleTree
@@ -69,8 +67,8 @@ fun main() {
 private fun <Enum> TreeNode<Enum>.extractJuridiskHenvisninger(): List<RegulaJuridiskHenvisning> {
     return when (this) {
         is LeafNode -> {
-            if (juridisk.juridisk is MedJuridisk) {
-                listOf(juridisk.juridisk.juridiskHenvisning)
+            if (juridisk.juridiskHenvisning != null) {
+                listOf(juridisk.juridiskHenvisning)
             } else {
                 emptyList()
             }
@@ -111,8 +109,8 @@ private fun <Enum> TreeNode<Enum>.traverseTree(
                             )
                         }\n"
                     )
-                    if (yesNode.juridisk.juridisk is MedJuridisk && renderJuridiskHenvisning) {
-                        val henvisning = yesNode.juridisk.juridisk.juridiskHenvisning
+                    if (yesNode.juridisk.juridiskHenvisning != null && renderJuridiskHenvisning) {
+                        val henvisning = yesNode.juridisk.juridiskHenvisning
                         builder.append(
                             "    click ${childKey} \"${henvisning.hyperlenke()}\" \"Gå til lovdata\"\n"
                         )
@@ -121,8 +119,8 @@ private fun <Enum> TreeNode<Enum>.traverseTree(
                         "    $thisNodeKey($rule) -->|\"Ja (papir)\"| ${childKey}_papir(${RuleStatus.MANUAL_PROCESSING.norsk()}${yesNode.juridisk.folkelig()})${getStyle(
                             RuleStatus.MANUAL_PROCESSING)}\n"
                     )
-                    if (yesNode.juridisk.juridisk is MedJuridisk && renderJuridiskHenvisning) {
-                        val henvisning = yesNode.juridisk.juridisk.juridiskHenvisning
+                    if (yesNode.juridisk.juridiskHenvisning != null && renderJuridiskHenvisning) {
+                        val henvisning = yesNode.juridisk.juridiskHenvisning
                         builder.append(
                             "    click ${childKey}_papir \"${henvisning.hyperlenke()}\" \"Gå til lovdata\"\n"
                         )
@@ -135,8 +133,8 @@ private fun <Enum> TreeNode<Enum>.traverseTree(
                             )
                         }\n"
                     )
-                    if (yesNode.juridisk.juridisk is MedJuridisk && renderJuridiskHenvisning) {
-                        val henvisning = yesNode.juridisk.juridisk.juridiskHenvisning
+                    if (yesNode.juridisk.juridiskHenvisning != null && renderJuridiskHenvisning) {
+                        val henvisning = yesNode.juridisk.juridiskHenvisning
                         builder.append(
                             "    click ${childKey} \"${henvisning.hyperlenke()}\" \"Gå til lovdata\"\n"
                         )
@@ -176,8 +174,8 @@ private fun <Enum> TreeNode<Enum>.traverseTree(
                             )
                         }\n"
                     )
-                    if (noNode.juridisk.juridisk is MedJuridisk && renderJuridiskHenvisning) {
-                        val henvisning = noNode.juridisk.juridisk.juridiskHenvisning
+                    if (noNode.juridisk.juridiskHenvisning != null && renderJuridiskHenvisning) {
+                        val henvisning = noNode.juridisk.juridiskHenvisning
                         builder.append(
                             "    click ${childKey} \"${henvisning.hyperlenke()}\" \"Gå til lovdata\"\n"
                         )
@@ -199,10 +197,10 @@ private fun RegulaJuridiskHenvisning.hyperlenke(): String =
 private fun RuleJuridisk.folkelig(): String {
     if (!renderJuridiskHenvisning) return ""
 
-    return when (this.juridisk) {
-        is UtenJuridisk -> ""
-        is MedJuridisk -> {
-            val it = this.juridisk.juridiskHenvisning
+    return when (this.juridiskHenvisning) {
+        null -> ""
+        else -> {
+            val it = this.juridiskHenvisning
             buildString {
                 append("\n")
                 append(it.lovverk.kortnavn)
