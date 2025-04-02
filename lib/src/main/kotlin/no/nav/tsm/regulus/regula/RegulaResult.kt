@@ -7,7 +7,9 @@ enum class RegulaStatus {
 }
 
 data class TreeResult(
+    val status: RegulaStatus,
     val rulePath: String,
+    val ruleInputs: Map<String, Any>,
     val outcome: RegulaOutcome?,
     val juridisk: RegulaJuridiskHenvisning?,
 )

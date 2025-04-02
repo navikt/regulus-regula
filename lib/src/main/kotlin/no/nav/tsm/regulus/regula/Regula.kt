@@ -79,6 +79,7 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
     val results: List<TreeResult> =
         executedChain.map {
             TreeResult(
+                status = it.treeResult.status.toRegulaStatus(),
                 outcome =
                     it.treeResult.getOutcome()?.let { outcome ->
                         RegulaOutcome(
@@ -89,6 +90,7 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
                         )
                     },
                 rulePath = it.getRulePath(),
+                ruleInputs = it.ruleInputs,
                 juridisk = it.treeResult.juridisk.toRegulaJuridisk(),
             )
         }
