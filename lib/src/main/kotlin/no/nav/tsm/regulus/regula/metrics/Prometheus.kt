@@ -9,8 +9,7 @@ internal val libVersionMetric: Gauge =
     Gauge.build()
         .namespace(namespace)
         .name("library_version")
-        .help("Current version of the library in apps")
-        .labelNames("app_name")
+        .help("Current version of the library")
         .register()
 
 val ruleNodeRuleHitCounter: Counter =
