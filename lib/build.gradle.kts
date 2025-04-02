@@ -29,10 +29,33 @@ java {
 }
 
 tasks.withType<Jar>().configureEach {
-    manifest {
-        attributes["Implementation-Version"] = file("version").readText().trim()
-    }
+    manifest { attributes["Implementation-Version"] = file("version").readText().trim() }
 }
+
+val generateVersionFile =
+    tasks.register("generateRegulaVersion") {
+        val version = file("version").readText().trim()
+        val outputDir = layout.buildDirectory.dir("generated/regula")
+        outputs.dir(outputDir)
+
+        doLast {
+            val file = outputDir.get().file("RegulaVersion.kt").asFile
+            file.parentFile.mkdirs()
+            file.writeText(
+                """
+            package no.nav.tsm.regulus.regula.metrics
+
+            internal object RegulaVersion {
+                const val VERSION = "$version"
+            }
+            
+            """
+                    .trimIndent()
+            )
+        }
+    }
+
+sourceSets["main"].kotlin.srcDir(generateVersionFile.map { it.outputs.files })
 
 publishing {
     publications {
@@ -125,6 +148,7 @@ tasks.register<JavaExec>("generateMermaidFull") {
     }
 }
 
+tasks.named("sourcesJar") { dependsOn("generateRegulaVersion") }
 tasks.named("build") {
     dependsOn("lintTrees")
     dependsOn("generateMermaid")
