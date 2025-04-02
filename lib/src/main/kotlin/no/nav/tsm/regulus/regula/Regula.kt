@@ -8,6 +8,7 @@ import no.nav.tsm.regulus.regula.dsl.getRulePath
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.executor.runRules
+import no.nav.tsm.regulus.regula.metrics.registerVersionMetrics
 import no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet.ArbeidsuforhetRulePayload
 import no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet.ArbeidsuforhetRules
 import no.nav.tsm.regulus.regula.rules.trees.dato.DatoRulePayload
@@ -27,6 +28,8 @@ import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRules
 
 /** Apply all the rules to the given sykmelding. */
 fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode): RegulaResult {
+    registerVersionMetrics()
+
     val executedChain =
         runRules(
             sequence =

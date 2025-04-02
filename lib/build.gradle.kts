@@ -20,11 +20,18 @@ dependencies {
 
     api(libs.diagnosekoder)
     api(libs.slf4j)
+    api(libs.prometheus)
 }
 
 java {
     toolchain { languageVersion = JavaLanguageVersion.of(21) }
     withSourcesJar()
+}
+
+tasks.withType<Jar>().configureEach {
+    manifest {
+        attributes["Implementation-Version"] = file("version").readText().trim()
+    }
 }
 
 publishing {
