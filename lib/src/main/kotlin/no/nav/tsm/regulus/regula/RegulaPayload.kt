@@ -54,17 +54,21 @@ sealed class RegulaMeta {
     data class Meta(val sendtTidspunkt: LocalDateTime) : RegulaMeta()
 }
 
-data class RegulaBehandler(
-    /**
-     * Er behandleren suspendert i btsys? Denne verdien SKAL komme rett fra btsys fra konsumerende
-     * applikasjon.
-     */
-    val suspendert: Boolean,
-    /**
-     * Behandlerens autorisasjoner fra HPR-registeret. Disse verdiene skal være ferske og hentes fra
-     * helsenettproxy fra konsumerende applikasjon.
-     */
-    val godkjenninger: List<BehandlerGodkjenning>,
-    val legekontorOrgnr: String?,
-    val fnr: String,
-)
+sealed class RegulaBehandler(open val fnr: String) {
+    data class Finnes(
+        /**
+         * Er behandleren suspendert i btsys? Denne verdien SKAL komme rett fra btsys fra
+         * konsumerende applikasjon.
+         */
+        val suspendert: Boolean,
+        /**
+         * Behandlerens autorisasjoner fra HPR-registeret. Disse verdiene skal være ferske og hentes
+         * fra helsenettproxy fra konsumerende applikasjon.
+         */
+        val godkjenninger: List<BehandlerGodkjenning>,
+        val legekontorOrgnr: String?,
+        override val fnr: String,
+    ) : RegulaBehandler(fnr)
+
+    data class FinnesIkke(override val fnr: String) : RegulaBehandler(fnr)
+}

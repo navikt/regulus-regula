@@ -81,7 +81,7 @@ class RegulaKtTest {
                             rulesetVersion = "2",
                         ),
                     behandler =
-                        RegulaBehandler(
+                        RegulaBehandler.Finnes(
                             suspendert = false,
                             godkjenninger =
                                 listOf(
@@ -139,7 +139,7 @@ class RegulaKtTest {
                             fodselsdato = LocalDate.now().minusYears(30),
                         ),
                     behandler =
-                        RegulaBehandler(
+                        RegulaBehandler.Finnes(
                             suspendert = false,
                             godkjenninger =
                                 listOf(

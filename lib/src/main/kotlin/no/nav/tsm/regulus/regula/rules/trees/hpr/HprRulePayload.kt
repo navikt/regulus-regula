@@ -8,7 +8,7 @@ import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 
 internal data class HprRulePayload(
     override val sykmeldingId: String,
-    val behandlerGodkjenninger: List<BehandlerGodkjenning>,
+    val behandlerGodkjenninger: List<BehandlerGodkjenning>?,
     val aktivitet: List<Aktivitet>,
     val tidligereSykmeldinger: List<TidligereSykmelding>,
     val signaturdato: LocalDateTime,

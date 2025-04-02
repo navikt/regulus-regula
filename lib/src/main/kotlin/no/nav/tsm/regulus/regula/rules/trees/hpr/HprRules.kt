@@ -18,6 +18,7 @@ internal class HprRules(hprRulePayload: HprRulePayload) :
 
 private fun getHprRule(rules: HprRule): HprRuleFn =
     when (rules) {
+        HprRule.BEHANDLER_FINNES_I_HPR -> Rules.behandlerFinnesIHPR
         HprRule.BEHANDLER_GYLIDG_I_HPR -> Rules.behanderGyldigHPR
         HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR -> Rules.behandlerHarAutorisasjon
         HprRule.BEHANDLER_ER_LEGE_I_HPR -> Rules.behandlerErLege
@@ -34,8 +35,18 @@ private typealias HprRuleFn = (payload: HprRulePayload) -> RuleOutput<HprRule>
 
 private val Rules =
     object {
+        val behandlerFinnesIHPR: HprRuleFn = { payload ->
+            val harGodkjenninger = payload.behandlerGodkjenninger != null
+
+            RuleOutput(
+                rule = HprRule.BEHANDLER_FINNES_I_HPR,
+                ruleInputs = mapOf("harGodkjenninger" to harGodkjenninger),
+                ruleResult = harGodkjenninger,
+            )
+        }
+
         val behanderGyldigHPR: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandlerGodkjenninger
+            val behandlerGodkjenninger = payload.behandlerGodkjenninger ?: emptyList()
 
             val aktivAutorisasjon =
                 behandlerGodkjenninger.any {
@@ -50,7 +61,7 @@ private val Rules =
         }
 
         val behandlerHarAutorisasjon: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandlerGodkjenninger
+            val behandlerGodkjenninger = payload.behandlerGodkjenninger ?: emptyList()
 
             val gyldigeGodkjenninger =
                 behandlerGodkjenninger.any {
@@ -69,7 +80,7 @@ private val Rules =
         }
 
         val behandlerErLege: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandlerGodkjenninger
+            val behandlerGodkjenninger = payload.behandlerGodkjenninger ?: emptyList()
 
             val behandlerErLege =
                 sjekkBehandler(behandlerGodkjenninger, HelsepersonellKategori.LEGE)
@@ -82,7 +93,7 @@ private val Rules =
         }
 
         val behandlerErTannlege: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandlerGodkjenninger
+            val behandlerGodkjenninger = payload.behandlerGodkjenninger ?: emptyList()
 
             val behandlerErTannlege =
                 sjekkBehandler(behandlerGodkjenninger, HelsepersonellKategori.TANNLEGE)
@@ -95,7 +106,7 @@ private val Rules =
         }
 
         val behandlerErManuellterapeut: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandlerGodkjenninger
+            val behandlerGodkjenninger = payload.behandlerGodkjenninger ?: emptyList()
 
             val behandlerErManuellterapeut =
                 sjekkBehandler(behandlerGodkjenninger, HelsepersonellKategori.MANUELLTERAPEUT)
@@ -108,7 +119,7 @@ private val Rules =
         }
 
         val behandlerErFTMedTilligskompetanseSykmelding: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandlerGodkjenninger
+            val behandlerGodkjenninger = payload.behandlerGodkjenninger ?: emptyList()
             val genereringsTidspunkt = payload.signaturdato
 
             val erFtMedTilleggskompetanse =
@@ -132,7 +143,7 @@ private val Rules =
         }
 
         val behandlerErKIMedTilligskompetanseSykmelding: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandlerGodkjenninger
+            val behandlerGodkjenninger = payload.behandlerGodkjenninger ?: emptyList()
             val genereringsTidspunkt = payload.signaturdato
 
             val erKIMedTilleggskompetanse =
@@ -154,7 +165,7 @@ private val Rules =
         val sykefravarOver12Uker: HprRuleFn = { payload ->
             val forsteFomDato = payload.aktivitet.earliestFom()
             val sisteTomDato = payload.aktivitet.latestTom()
-            val behandlerGodkjenninger = payload.behandlerGodkjenninger
+            val behandlerGodkjenninger = payload.behandlerGodkjenninger ?: emptyList()
             val startdato =
                 getStartdatoFromTidligereSykmeldinger(forsteFomDato, payload.tidligereSykmeldinger)
 

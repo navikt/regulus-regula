@@ -19,7 +19,7 @@ import no.nav.tsm.regulus.regula.testutils.testTidligereSykmelding
 
 class HprRulesTest {
     private fun createHprRulePayload(
-        behandlerGodkjenninger: List<BehandlerGodkjenning>,
+        behandlerGodkjenninger: List<BehandlerGodkjenning>?,
         perioder: List<Aktivitet> = emptyList(),
         tidligereSykmeldinger: List<TidligereSykmelding> = emptyList(),
         signaturdato: LocalDateTime = LocalDateTime.now(),
@@ -33,13 +33,30 @@ class HprRulesTest {
         )
 
     @Test
+    fun `finnes ikke i HPR, Status INVALID`() {
+        val result =
+            HprRules(createHprRulePayload(behandlerGodkjenninger = null))
+                .execute(ExecutionMode.NORMAL)
+
+        assertEquals(RuleStatus.INVALID, result.treeResult.status)
+        assertPath(result.rulePath, listOf(HprRule.BEHANDLER_FINNES_I_HPR to false))
+        assertEquals(mapOf("harGodkjenninger" to false), result.ruleInputs)
+    }
+
+    @Test
     fun `har ikke aktiv autorisasjon, Status INVALID`() {
         val behandler = testBehandlerGodkjenninger(BehandlerScenarios.INAKTIV_LEGE)
         val result = HprRules(createHprRulePayload(behandler)).execute(ExecutionMode.NORMAL)
 
         assertEquals(RuleStatus.INVALID, result.treeResult.status)
-        assertPath(result.rulePath, listOf(HprRule.BEHANDLER_GYLIDG_I_HPR to false))
-        assertEquals(mapOf("behandlerGodkjenninger" to behandler), result.ruleInputs)
+        assertPath(
+            result.rulePath,
+            listOf(HprRule.BEHANDLER_FINNES_I_HPR to true, HprRule.BEHANDLER_GYLIDG_I_HPR to false),
+        )
+        assertEquals(
+            mapOf("harGodkjenninger" to true, "behandlerGodkjenninger" to behandler),
+            result.ruleInputs,
+        )
     }
 
     @Test
@@ -51,11 +68,15 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to false,
             ),
         )
-        assertEquals(mapOf("behandlerGodkjenninger" to behandler), result.ruleInputs)
+        assertEquals(
+            mapOf("harGodkjenninger" to true, "behandlerGodkjenninger" to behandler),
+            result.ruleInputs,
+        )
     }
 
     @Test
@@ -78,12 +99,16 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to true,
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to true,
             ),
         )
-        assertEquals(mapOf("behandlerGodkjenninger" to behandler), result.ruleInputs)
+        assertEquals(
+            mapOf("harGodkjenninger" to true, "behandlerGodkjenninger" to behandler),
+            result.ruleInputs,
+        )
     }
 
     @Test
@@ -106,6 +131,7 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to true,
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
@@ -116,6 +142,7 @@ class HprRulesTest {
         )
         assertEquals(
             mapOf(
+                "harGodkjenninger" to true,
                 "behandlerGodkjenninger" to behandler,
                 "fom" to perioder.first().fom,
                 "tom" to perioder.first().tom,
@@ -145,13 +172,17 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to true,
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_TANNLEGE_I_HPR to true,
             ),
         )
-        assertEquals(mapOf("behandlerGodkjenninger" to behandler), result.ruleInputs)
+        assertEquals(
+            mapOf("harGodkjenninger" to true, "behandlerGodkjenninger" to behandler),
+            result.ruleInputs,
+        )
     }
 
     @Test
@@ -179,6 +210,7 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to true,
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
@@ -189,6 +221,7 @@ class HprRulesTest {
         )
         assertEquals(
             mapOf(
+                "harGodkjenninger" to true,
                 "behandlerGodkjenninger" to behandler,
                 "fom" to perioder.first().fom,
                 "tom" to perioder.first().tom,
@@ -218,6 +251,7 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to true,
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
@@ -228,7 +262,11 @@ class HprRulesTest {
             ),
         )
         assertEquals(
-            mapOf("behandlerGodkjenninger" to behandler, "genereringsTidspunkt" to signaturdato),
+            mapOf(
+                "harGodkjenninger" to true,
+                "behandlerGodkjenninger" to behandler,
+                "genereringsTidspunkt" to signaturdato,
+            ),
             result.ruleInputs,
         )
     }
@@ -256,6 +294,7 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to true,
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
@@ -295,6 +334,7 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to true,
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
@@ -306,6 +346,7 @@ class HprRulesTest {
         )
         assertEquals(
             mapOf(
+                "harGodkjenninger" to true,
                 "behandlerGodkjenninger" to behandler,
                 "genereringsTidspunkt" to signaturdato,
                 "fom" to perioder.first().fom,
@@ -336,6 +377,7 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to true,
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
@@ -346,7 +388,11 @@ class HprRulesTest {
             ),
         )
         assertEquals(
-            mapOf("behandlerGodkjenninger" to behandler, "genereringsTidspunkt" to signaturdato),
+            mapOf(
+                "harGodkjenninger" to true,
+                "behandlerGodkjenninger" to behandler,
+                "genereringsTidspunkt" to signaturdato,
+            ),
             result.ruleInputs,
         )
     }
@@ -372,6 +418,7 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to true,
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
@@ -409,6 +456,7 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to true,
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
@@ -421,6 +469,7 @@ class HprRulesTest {
         )
         assertEquals(
             mapOf(
+                "harGodkjenninger" to true,
                 "behandlerGodkjenninger" to behandler,
                 "genereringsTidspunkt" to signaturdato,
                 "fom" to perioder.first().fom,
@@ -472,6 +521,7 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to true,
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
@@ -521,6 +571,7 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to true,
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
@@ -532,6 +583,7 @@ class HprRulesTest {
         )
         assertEquals(
             mapOf(
+                "harGodkjenninger" to true,
                 "behandlerGodkjenninger" to behandlerWithCustomGyldig,
                 "genereringsTidspunkt" to signaturdato,
             ),
@@ -580,6 +632,7 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to true,
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
@@ -591,6 +644,7 @@ class HprRulesTest {
         )
         assertEquals(
             mapOf(
+                "harGodkjenninger" to true,
                 "behandlerGodkjenninger" to behandlerWithCustomGyldig,
                 "genereringsTidspunkt" to signaturdato,
             ),
@@ -639,6 +693,7 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to true,
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
@@ -673,6 +728,7 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to true,
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
@@ -683,7 +739,11 @@ class HprRulesTest {
             ),
         )
         assertEquals(
-            mapOf("behandlerGodkjenninger" to behandler, "genereringsTidspunkt" to signaturdato),
+            mapOf(
+                "harGodkjenninger" to true,
+                "behandlerGodkjenninger" to behandler,
+                "genereringsTidspunkt" to signaturdato,
+            ),
             result.ruleInputs,
         )
     }
@@ -711,6 +771,7 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to true,
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
@@ -721,7 +782,11 @@ class HprRulesTest {
             ),
         )
         assertEquals(
-            mapOf("behandlerGodkjenninger" to behandler, "genereringsTidspunkt" to signaturdato),
+            mapOf(
+                "harGodkjenninger" to true,
+                "behandlerGodkjenninger" to behandler,
+                "genereringsTidspunkt" to signaturdato,
+            ),
             result.ruleInputs,
         )
     }
@@ -747,6 +812,7 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to true,
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
@@ -783,6 +849,7 @@ class HprRulesTest {
         assertPath(
             result.rulePath,
             listOf(
+                HprRule.BEHANDLER_FINNES_I_HPR to true,
                 HprRule.BEHANDLER_GYLIDG_I_HPR to true,
                 HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR to true,
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,

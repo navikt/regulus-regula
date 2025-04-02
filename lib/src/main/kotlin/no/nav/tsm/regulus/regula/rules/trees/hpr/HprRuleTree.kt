@@ -7,21 +7,28 @@ import no.nav.tsm.regulus.regula.dsl.TreeNode.RuleNode
 import no.nav.tsm.regulus.regula.dsl.tree
 
 internal val hprRuleTree =
-    tree(HprRule.BEHANDLER_GYLIDG_I_HPR) {
-        no(INVALID(HprRule.Outcomes.BEHANDLER_IKKE_GYLDIG_I_HPR))
-        yes(HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR) {
-            no(INVALID(HprRule.Outcomes.BEHANDLER_MANGLER_AUTORISASJON_I_HPR))
-            yes(HprRule.BEHANDLER_ER_LEGE_I_HPR) {
-                yes(OK())
-                no(HprRule.BEHANDLER_ER_TANNLEGE_I_HPR) {
+    tree(HprRule.BEHANDLER_FINNES_I_HPR) {
+        no(INVALID(HprRule.Outcomes.BEHANDLER_IKKE_I_HPR))
+        yes(HprRule.BEHANDLER_GYLIDG_I_HPR) {
+            no(INVALID(HprRule.Outcomes.BEHANDLER_IKKE_GYLDIG_I_HPR))
+            yes(HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR) {
+                no(INVALID(HprRule.Outcomes.BEHANDLER_MANGLER_AUTORISASJON_I_HPR))
+                yes(HprRule.BEHANDLER_ER_LEGE_I_HPR) {
                     yes(OK())
-                    no(HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR) {
-                        yesThenSykefravarOver12Uker()
-                        no(HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR) {
+                    no(HprRule.BEHANDLER_ER_TANNLEGE_I_HPR) {
+                        yes(OK())
+                        no(HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR) {
                             yesThenSykefravarOver12Uker()
-                            no(HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR) {
+                            no(HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR) {
                                 yesThenSykefravarOver12Uker()
-                                no(INVALID(HprRule.Outcomes.BEHANDLER_IKKE_LE_KI_MT_TL_FT_I_HPR))
+                                no(HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR) {
+                                    yesThenSykefravarOver12Uker()
+                                    no(
+                                        INVALID(
+                                            HprRule.Outcomes.BEHANDLER_IKKE_LE_KI_MT_TL_FT_I_HPR
+                                        )
+                                    )
+                                }
                             }
                         }
                     }

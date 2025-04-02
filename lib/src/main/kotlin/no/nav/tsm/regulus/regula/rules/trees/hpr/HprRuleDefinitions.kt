@@ -4,6 +4,7 @@ import no.nav.tsm.regulus.regula.dsl.RuleOutcome
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 
 internal enum class HprRule {
+    BEHANDLER_FINNES_I_HPR,
     BEHANDLER_GYLIDG_I_HPR,
     BEHANDLER_HAR_AUTORISASJON_I_HPR,
     BEHANDLER_ER_LEGE_I_HPR,
@@ -19,25 +20,33 @@ internal enum class HprRule {
         override val messageForSender: String,
         override val messageForUser: String,
     ) : RuleOutcome {
-        BEHANDLER_IKKE_GYLDIG_I_HPR(
-            rule = "BEHANDLER_IKKE_GYLDIG_I_HPR",
+        BEHANDLER_IKKE_I_HPR(
+            rule = BEHANDLER_FINNES_I_HPR.name,
             status = RuleStatus.INVALID,
             messageForSender =
-                "no.nav.tsm.regulus.regula.trees.hpr.Behandler er ikke gyldig i HPR på konsultasjonstidspunkt. Pasienten har fått beskjed.",
+                "Den som har skrevet sykmeldingen ble ikke funnet i Helsepersonellregisteret (HPR)",
+            messageForUser =
+                "Avsender fodselsnummer er ikke registert i Helsepersonellregisteret (HPR)",
+        ),
+        BEHANDLER_IKKE_GYLDIG_I_HPR(
+            rule = BEHANDLER_GYLIDG_I_HPR.name,
+            status = RuleStatus.INVALID,
+            messageForSender =
+                "Behandler er ikke gyldig i HPR på konsultasjonstidspunkt. Pasienten har fått beskjed.",
             messageForUser = "Den som skrev sykmeldingen manglet autorisasjon.",
         ),
         BEHANDLER_MANGLER_AUTORISASJON_I_HPR(
-            rule = "BEHANDLER_MANGLER_AUTORISASJON_I_HPR",
+            rule = BEHANDLER_HAR_AUTORISASJON_I_HPR.name,
             status = RuleStatus.INVALID,
             messageForSender =
-                "no.nav.tsm.regulus.regula.trees.hpr.Behandler har ikke gyldig autorisasjon i HPR. Pasienten har fått beskjed.",
+                "Behandler har ikke gyldig autorisasjon i HPR. Pasienten har fått beskjed.",
             messageForUser = "Den som skrev sykmeldingen manglet autorisasjon.",
         ),
         BEHANDLER_IKKE_LE_KI_MT_TL_FT_I_HPR(
             rule = "BEHANDLER_IKKE_LE_KI_MT_TL_FT_I_HPR",
             status = RuleStatus.INVALID,
             messageForSender =
-                "no.nav.tsm.regulus.regula.trees.hpr.Behandler finnes i HPR, men er ikke lege, kiropraktor, fysioterapeut, " +
+                "Behandler finnes i HPR, men er ikke lege, kiropraktor, fysioterapeut, " +
                     "manuellterapeut eller tannlege. Pasienten har fått beskjed.",
             messageForUser = "Den som skrev sykmeldingen manglet autorisasjon.",
         ),
