@@ -97,7 +97,7 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
 
     val regulaResult = RegulaResult(status = overallStatus, outcome = outcome, results = results)
 
-    registerResultMetrics(regulaResult)
+    registerResultMetrics(regulaResult, mode)
 
     return regulaResult
 }
