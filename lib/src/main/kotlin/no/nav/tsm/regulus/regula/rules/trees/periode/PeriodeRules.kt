@@ -28,6 +28,7 @@ private fun getPeriodeRule(rules: PeriodeRule): PeriodeRuleFn {
         PeriodeRule.AVVENTENDE_SYKMELDING_OVER_16_DAGER -> Rules.avventendeOver16Dager
         PeriodeRule.FOR_MANGE_BEHANDLINGSDAGER_PER_UKE -> Rules.forMangeBehandlingsDagerPrUke
         PeriodeRule.GRADERT_SYKMELDING_OVER_99_PROSENT -> Rules.gradertOver99Prosent
+        PeriodeRule.GRADERT_SYKMELDING_0_PROSENT -> Rules.gradert0Prosent
         PeriodeRule.SYKMELDING_MED_BEHANDLINGSDAGER -> Rules.inneholderBehandlingsDager
     }
 }
@@ -201,6 +202,17 @@ private val Rules =
                     ),
                 rule = PeriodeRule.GRADERT_SYKMELDING_OVER_99_PROSENT,
                 ruleResult = gradertOver99Prosent,
+            )
+        }
+
+        val gradert0Prosent: PeriodeRuleFn = { payload ->
+            val gradertePerioder = payload.aktivitet.filterIsInstance<Aktivitet.Gradert>()
+            val gradert0Prosent = gradertePerioder.any { it.grad == 0 }
+
+            RuleOutput(
+                ruleInputs = mapOf("gradertePerioder" to gradertePerioder),
+                rule = PeriodeRule.GRADERT_SYKMELDING_0_PROSENT,
+                ruleResult = gradert0Prosent,
             )
         }
 
