@@ -10,6 +10,7 @@ import no.nav.tsm.regulus.regula.dsl.getOutcome
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
+import no.nav.tsm.regulus.regula.rules.trees.debugPath
 
 class PeriodeRulesTest {
     @Test
@@ -41,6 +42,7 @@ class PeriodeRulesTest {
                 PeriodeRule.AVVENTENDE_SYKMELDING_OVER_16_DAGER to false,
                 PeriodeRule.FOR_MANGE_BEHANDLINGSDAGER_PER_UKE to false,
                 PeriodeRule.GRADERT_SYKMELDING_OVER_99_PROSENT to false,
+                PeriodeRule.GRADERT_SYKMELDING_0_PROSENT to false,
                 PeriodeRule.SYKMELDING_MED_BEHANDLINGSDAGER to false,
             ),
         )
@@ -48,6 +50,7 @@ class PeriodeRulesTest {
             result.ruleInputs,
             mapOf(
                 "perioder" to perioder,
+                "gradertePerioder" to emptyList<Aktivitet>(),
                 "behandslingsDatoEtterMottatDato" to false,
                 "antallAvventende" to 0,
                 "antallPerioder" to 1,
@@ -353,7 +356,22 @@ class PeriodeRulesTest {
             )
         val payload = testPeriodeRulePayload(perioder = perioder)
 
-        val result = PeriodeRules(payload).execute(ExecutionMode.NORMAL)
+        val result =
+            PeriodeRules(payload)
+                .execute(ExecutionMode.NORMAL)
+                .debugPath(
+                    listOf(
+                        PeriodeRule.PERIODER_MANGLER to false,
+                        PeriodeRule.FRADATO_ETTER_TILDATO to false,
+                        PeriodeRule.OVERLAPPENDE_PERIODER to false,
+                        PeriodeRule.OPPHOLD_MELLOM_PERIODER to false,
+                        PeriodeRule.IKKE_DEFINERT_PERIODE to false,
+                        PeriodeRule.BEHANDLINGSDATO_ETTER_MOTTATTDATO to false,
+                        PeriodeRule.AVVENTENDE_SYKMELDING_KOMBINERT to false,
+                        PeriodeRule.MANGLENDE_INNSPILL_TIL_ARBEIDSGIVER to false,
+                        PeriodeRule.AVVENTENDE_SYKMELDING_OVER_16_DAGER to true,
+                    )
+                )
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertPath(
@@ -488,6 +506,55 @@ class PeriodeRulesTest {
     }
 
     @Test
+    fun `Gradert is 0 prosent, Status INVALID`() {
+        val perioder =
+            listOf(testGradertPeriode(fom = LocalDate.now(), tom = LocalDate.now(), grad = 0))
+
+        val payload = testPeriodeRulePayload(perioder = perioder)
+
+        val result = PeriodeRules(payload).execute(ExecutionMode.NORMAL)
+
+        assertEquals(result.treeResult.status, RuleStatus.INVALID)
+        assertPath(
+            result.rulePath,
+            listOf(
+                PeriodeRule.PERIODER_MANGLER to false,
+                PeriodeRule.FRADATO_ETTER_TILDATO to false,
+                PeriodeRule.OVERLAPPENDE_PERIODER to false,
+                PeriodeRule.OPPHOLD_MELLOM_PERIODER to false,
+                PeriodeRule.IKKE_DEFINERT_PERIODE to false,
+                PeriodeRule.BEHANDLINGSDATO_ETTER_MOTTATTDATO to false,
+                PeriodeRule.AVVENTENDE_SYKMELDING_KOMBINERT to false,
+                PeriodeRule.MANGLENDE_INNSPILL_TIL_ARBEIDSGIVER to false,
+                PeriodeRule.AVVENTENDE_SYKMELDING_OVER_16_DAGER to false,
+                PeriodeRule.FOR_MANGE_BEHANDLINGSDAGER_PER_UKE to false,
+                PeriodeRule.GRADERT_SYKMELDING_OVER_99_PROSENT to false,
+                PeriodeRule.GRADERT_SYKMELDING_0_PROSENT to true,
+            ),
+        )
+
+        assertEquals(
+            result.ruleInputs,
+            mapOf(
+                "perioder" to perioder,
+                "gradertePerioder" to perioder,
+                "behandslingsDatoEtterMottatDato" to false,
+                "antallAvventende" to 0,
+                "antallPerioder" to 1,
+                "manglendeInnspillArbeidsgiver" to false,
+                "avventendeOver16Dager" to false,
+                "forMangeBehandlingsDagerPrUke" to false,
+                "gradertOver99Prosent" to false,
+            ),
+        )
+
+        assertEquals(
+            result.treeResult.getOutcome(),
+            PeriodeRule.Outcomes.GRADERT_SYKMELDING_0_PROSENT,
+        )
+    }
+
+    @Test
     fun `Inneholder behandlingsdager, Status MANUAL_PROCESSING`() {
         val perioder =
             listOf(
@@ -517,6 +584,7 @@ class PeriodeRulesTest {
                 PeriodeRule.AVVENTENDE_SYKMELDING_OVER_16_DAGER to false,
                 PeriodeRule.FOR_MANGE_BEHANDLINGSDAGER_PER_UKE to false,
                 PeriodeRule.GRADERT_SYKMELDING_OVER_99_PROSENT to false,
+                PeriodeRule.GRADERT_SYKMELDING_0_PROSENT to false,
                 PeriodeRule.SYKMELDING_MED_BEHANDLINGSDAGER to true,
             ),
         )
@@ -525,6 +593,7 @@ class PeriodeRulesTest {
             result.ruleInputs,
             mapOf(
                 "perioder" to perioder,
+                "gradertePerioder" to emptyList<Aktivitet>(),
                 "behandslingsDatoEtterMottatDato" to false,
                 "antallAvventende" to 0,
                 "antallPerioder" to 1,

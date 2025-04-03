@@ -15,6 +15,7 @@ internal enum class PeriodeRule {
     AVVENTENDE_SYKMELDING_OVER_16_DAGER,
     FOR_MANGE_BEHANDLINGSDAGER_PER_UKE,
     GRADERT_SYKMELDING_OVER_99_PROSENT,
+    GRADERT_SYKMELDING_0_PROSENT,
     SYKMELDING_MED_BEHANDLINGSDAGER;
 
     enum class Outcomes(
@@ -131,6 +132,16 @@ internal enum class PeriodeRule {
                     "Hvis sykmeldingsgrad er høyere enn 99% for delvis sykmelding avvises meldingen",
             messageForUser =
                 "Sykmeldingsgraden kan ikke være mer enn 99% fordi det er en gradert sykmelding.",
+        ),
+        GRADERT_SYKMELDING_0_PROSENT(
+            rule = "GRADERT_SYKMELDING_O_PROSENT",
+            status = RuleStatus.INVALID,
+            messageForSender =
+                "Sykmeldingen kan ikke rettes, det må skrives en ny. " +
+                    "Pasienten har fått beskjed om å vente på ny sykmelding fra deg. Grunnet følgende:" +
+                    "Hvis sykmeldingsgrad er 0% for delvis sykmelding avvises meldingen",
+            messageForUser =
+                "Sykmeldingsgraden kan ikke være lik 0% fordi det er en gradert sykmelding.",
         ),
         SYKMELDING_MED_BEHANDLINGSDAGER(
             rule = "SYKMELDING_MED_BEHANDLINGSDAGER",
