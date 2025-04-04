@@ -28,7 +28,7 @@ internal fun RegulaPayload.toValideringRulePayload(mode: ExecutionMode): Valider
         legekontorOrgnr =
             if (behandler is RegulaBehandler.Finnes) behandler.legekontorOrgnr else null,
         behandlerFnr = behandler.fnr,
-        avsenderFnr = avsender.fnr,
+        avsenderFnr = if (avsender is RegulaAvsender.Finnes) avsender.fnr else null,
         pasientIdent = pasient.ident,
     )
 }

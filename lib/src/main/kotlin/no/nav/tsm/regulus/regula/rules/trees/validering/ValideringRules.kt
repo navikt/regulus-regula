@@ -83,7 +83,8 @@ private val Rules =
             val avsenderSammeSomPasient = avsenderFnr == pasientIdent
 
             RuleOutput(
-                ruleInputs = mapOf("avsenderFnr" to avsenderFnr, "pasientIdent" to pasientIdent),
+                ruleInputs =
+                    mapOf("avsenderFnr" to (avsenderFnr ?: "null"), "pasientIdent" to pasientIdent),
                 rule = ValideringRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR,
                 ruleResult = avsenderSammeSomPasient,
             )

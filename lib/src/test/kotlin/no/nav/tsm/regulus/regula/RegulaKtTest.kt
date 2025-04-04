@@ -97,7 +97,7 @@ class RegulaKtTest {
                             legekontorOrgnr = "123456789",
                             fnr = "10987654321",
                         ),
-                    avsender = RegulaAvsender(fnr = "10987654321"),
+                    avsender = RegulaAvsender.Finnes(fnr = "10987654321"),
                 ),
                 ExecutionMode.NORMAL,
             )
@@ -155,9 +155,67 @@ class RegulaKtTest {
                             legekontorOrgnr = "123456789",
                             fnr = "10987654321",
                         ),
-                    avsender = RegulaAvsender(fnr = "10987654321"),
+                    avsender = RegulaAvsender.Finnes(fnr = "10987654321"),
                 ),
                 ExecutionMode.NORMAL,
+            )
+
+        // All 8 chains
+        assertEquals(result.results.size, 8)
+        assertEquals(result.status, RegulaStatus.OK)
+        assertNull(result.outcome)
+    }
+
+    @Test
+    fun `should support having no avsender`() {
+        val result =
+            executeRegulaRules(
+                RegulaPayload(
+                    sykmeldingId = "123456789",
+                    hoveddiagnose = Diagnose(kode = "A01", system = Diagnosekoder.ICPC2_CODE),
+                    aktivitet =
+                        listOf(
+                            Aktivitet.IkkeMulig(
+                                fom = LocalDate.now().minusDays(0),
+                                tom = LocalDate.now().plusDays(7),
+                            )
+                        ),
+                    behandletTidspunkt = LocalDateTime.now(),
+                    meta =
+                        RegulaMeta.LegacyMeta(
+                            signaturdato = LocalDateTime.now().minusDays(1),
+                            mottattDato = LocalDateTime.now(),
+                            rulesetVersion = "2",
+                        ),
+                    tidligereSykmeldinger = emptyList(),
+                    bidiagnoser = null,
+                    annenFravarsArsak = null,
+                    utdypendeOpplysninger = null,
+                    kontaktPasientBegrunnelseIkkeKontakt = null,
+                    pasient =
+                        RegulaPasient(
+                            ident = "12345678910",
+                            fodselsdato = LocalDate.now().minusYears(30),
+                        ),
+                    behandler =
+                        RegulaBehandler.Finnes(
+                            suspendert = false,
+                            godkjenninger =
+                                listOf(
+                                    BehandlerGodkjenning(
+                                        autorisasjon =
+                                            BehandlerKode(aktiv = true, oid = 7704, verdi = "1"),
+                                        helsepersonellkategori =
+                                            BehandlerKode(aktiv = true, oid = 9060, verdi = "LE"),
+                                        tillegskompetanse = null,
+                                    )
+                                ),
+                            legekontorOrgnr = "123456789",
+                            fnr = "10987654321",
+                        ),
+                    avsender = RegulaAvsender.IngenAvsender,
+                ),
+                ExecutionMode.PAPIR,
             )
 
         // All 8 chains

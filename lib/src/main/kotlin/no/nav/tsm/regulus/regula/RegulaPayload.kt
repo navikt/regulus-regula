@@ -39,7 +39,11 @@ data class RegulaPasient(
  * In the new architecture this is the same fnr as the RegulaBehandler.fnr, in the legacy it can be
  * different
  */
-data class RegulaAvsender(val fnr: String)
+sealed class RegulaAvsender {
+    data class Finnes(val fnr: String) : RegulaAvsender()
+
+    data object IngenAvsender : RegulaAvsender()
+}
 
 /** Values that are not directly in the sykmelding document, but assosiated with it * */
 sealed class RegulaMeta {
