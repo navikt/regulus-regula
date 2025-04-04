@@ -2,7 +2,10 @@ package no.nav.tsm.regulus.regula.rules.trees.validering
 
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
+import no.nav.tsm.regulus.regula.rules.shared.getStartdatoFromTidligereSykmeldinger
 import no.nav.tsm.regulus.regula.utils.daysBetween
+import no.nav.tsm.regulus.regula.utils.earliestFom
+import no.nav.tsm.regulus.regula.utils.latestTom
 
 internal class ValideringRules(validationRulePayload: ValideringRulePayload) :
     TreeExecutor<ValideringRule, ValideringRulePayload>(valideringRuleTree, validationRulePayload) {
@@ -39,11 +42,15 @@ private val Rules =
             val rulesetVersion = payload.rulesetVersion
             val sykmeldingPerioder = payload.aktivitet
             val utdypendeOpplysinger = payload.utdypendeOpplysninger
+            val tidligereSykmeldinger = payload.tidligereSykmeldinger
+
+            val tidligsteFom = sykmeldingPerioder.earliestFom()
+            val sisteTom = sykmeldingPerioder.latestTom()
+            val startdato =
+                getStartdatoFromTidligereSykmeldinger(tidligsteFom, tidligereSykmeldinger)
 
             val shouldHaveAllSporsmals =
-                rulesetVersion == "2" &&
-                    sykmeldingPerioder.any { daysBetween(it.fom, it.tom) > 273 }
-
+                rulesetVersion == "2" && daysBetween(startdato, sisteTom) > 273
             val manglendeDynamiskesporsmaalversjon2uke39 =
                 if (shouldHaveAllSporsmals && utdypendeOpplysinger != null) {
                     val group65Answers = utdypendeOpplysinger["6.5"]?.map { it.key } ?: emptyList()
