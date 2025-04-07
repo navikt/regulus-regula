@@ -8,7 +8,7 @@ internal enum class RuleStatus {
 
 internal interface RuleOutcome {
     val status: RuleStatus
-    val rule: String
+    val name: String
     val messageForUser: String
     val messageForSender: String
 }
@@ -36,7 +36,7 @@ internal sealed class TreeNode<Enum> {
                     is INVALID -> outcome
                 }
 
-            return status.name + (ruleOutcome?.let { "->${ruleOutcome.rule}" } ?: "")
+            return status.name + (ruleOutcome?.let { "->${ruleOutcome.name}" } ?: "")
         }
     }
 

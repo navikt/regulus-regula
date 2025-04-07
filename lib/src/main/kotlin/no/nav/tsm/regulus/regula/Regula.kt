@@ -69,7 +69,7 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
             .map {
                 RegulaOutcome(
                     status = it.status.toRegulaStatus(),
-                    rule = it.rule,
+                    rule = it.name,
                     messageForSender = it.messageForSender,
                     messageForUser = it.messageForUser,
                 )
@@ -84,7 +84,7 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
                     it.treeResult.getOutcome()?.let { outcome ->
                         RegulaOutcome(
                             status = outcome.status.toRegulaStatus(),
-                            rule = outcome.rule,
+                            rule = outcome.name,
                             messageForSender = outcome.messageForSender,
                             messageForUser = outcome.messageForUser,
                         )

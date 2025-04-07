@@ -6,6 +6,7 @@ import no.nav.tsm.regulus.regula.dsl.RuleOutcome
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.TreeNode.LeafNode.*
+import no.nav.tsm.regulus.regula.dsl.getOutcome
 import no.nav.tsm.regulus.regula.dsl.tree
 import no.nav.tsm.regulus.regula.rules.trees.assertPath
 import org.junit.jupiter.api.Assertions.*
@@ -17,23 +18,16 @@ private enum class TestEnumRule {
     RULE_3;
 
     enum class Outcomes(
-        override val rule: String,
         override val status: RuleStatus,
         override val messageForSender: String,
         override val messageForUser: String,
     ) : RuleOutcome {
         ITS_NOT_LOOKING_GOOD(
-            rule = "RULE_1",
             status = RuleStatus.INVALID,
             messageForSender = "Sender",
             messageForUser = "User",
         ),
-        CERTAIN_DEATH(
-            rule = "RULE_2",
-            status = RuleStatus.OK,
-            messageForSender = "Sender",
-            messageForUser = "User",
-        ),
+        CERTAIN_DEATH(status = RuleStatus.OK, messageForSender = "Sender", messageForUser = "User"),
     }
 }
 
@@ -118,6 +112,8 @@ class TreeExecutorTest {
                     TestEnumRule.RULE_3 to false,
                 ),
             )
+            assertEquals(result.treeResult.getOutcome(), TestEnumRule.Outcomes.CERTAIN_DEATH)
+            assertEquals(result.treeResult.getOutcome()?.name, "CERTAIN_DEATH")
         }
 
         @Test

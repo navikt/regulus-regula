@@ -12,13 +12,11 @@ internal enum class ValideringRule {
     PAPIRSYKMELDING;
 
     enum class Outcomes(
-        override val rule: String,
         override val status: RuleStatus,
         override val messageForSender: String,
         override val messageForUser: String,
     ) : RuleOutcome {
         UGYLDIG_REGELSETTVERSJON(
-            rule = "UGYLDIG_REGELSETTVERSJON",
             status = RuleStatus.INVALID,
             messageForSender =
                 "Sykmeldingen kan ikke rettes, det må skrives en ny. " +
@@ -27,7 +25,6 @@ internal enum class ValideringRule {
             messageForUser = "Det er brukt en versjon av sykmeldingen som ikke lenger er gyldig.",
         ),
         MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39(
-            rule = "MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39",
             status = RuleStatus.INVALID,
             messageForSender =
                 "Sykmeldingen kan ikke rettes, det må skrives en ny." +
@@ -38,7 +35,6 @@ internal enum class ValideringRule {
                     "sykefraværet er lengre enn 39 uker til sammen.",
         ),
         UGYLDIG_ORGNR_LENGDE(
-            rule = "UGYLDIG_ORGNR_LENGDE",
             status = RuleStatus.INVALID,
             messageForSender =
                 "Sykmeldingen kan ikke rettes, det må skrives en ny. " +
@@ -47,7 +43,6 @@ internal enum class ValideringRule {
             messageForUser = "Den må ha riktig organisasjonsnummer.",
         ),
         AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR(
-            rule = "AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR",
             status = RuleStatus.INVALID,
             messageForSender =
                 "Sykmeldingen kan ikke rettes, " +
@@ -56,7 +51,6 @@ internal enum class ValideringRule {
             messageForUser = "Den som signert sykmeldingen er også pasient.",
         ),
         BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR(
-            rule = "BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR",
             status = RuleStatus.INVALID,
             messageForSender =
                 "Sykmeldingen kan ikke rettes." +

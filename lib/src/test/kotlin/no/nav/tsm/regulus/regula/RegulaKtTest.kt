@@ -223,4 +223,45 @@ class RegulaKtTest {
         assertEquals(result.status, RegulaStatus.OK)
         assertNull(result.outcome)
     }
+
+    @Test
+    fun `should give the name of the outcome based on the enum named`() {
+        val payload =
+            RegulaPayload(
+                sykmeldingId = "123456789",
+                hoveddiagnose = null,
+                bidiagnoser = null,
+                annenFravarsArsak = null,
+                aktivitet =
+                    listOf(
+                        Aktivitet.IkkeMulig(
+                            fom = LocalDate.now().minusDays(10),
+                            tom = LocalDate.now().plusDays(10),
+                        )
+                    ),
+                utdypendeOpplysninger = null,
+                tidligereSykmeldinger = emptyList(),
+                kontaktPasientBegrunnelseIkkeKontakt = null,
+                pasient =
+                    RegulaPasient(
+                        ident = "12345678910",
+                        fodselsdato = LocalDate.now().minusYears(30),
+                    ),
+                behandletTidspunkt = LocalDateTime.now(),
+                meta =
+                    RegulaMeta.LegacyMeta(
+                        signaturdato = LocalDateTime.now().minusDays(1),
+                        mottattDato = LocalDateTime.now(),
+                        rulesetVersion = "2",
+                    ),
+                behandler = RegulaBehandler.FinnesIkke(fnr = "10987654321"),
+                avsender = RegulaAvsender.IngenAvsender,
+            )
+
+        val result = executeRegulaRules(payload, ExecutionMode.NORMAL)
+
+        assertEquals(result.results.size, 4)
+        assertEquals(result.status, RegulaStatus.INVALID)
+        assertEquals(result.outcome?.rule, "BEHANDLER_IKKE_I_HPR")
+    }
 }

@@ -9,13 +9,11 @@ internal enum class DatoRule {
     TOTAL_VARIGHET_OVER_ETT_AAR;
 
     enum class Outcomes(
-        override val rule: String,
         override val status: RuleStatus,
         override val messageForSender: String,
         override val messageForUser: String,
     ) : RuleOutcome {
         FREMDATERT(
-            rule = "FREMDATERT",
             status = RuleStatus.INVALID,
             messageForSender =
                 "Sykmeldingen kan ikke rettes, det må skrives en ny. " +
@@ -24,7 +22,6 @@ internal enum class DatoRule {
             messageForUser = "Sykmeldingen er datert mer enn 30 dager fram i tid.",
         ),
         TILBAKEDATERT_MER_ENN_3_AR(
-            rule = "TILBAKEDATERT_MER_ENN_3_AR",
             status = RuleStatus.INVALID,
             messageForSender =
                 "Sykmeldingen kan ikke rettes, det må skrives en ny. " +
@@ -33,7 +30,6 @@ internal enum class DatoRule {
             messageForUser = "Startdatoen er mer enn tre år tilbake.",
         ),
         TOTAL_VARIGHET_OVER_ETT_AAR(
-            rule = "TOTAL_VARIGHET_OVER_ETT_AAR",
             status = RuleStatus.INVALID,
             messageForSender =
                 "Sykmeldingen kan ikke rettes, det må skrives en ny. " +
