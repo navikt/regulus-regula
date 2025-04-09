@@ -20,10 +20,10 @@ internal val valideringRuleTree =
                     )
                     no(ValideringRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR) {
                         yes(INVALID(ValideringRule.Outcomes.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR))
-                        no(ValideringRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR) {
+                        no(ValideringRule.SYKMELDER_FNR_ER_SAMME_SOM_PASIENT_FNR) {
                             yes(
                                 INVALID(
-                                    ValideringRule.Outcomes.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR
+                                    ValideringRule.Outcomes.SYKMELDER_FNR_ER_SAMME_SOM_PASIENT_FNR
                                 )
                             )
                             no(OK())

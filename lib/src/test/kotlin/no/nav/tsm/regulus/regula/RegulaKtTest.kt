@@ -9,9 +9,9 @@ import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.AnnenFravarsArsak
-import no.nav.tsm.regulus.regula.payload.BehandlerGodkjenning
-import no.nav.tsm.regulus.regula.payload.BehandlerKode
 import no.nav.tsm.regulus.regula.payload.Diagnose
+import no.nav.tsm.regulus.regula.payload.SykmelderGodkjenning
+import no.nav.tsm.regulus.regula.payload.SykmelderKode
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 import no.nav.tsm.regulus.regula.payload.TidligereSykmeldingAktivitet
 import no.nav.tsm.regulus.regula.payload.TidligereSykmeldingMeta
@@ -81,16 +81,16 @@ class RegulaKtTest {
                             mottattDato = LocalDateTime.now(),
                             rulesetVersion = "2",
                         ),
-                    behandler =
-                        RegulaBehandler.Finnes(
+                    sykmelder =
+                        RegulaSykmelder.Finnes(
                             suspendert = false,
                             godkjenninger =
                                 listOf(
-                                    BehandlerGodkjenning(
+                                    SykmelderGodkjenning(
                                         autorisasjon =
-                                            BehandlerKode(aktiv = true, oid = 7704, verdi = "1"),
+                                            SykmelderKode(aktiv = true, oid = 7704, verdi = "1"),
                                         helsepersonellkategori =
-                                            BehandlerKode(aktiv = true, oid = 9060, verdi = "LE"),
+                                            SykmelderKode(aktiv = true, oid = 9060, verdi = "LE"),
                                         tillegskompetanse = null,
                                     )
                                 ),
@@ -139,16 +139,16 @@ class RegulaKtTest {
                             ident = "12345678910",
                             fodselsdato = LocalDate.now().minusYears(30),
                         ),
-                    behandler =
-                        RegulaBehandler.Finnes(
+                    sykmelder =
+                        RegulaSykmelder.Finnes(
                             suspendert = false,
                             godkjenninger =
                                 listOf(
-                                    BehandlerGodkjenning(
+                                    SykmelderGodkjenning(
                                         autorisasjon =
-                                            BehandlerKode(aktiv = true, oid = 7704, verdi = "1"),
+                                            SykmelderKode(aktiv = true, oid = 7704, verdi = "1"),
                                         helsepersonellkategori =
-                                            BehandlerKode(aktiv = true, oid = 9060, verdi = "LE"),
+                                            SykmelderKode(aktiv = true, oid = 9060, verdi = "LE"),
                                         tillegskompetanse = null,
                                     )
                                 ),
@@ -197,16 +197,16 @@ class RegulaKtTest {
                             ident = "12345678910",
                             fodselsdato = LocalDate.now().minusYears(30),
                         ),
-                    behandler =
-                        RegulaBehandler.Finnes(
+                    sykmelder =
+                        RegulaSykmelder.Finnes(
                             suspendert = false,
                             godkjenninger =
                                 listOf(
-                                    BehandlerGodkjenning(
+                                    SykmelderGodkjenning(
                                         autorisasjon =
-                                            BehandlerKode(aktiv = true, oid = 7704, verdi = "1"),
+                                            SykmelderKode(aktiv = true, oid = 7704, verdi = "1"),
                                         helsepersonellkategori =
-                                            BehandlerKode(aktiv = true, oid = 9060, verdi = "LE"),
+                                            SykmelderKode(aktiv = true, oid = 9060, verdi = "LE"),
                                         tillegskompetanse = null,
                                     )
                                 ),
@@ -254,7 +254,7 @@ class RegulaKtTest {
                         mottattDato = LocalDateTime.now(),
                         rulesetVersion = "2",
                     ),
-                behandler = RegulaBehandler.FinnesIkke(fnr = "10987654321"),
+                sykmelder = RegulaSykmelder.FinnesIkke(fnr = "10987654321"),
                 avsender = RegulaAvsender.IngenAvsender,
             )
 
@@ -262,6 +262,6 @@ class RegulaKtTest {
 
         assertEquals(result.results.size, 4)
         assertEquals(result.status, RegulaStatus.INVALID)
-        assertEquals(result.outcome?.rule, "BEHANDLER_IKKE_I_HPR")
+        assertEquals(result.outcome?.rule, "SYKMELDER_IKKE_I_HPR")
     }
 }

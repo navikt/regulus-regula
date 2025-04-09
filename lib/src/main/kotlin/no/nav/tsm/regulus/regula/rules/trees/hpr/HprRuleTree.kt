@@ -7,25 +7,25 @@ import no.nav.tsm.regulus.regula.dsl.TreeNode.RuleNode
 import no.nav.tsm.regulus.regula.dsl.tree
 
 internal val hprRuleTree =
-    tree(HprRule.BEHANDLER_FINNES_I_HPR) {
-        no(INVALID(HprRule.Outcomes.BEHANDLER_IKKE_I_HPR))
-        yes(HprRule.BEHANDLER_GYLIDG_I_HPR) {
-            no(INVALID(HprRule.Outcomes.BEHANDLER_IKKE_GYLDIG_I_HPR))
-            yes(HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR) {
-                no(INVALID(HprRule.Outcomes.BEHANDLER_MANGLER_AUTORISASJON_I_HPR))
-                yes(HprRule.BEHANDLER_ER_LEGE_I_HPR) {
+    tree(HprRule.SYKMELDER_FINNES_I_HPR) {
+        no(INVALID(HprRule.Outcomes.SYKMELDER_IKKE_I_HPR))
+        yes(HprRule.SYKMELDER_GYLDIG_I_HPR) {
+            no(INVALID(HprRule.Outcomes.SYKMELDER_IKKE_GYLDIG_I_HPR))
+            yes(HprRule.SYKMELDER_HAR_AUTORISASJON_I_HPR) {
+                no(INVALID(HprRule.Outcomes.SYKMELDER_MANGLER_AUTORISASJON_I_HPR))
+                yes(HprRule.SYKMELDER_ER_LEGE_I_HPR) {
                     yes(OK())
-                    no(HprRule.BEHANDLER_ER_TANNLEGE_I_HPR) {
+                    no(HprRule.SYKMELDER_ER_TANNLEGE_I_HPR) {
                         yes(OK())
-                        no(HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR) {
+                        no(HprRule.SYKMELDER_ER_MANUELLTERAPEUT_I_HPR) {
                             yesThenSykefravarOver12Uker()
-                            no(HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR) {
+                            no(HprRule.SYKMELDER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR) {
                                 yesThenSykefravarOver12Uker()
-                                no(HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR) {
+                                no(HprRule.SYKMELDER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR) {
                                     yesThenSykefravarOver12Uker()
                                     no(
                                         INVALID(
-                                            HprRule.Outcomes.BEHANDLER_IKKE_LE_KI_MT_TL_FT_I_HPR
+                                            HprRule.Outcomes.SYKMELDER_IKKE_LE_KI_MT_TL_FT_I_HPR
                                         )
                                     )
                                 }
@@ -38,8 +38,8 @@ internal val hprRuleTree =
     }
 
 private fun RuleNode<HprRule>.yesThenSykefravarOver12Uker() {
-    yes(HprRule.SYKEFRAVAR_OVER_12_UKER) {
-        yes(INVALID(HprRule.Outcomes.BEHANDLER_MT_FT_KI_OVER_12_UKER))
+    yes(HprRule.SYKEFRAVAER_OVER_12_UKER) {
+        yes(INVALID(HprRule.Outcomes.SYKMELDER_MT_FT_KI_OVER_12_UKER))
         no(OK())
     }
 }
