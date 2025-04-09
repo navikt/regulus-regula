@@ -4,8 +4,8 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.AnnenFravarsArsak
-import no.nav.tsm.regulus.regula.payload.BehandlerGodkjenning
 import no.nav.tsm.regulus.regula.payload.Diagnose
+import no.nav.tsm.regulus.regula.payload.SykmelderGodkjenning
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
 
 /** The entire payload is needed to apply the rules to this specific sykmelding. */
@@ -24,7 +24,7 @@ data class RegulaPayload(
     val kontaktPasientBegrunnelseIkkeKontakt: String?,
     val pasient: RegulaPasient,
     val meta: RegulaMeta,
-    val behandler: RegulaBehandler,
+    val sykmelder: RegulaSykmelder,
     val avsender: RegulaAvsender,
 )
 
@@ -36,7 +36,7 @@ data class RegulaPasient(
 )
 
 /**
- * In the new architecture this is the same fnr as the RegulaBehandler.fnr, in the legacy it can be
+ * In the new architecture this is the same fnr as the RegulaSykmelder.fnr, in the legacy it can be
  * different
  */
 sealed class RegulaAvsender {
@@ -58,21 +58,21 @@ sealed class RegulaMeta {
     data class Meta(val sendtTidspunkt: LocalDateTime) : RegulaMeta()
 }
 
-sealed class RegulaBehandler(open val fnr: String) {
+sealed class RegulaSykmelder(open val fnr: String) {
     data class Finnes(
         /**
-         * Er behandleren suspendert i btsys? Denne verdien SKAL komme rett fra btsys fra
+         * Er sykmelderen suspendert i btsys? Denne verdien SKAL komme rett fra btsys fra
          * konsumerende applikasjon.
          */
         val suspendert: Boolean,
         /**
-         * Behandlerens autorisasjoner fra HPR-registeret. Disse verdiene skal være ferske og hentes
+         * Sykmelders autorisasjoner fra HPR-registeret. Disse verdiene skal være ferske og hentes
          * fra helsenettproxy fra konsumerende applikasjon.
          */
-        val godkjenninger: List<BehandlerGodkjenning>,
+        val godkjenninger: List<SykmelderGodkjenning>,
         val legekontorOrgnr: String?,
         override val fnr: String,
-    ) : RegulaBehandler(fnr)
+    ) : RegulaSykmelder(fnr)
 
-    data class FinnesIkke(override val fnr: String) : RegulaBehandler(fnr)
+    data class FinnesIkke(override val fnr: String) : RegulaSykmelder(fnr)
 }

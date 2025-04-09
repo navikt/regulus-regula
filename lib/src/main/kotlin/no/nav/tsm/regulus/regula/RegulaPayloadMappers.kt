@@ -13,8 +13,8 @@ import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRulePayload
 internal fun RegulaPayload.toLegeSuspensjonRulePayload(): LegeSuspensjonRulePayload {
     return LegeSuspensjonRulePayload(
         sykmeldingId = sykmeldingId,
-        behandlerSuspendert =
-            if (behandler is RegulaBehandler.Finnes) behandler.suspendert else false,
+        sykmelderSuspendert =
+            if (sykmelder is RegulaSykmelder.Finnes) sykmelder.suspendert else false,
     )
 }
 
@@ -26,8 +26,8 @@ internal fun RegulaPayload.toValideringRulePayload(mode: ExecutionMode): Valider
         rulesetVersion = if (meta is RegulaMeta.LegacyMeta) meta.rulesetVersion else "3",
         papirsykmelding = mode == ExecutionMode.PAPIR,
         legekontorOrgnr =
-            if (behandler is RegulaBehandler.Finnes) behandler.legekontorOrgnr else null,
-        behandlerFnr = behandler.fnr,
+            if (sykmelder is RegulaSykmelder.Finnes) sykmelder.legekontorOrgnr else null,
+        sykmelderFnr = sykmelder.fnr,
         avsenderFnr = if (avsender is RegulaAvsender.Finnes) avsender.fnr else null,
         pasientIdent = pasient.ident,
     )
@@ -49,8 +49,8 @@ internal fun RegulaPayload.toPeriodeRulePayload(): PeriodeRulePayload {
 internal fun RegulaPayload.toHprRulePayload(): HprRulePayload {
     return HprRulePayload(
         sykmeldingId = sykmeldingId,
-        behandlerGodkjenninger =
-            if (behandler is RegulaBehandler.Finnes) behandler.godkjenninger else null,
+        sykmelderGodkjenninger =
+            if (sykmelder is RegulaSykmelder.Finnes) sykmelder.godkjenninger else null,
         aktivitet = aktivitet,
         signaturdato =
             when (meta) {

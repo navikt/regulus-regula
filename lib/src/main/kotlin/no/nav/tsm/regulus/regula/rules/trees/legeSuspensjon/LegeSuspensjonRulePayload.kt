@@ -4,5 +4,5 @@ import no.nav.tsm.regulus.regula.executor.BasePayload
 
 internal data class LegeSuspensjonRulePayload(
     override val sykmeldingId: String,
-    val behandlerSuspendert: Boolean,
+    val sykmelderSuspendert: Boolean,
 ) : BasePayload

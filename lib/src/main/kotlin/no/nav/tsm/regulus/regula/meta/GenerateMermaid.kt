@@ -21,7 +21,7 @@ fun main() {
             "Suspendert lege" to legeSuspensjonRuleTree,
             "Strukturell validering" to valideringRuleTree,
             "Sykmeldingsperioder" to periodeRuleTree,
-            "Behandler i HPR" to hprRuleTree,
+            "Sykmelder i HPR" to hprRuleTree,
             "Arbeidsuførhet" to arbeidsuforhetRuleTree,
             "Pasient under 13" to pasientUnder13RuleTree,
             "Dato" to datoRuleTree,

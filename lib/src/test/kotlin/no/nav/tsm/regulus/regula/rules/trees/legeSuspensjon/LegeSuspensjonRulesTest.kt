@@ -13,14 +13,14 @@ class LegeSuspensjonRulesTest {
     fun `Er ikkje suspendert, Status OK`() {
         val result =
             LegeSuspensjonRules(
-                    LegeSuspensjonRulePayload(sykmeldingId = "foo-bar", behandlerSuspendert = false)
+                    LegeSuspensjonRulePayload(sykmeldingId = "foo-bar", sykmelderSuspendert = false)
                 )
                 .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.OK)
         assertNull(result.treeResult.getOutcome())
 
-        assertPath(result.rulePath, listOf(LegeSuspensjonRule.BEHANDLER_SUSPENDERT to false))
+        assertPath(result.rulePath, listOf(LegeSuspensjonRule.SYKMELDER_SUSPENDERT to false))
         assertEquals(result.ruleInputs, mapOf("suspendert" to false))
     }
 
@@ -28,17 +28,17 @@ class LegeSuspensjonRulesTest {
     fun `Er suspendert, Status INVALID`() {
         val result =
             LegeSuspensjonRules(
-                    LegeSuspensjonRulePayload(sykmeldingId = "foo-bar", behandlerSuspendert = true)
+                    LegeSuspensjonRulePayload(sykmeldingId = "foo-bar", sykmelderSuspendert = true)
                 )
                 .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
         assertEquals(
             result.treeResult.getOutcome(),
-            LegeSuspensjonRule.Outcomes.BEHANDLER_SUSPENDERT,
+            LegeSuspensjonRule.Outcomes.SYKMELDER_SUSPENDERT,
         )
 
-        assertPath(result.rulePath, listOf(LegeSuspensjonRule.BEHANDLER_SUSPENDERT to true))
+        assertPath(result.rulePath, listOf(LegeSuspensjonRule.SYKMELDER_SUSPENDERT to true))
         assertEquals(result.ruleInputs, mapOf("suspendert" to true))
     }
 }
