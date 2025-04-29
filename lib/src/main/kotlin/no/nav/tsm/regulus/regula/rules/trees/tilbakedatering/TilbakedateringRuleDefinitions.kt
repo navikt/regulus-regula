@@ -53,7 +53,7 @@ internal enum class TilbakedateringRule {
         OVER_1_MND_MED_BEGRUNNELSE(
             status = RuleStatus.MANUAL_PROCESSING,
             messageForSender = "Sykmeldingen er tilbakedatert og felt 11.2 (begrunnelse) er utfylt",
-            messageForUser = "Sykmeldingen blir manuell behandlet fordi den er tilbakedatert",
+            messageForUser = "Sykmeldingen blir manuelt behandlet fordi den er tilbakedatert",
         ),
         OVER_1_MND_SPESIALISTHELSETJENESTEN(
             status = RuleStatus.MANUAL_PROCESSING,
