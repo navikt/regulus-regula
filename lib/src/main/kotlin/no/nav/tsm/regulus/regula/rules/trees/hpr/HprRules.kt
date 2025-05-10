@@ -3,8 +3,8 @@ package no.nav.tsm.regulus.regula.rules.trees.hpr
 import java.time.LocalDateTime
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
-import no.nav.tsm.regulus.regula.payload.BehandlerGodkjenning
-import no.nav.tsm.regulus.regula.payload.BehandlerTilleggskompetanse
+import no.nav.tsm.regulus.regula.payload.SykmelderGodkjenning
+import no.nav.tsm.regulus.regula.payload.SykmelderTilleggskompetanse
 import no.nav.tsm.regulus.regula.rules.shared.getStartdatoFromTidligereSykmeldinger
 import no.nav.tsm.regulus.regula.rules.trees.hpr.extras.HelsepersonellKategori
 import no.nav.tsm.regulus.regula.utils.daysBetween
@@ -18,53 +18,53 @@ internal class HprRules(hprRulePayload: HprRulePayload) :
 
 private fun getHprRule(rules: HprRule): HprRuleFn =
     when (rules) {
-        HprRule.BEHANDLER_FINNES_I_HPR -> Rules.behandlerFinnesIHPR
-        HprRule.BEHANDLER_GYLIDG_I_HPR -> Rules.behanderGyldigHPR
-        HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR -> Rules.behandlerHarAutorisasjon
-        HprRule.BEHANDLER_ER_LEGE_I_HPR -> Rules.behandlerErLege
-        HprRule.BEHANDLER_ER_TANNLEGE_I_HPR -> Rules.behandlerErTannlege
-        HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR -> Rules.behandlerErManuellterapeut
-        HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR ->
-            Rules.behandlerErFTMedTilligskompetanseSykmelding
-        HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR ->
-            Rules.behandlerErKIMedTilligskompetanseSykmelding
-        HprRule.SYKEFRAVAR_OVER_12_UKER -> Rules.sykefravarOver12Uker
+        HprRule.SYKMELDER_FINNES_I_HPR -> Rules.sykmelderFinnesIHPR
+        HprRule.SYKMELDER_GYLDIG_I_HPR -> Rules.sykmelderGyldigHPR
+        HprRule.SYKMELDER_HAR_AUTORISASJON_I_HPR -> Rules.sykmelderHarAutorisasjon
+        HprRule.SYKMELDER_ER_LEGE_I_HPR -> Rules.sykmelderErLege
+        HprRule.SYKMELDER_ER_TANNLEGE_I_HPR -> Rules.sykmelderErTannlege
+        HprRule.SYKMELDER_ER_MANUELLTERAPEUT_I_HPR -> Rules.sykmelderErManuellterapeut
+        HprRule.SYKMELDER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR ->
+            Rules.sykmelderErFTMedTilligskompetanseSykmelding
+        HprRule.SYKMELDER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR ->
+            Rules.sykmelderErKIMedTilligskompetanseSykmelding
+        HprRule.SYKEFRAVAER_OVER_12_UKER -> Rules.sykefravarOver12Uker
     }
 
 private typealias HprRuleFn = (payload: HprRulePayload) -> RuleOutput<HprRule>
 
 private val Rules =
     object {
-        val behandlerFinnesIHPR: HprRuleFn = { payload ->
-            val harGodkjenninger = payload.behandlerGodkjenninger != null
+        val sykmelderFinnesIHPR: HprRuleFn = { payload ->
+            val harGodkjenninger = payload.sykmelderGodkjenninger != null
 
             RuleOutput(
-                rule = HprRule.BEHANDLER_FINNES_I_HPR,
+                rule = HprRule.SYKMELDER_FINNES_I_HPR,
                 ruleInputs = mapOf("harGodkjenninger" to harGodkjenninger),
                 ruleResult = harGodkjenninger,
             )
         }
 
-        val behanderGyldigHPR: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandlerGodkjenninger ?: emptyList()
+        val sykmelderGyldigHPR: HprRuleFn = { payload ->
+            val sykmelderGodkjenninger = payload.sykmelderGodkjenninger ?: emptyList()
 
             val aktivAutorisasjon =
-                behandlerGodkjenninger.any {
+                sykmelderGodkjenninger.any {
                     (it.autorisasjon?.aktiv != null && it.autorisasjon.aktiv)
                 }
 
             RuleOutput(
-                rule = HprRule.BEHANDLER_GYLIDG_I_HPR,
-                ruleInputs = mapOf("behandlerGodkjenninger" to behandlerGodkjenninger),
+                rule = HprRule.SYKMELDER_GYLDIG_I_HPR,
+                ruleInputs = mapOf("sykmelderGodkjenninger" to sykmelderGodkjenninger),
                 ruleResult = aktivAutorisasjon,
             )
         }
 
-        val behandlerHarAutorisasjon: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandlerGodkjenninger ?: emptyList()
+        val sykmelderHarAutorisasjon: HprRuleFn = { payload ->
+            val sykmelderGodkjenninger = payload.sykmelderGodkjenninger ?: emptyList()
 
             val gyldigeGodkjenninger =
-                behandlerGodkjenninger.any {
+                sykmelderGodkjenninger.any {
                     (it.autorisasjon?.aktiv != null &&
                         it.autorisasjon.aktiv &&
                         it.autorisasjon.oid == 7704 &&
@@ -73,58 +73,58 @@ private val Rules =
                 }
 
             RuleOutput(
-                ruleInputs = mapOf("behandlerGodkjenninger" to behandlerGodkjenninger),
-                rule = HprRule.BEHANDLER_HAR_AUTORISASJON_I_HPR,
+                ruleInputs = mapOf("sykmelderGodkjenninger" to sykmelderGodkjenninger),
+                rule = HprRule.SYKMELDER_HAR_AUTORISASJON_I_HPR,
                 ruleResult = gyldigeGodkjenninger,
             )
         }
 
-        val behandlerErLege: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandlerGodkjenninger ?: emptyList()
+        val sykmelderErLege: HprRuleFn = { payload ->
+            val sykmelderGodkjenninger = payload.sykmelderGodkjenninger ?: emptyList()
 
-            val behandlerErLege =
-                sjekkBehandler(behandlerGodkjenninger, HelsepersonellKategori.LEGE)
+            val sykmelderErLege =
+                sjekkSykmelder(sykmelderGodkjenninger, HelsepersonellKategori.LEGE)
 
             RuleOutput(
-                ruleInputs = mapOf("behandlerGodkjenninger" to behandlerGodkjenninger),
-                rule = HprRule.BEHANDLER_ER_LEGE_I_HPR,
-                ruleResult = behandlerErLege,
+                ruleInputs = mapOf("sykmelderGodkjenninger" to sykmelderGodkjenninger),
+                rule = HprRule.SYKMELDER_ER_LEGE_I_HPR,
+                ruleResult = sykmelderErLege,
             )
         }
 
-        val behandlerErTannlege: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandlerGodkjenninger ?: emptyList()
+        val sykmelderErTannlege: HprRuleFn = { payload ->
+            val sykmelderGodkjenninger = payload.sykmelderGodkjenninger ?: emptyList()
 
-            val behandlerErTannlege =
-                sjekkBehandler(behandlerGodkjenninger, HelsepersonellKategori.TANNLEGE)
+            val sykmelderErTannlege =
+                sjekkSykmelder(sykmelderGodkjenninger, HelsepersonellKategori.TANNLEGE)
 
             RuleOutput(
-                ruleInputs = mapOf("behandlerGodkjenninger" to behandlerGodkjenninger),
-                rule = HprRule.BEHANDLER_ER_TANNLEGE_I_HPR,
-                ruleResult = behandlerErTannlege,
+                ruleInputs = mapOf("sykmelderGodkjenninger" to sykmelderGodkjenninger),
+                rule = HprRule.SYKMELDER_ER_TANNLEGE_I_HPR,
+                ruleResult = sykmelderErTannlege,
             )
         }
 
-        val behandlerErManuellterapeut: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandlerGodkjenninger ?: emptyList()
+        val sykmelderErManuellterapeut: HprRuleFn = { payload ->
+            val sykmelderGodkjenninger = payload.sykmelderGodkjenninger ?: emptyList()
 
-            val behandlerErManuellterapeut =
-                sjekkBehandler(behandlerGodkjenninger, HelsepersonellKategori.MANUELLTERAPEUT)
+            val sykmelderErManuellterapeut =
+                sjekkSykmelder(sykmelderGodkjenninger, HelsepersonellKategori.MANUELLTERAPEUT)
 
             RuleOutput(
-                ruleInputs = mapOf("behandlerGodkjenninger" to behandlerGodkjenninger),
-                rule = HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR,
-                ruleResult = behandlerErManuellterapeut,
+                ruleInputs = mapOf("sykmelderGodkjenninger" to sykmelderGodkjenninger),
+                rule = HprRule.SYKMELDER_ER_MANUELLTERAPEUT_I_HPR,
+                ruleResult = sykmelderErManuellterapeut,
             )
         }
 
-        val behandlerErFTMedTilligskompetanseSykmelding: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandlerGodkjenninger ?: emptyList()
+        val sykmelderErFTMedTilligskompetanseSykmelding: HprRuleFn = { payload ->
+            val sykmelderGodkjenninger = payload.sykmelderGodkjenninger ?: emptyList()
             val genereringsTidspunkt = payload.signaturdato
 
             val erFtMedTilleggskompetanse =
                 erHelsepersonellKategoriMedTilleggskompetanse(
-                    behandlerGodkjenninger,
+                    sykmelderGodkjenninger,
                     genereringsTidspunkt,
                     HelsepersonellKategori.FYSIOTERAPAEUT,
                 )
@@ -134,21 +134,21 @@ private val Rules =
             RuleOutput(
                 ruleInputs =
                     mapOf(
-                        "behandlerGodkjenninger" to behandlerGodkjenninger,
+                        "sykmelderGodkjenninger" to sykmelderGodkjenninger,
                         "genereringsTidspunkt" to genereringsTidspunkt,
                     ),
-                rule = HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR,
+                rule = HprRule.SYKMELDER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR,
                 ruleResult = result,
             )
         }
 
-        val behandlerErKIMedTilligskompetanseSykmelding: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandlerGodkjenninger ?: emptyList()
+        val sykmelderErKIMedTilligskompetanseSykmelding: HprRuleFn = { payload ->
+            val sykmelderGodkjenninger = payload.sykmelderGodkjenninger ?: emptyList()
             val genereringsTidspunkt = payload.signaturdato
 
             val erKIMedTilleggskompetanse =
                 erHelsepersonellKategoriMedTilleggskompetanse(
-                    behandlerGodkjenninger,
+                    sykmelderGodkjenninger,
                     genereringsTidspunkt,
                     HelsepersonellKategori.KIROPRAKTOR,
                 )
@@ -156,8 +156,8 @@ private val Rules =
             val result = erKIMedTilleggskompetanse
 
             RuleOutput(
-                ruleInputs = mapOf("behandlerGodkjenninger" to behandlerGodkjenninger),
-                rule = HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR,
+                ruleInputs = mapOf("sykmelderGodkjenninger" to sykmelderGodkjenninger),
+                rule = HprRule.SYKMELDER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR,
                 ruleResult = result,
             )
         }
@@ -165,7 +165,7 @@ private val Rules =
         val sykefravarOver12Uker: HprRuleFn = { payload ->
             val forsteFomDato = payload.aktivitet.earliestFom()
             val sisteTomDato = payload.aktivitet.latestTom()
-            val behandlerGodkjenninger = payload.behandlerGodkjenninger ?: emptyList()
+            val sykmelderGodkjenninger = payload.sykmelderGodkjenninger ?: emptyList()
             val startdato =
                 getStartdatoFromTidligereSykmeldinger(forsteFomDato, payload.tidligereSykmeldinger)
 
@@ -179,20 +179,20 @@ private val Rules =
                         "fom" to forsteFomDato,
                         "tom" to sisteTomDato,
                         "startDatoSykefravær" to startdato,
-                        "behandlerGodkjenninger" to behandlerGodkjenninger,
+                        "sykmelderGodkjenninger" to sykmelderGodkjenninger,
                     ),
-                rule = HprRule.SYKEFRAVAR_OVER_12_UKER,
+                rule = HprRule.SYKEFRAVAER_OVER_12_UKER,
                 ruleResult = over12Uker,
             )
         }
     }
 
 private fun erHelsepersonellKategoriMedTilleggskompetanse(
-    behandlerGodkjenninger: List<BehandlerGodkjenning>,
+    sykmelderGodkjenninger: List<SykmelderGodkjenning>,
     genereringsTidspunkt: LocalDateTime,
     helsepersonellkategori: HelsepersonellKategori,
 ) =
-    behandlerGodkjenninger.any { godkjenning ->
+    sykmelderGodkjenninger.any { godkjenning ->
         godkjenning.helsepersonellkategori?.verdi == helsepersonellkategori.verdi &&
             godkjenning.tillegskompetanse?.any { tillegskompetanse ->
                 tillegskompetanse.avsluttetStatus == null &&
@@ -203,31 +203,31 @@ private fun erHelsepersonellKategoriMedTilleggskompetanse(
             } ?: false
     }
 
-private fun sjekkBehandler(
-    behandlerGodkjenninger: List<BehandlerGodkjenning>,
+private fun sjekkSykmelder(
+    sykmelderGodkjenninger: List<SykmelderGodkjenning>,
     helsepersonellkategori: HelsepersonellKategori,
 ) =
-    behandlerGodkjenninger.any {
+    sykmelderGodkjenninger.any {
         (it.helsepersonellkategori?.aktiv != null &&
             it.autorisasjon?.aktiv == true &&
             harAktivHelsepersonellAutorisasjonsSom(
-                behandlerGodkjenninger,
+                sykmelderGodkjenninger,
                 helsepersonellkategori.verdi,
             ))
     }
 
 private fun harAktivHelsepersonellAutorisasjonsSom(
-    behandlerGodkjenninger: List<BehandlerGodkjenning>,
+    sykmelderGodkjenninger: List<SykmelderGodkjenning>,
     helsepersonerVerdi: String,
 ): Boolean =
-    behandlerGodkjenninger.any { godkjenning ->
+    sykmelderGodkjenninger.any { godkjenning ->
         godkjenning.helsepersonellkategori?.aktiv != null &&
             godkjenning.autorisasjon?.aktiv == true &&
             godkjenning.helsepersonellkategori.verdi != null &&
             godkjenning.helsepersonellkategori.let { it.aktiv && it.verdi == helsepersonerVerdi }
     }
 
-private fun BehandlerTilleggskompetanse.gyldigPeriode(
+private fun SykmelderTilleggskompetanse.gyldigPeriode(
     genereringsTidspunkt: LocalDateTime
 ): Boolean {
     val fom = gyldig?.fra?.toLocalDate()

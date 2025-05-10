@@ -1,12 +1,12 @@
 package no.nav.tsm.regulus.regula.rules.trees.hpr
 
 import java.time.LocalDate
-import no.nav.tsm.regulus.regula.payload.BehandlerGodkjenning
-import no.nav.tsm.regulus.regula.payload.BehandlerKode
-import no.nav.tsm.regulus.regula.payload.BehandlerPeriode
-import no.nav.tsm.regulus.regula.payload.BehandlerTilleggskompetanse
+import no.nav.tsm.regulus.regula.payload.SykmelderGodkjenning
+import no.nav.tsm.regulus.regula.payload.SykmelderKode
+import no.nav.tsm.regulus.regula.payload.SykmelderPeriode
+import no.nav.tsm.regulus.regula.payload.SykmelderTilleggskompetanse
 
-internal enum class BehandlerScenarios {
+internal enum class SykmelderScenarios {
     INAKTIV_LEGE,
     UGYLDIG_AUTORISASJON,
     AKTIV_LEGE,
@@ -21,127 +21,127 @@ internal enum class BehandlerScenarios {
     AKTIV_KIROPRAKTOR_MED_TILLEGGSKOMPETANSE_OG_ANNEN_HELSEPERSONELLKATEGORI,
 }
 
-internal fun testBehandlerGodkjenninger(variant: BehandlerScenarios): List<BehandlerGodkjenning> =
+internal fun testSykmelderGodkjenninger(variant: SykmelderScenarios): List<SykmelderGodkjenning> =
     when (variant) {
-        BehandlerScenarios.INAKTIV_LEGE ->
+        SykmelderScenarios.INAKTIV_LEGE ->
             listOf(
-                BehandlerGodkjenning(
-                    autorisasjon = BehandlerKode(aktiv = false, oid = 7704, verdi = "1"),
-                    helsepersonellkategori = BehandlerKode(aktiv = true, oid = 0, verdi = "LE"),
+                SykmelderGodkjenning(
+                    autorisasjon = SykmelderKode(aktiv = false, oid = 7704, verdi = "1"),
+                    helsepersonellkategori = SykmelderKode(aktiv = true, oid = 0, verdi = "LE"),
                     tillegskompetanse = null,
                 )
             )
 
-        BehandlerScenarios.UGYLDIG_AUTORISASJON ->
+        SykmelderScenarios.UGYLDIG_AUTORISASJON ->
             listOf(
-                BehandlerGodkjenning(
-                    autorisasjon = BehandlerKode(aktiv = true, oid = 7704, verdi = "foo-bar"),
-                    helsepersonellkategori = BehandlerKode(aktiv = true, oid = 0, verdi = "LE"),
+                SykmelderGodkjenning(
+                    autorisasjon = SykmelderKode(aktiv = true, oid = 7704, verdi = "foo-bar"),
+                    helsepersonellkategori = SykmelderKode(aktiv = true, oid = 0, verdi = "LE"),
                     tillegskompetanse = null,
                 )
             )
 
-        BehandlerScenarios.AKTIV_LEGE ->
+        SykmelderScenarios.AKTIV_LEGE ->
             listOf(
-                BehandlerGodkjenning(
-                    autorisasjon = BehandlerKode(aktiv = true, oid = 7704, verdi = "1"),
-                    helsepersonellkategori = BehandlerKode(aktiv = true, oid = 0, verdi = "LE"),
+                SykmelderGodkjenning(
+                    autorisasjon = SykmelderKode(aktiv = true, oid = 7704, verdi = "1"),
+                    helsepersonellkategori = SykmelderKode(aktiv = true, oid = 0, verdi = "LE"),
                     tillegskompetanse = null,
                 )
             )
 
-        BehandlerScenarios.AKTIV_MANUELLTERAPEUT ->
+        SykmelderScenarios.AKTIV_MANUELLTERAPEUT ->
             listOf(
-                BehandlerGodkjenning(
-                    autorisasjon = BehandlerKode(aktiv = true, oid = 7704, verdi = "1"),
-                    helsepersonellkategori = BehandlerKode(aktiv = true, oid = 0, verdi = "MT"),
+                SykmelderGodkjenning(
+                    autorisasjon = SykmelderKode(aktiv = true, oid = 7704, verdi = "1"),
+                    helsepersonellkategori = SykmelderKode(aktiv = true, oid = 0, verdi = "MT"),
                     tillegskompetanse = null,
                 )
             )
 
-        BehandlerScenarios.AKTIV_TANNLEGE ->
+        SykmelderScenarios.AKTIV_TANNLEGE ->
             listOf(
-                BehandlerGodkjenning(
-                    autorisasjon = BehandlerKode(aktiv = true, oid = 7704, verdi = "1"),
-                    helsepersonellkategori = BehandlerKode(aktiv = true, oid = 0, verdi = "TL"),
+                SykmelderGodkjenning(
+                    autorisasjon = SykmelderKode(aktiv = true, oid = 7704, verdi = "1"),
+                    helsepersonellkategori = SykmelderKode(aktiv = true, oid = 0, verdi = "TL"),
                     tillegskompetanse = null,
                 )
             )
 
-        BehandlerScenarios.AKTIV_FYSIOTERAPEUT ->
+        SykmelderScenarios.AKTIV_FYSIOTERAPEUT ->
             listOf(
-                BehandlerGodkjenning(
-                    autorisasjon = BehandlerKode(aktiv = true, oid = 7704, verdi = "1"),
-                    helsepersonellkategori = BehandlerKode(aktiv = true, oid = 0, verdi = "FT"),
+                SykmelderGodkjenning(
+                    autorisasjon = SykmelderKode(aktiv = true, oid = 7704, verdi = "1"),
+                    helsepersonellkategori = SykmelderKode(aktiv = true, oid = 0, verdi = "FT"),
                     tillegskompetanse = null,
                 )
             )
 
-        BehandlerScenarios.AKTIV_FYSIOTERAPEUT_MED_TILLEGGSKOMPETANSE ->
+        SykmelderScenarios.AKTIV_FYSIOTERAPEUT_MED_TILLEGGSKOMPETANSE ->
             listOf(
-                BehandlerGodkjenning(
-                    autorisasjon = BehandlerKode(aktiv = true, oid = 7704, verdi = "1"),
-                    helsepersonellkategori = BehandlerKode(aktiv = true, oid = 0, verdi = "FT"),
+                SykmelderGodkjenning(
+                    autorisasjon = SykmelderKode(aktiv = true, oid = 7704, verdi = "1"),
+                    helsepersonellkategori = SykmelderKode(aktiv = true, oid = 0, verdi = "FT"),
                     tillegskompetanse =
                         listOf(
-                            BehandlerTilleggskompetanse(
+                            SykmelderTilleggskompetanse(
                                 avsluttetStatus = null,
                                 gyldig =
-                                    BehandlerPeriode(
+                                    SykmelderPeriode(
                                         fra = LocalDate.of(2000, 1, 1).atStartOfDay(),
                                         til = null,
                                     ),
-                                type = BehandlerKode(aktiv = true, oid = 7702, verdi = "1"),
+                                type = SykmelderKode(aktiv = true, oid = 7702, verdi = "1"),
                             )
                         ),
                 )
             )
 
-        BehandlerScenarios.AKTIV_KIROPRAKTOR ->
+        SykmelderScenarios.AKTIV_KIROPRAKTOR ->
             listOf(
-                BehandlerGodkjenning(
-                    autorisasjon = BehandlerKode(aktiv = true, oid = 7704, verdi = "1"),
-                    helsepersonellkategori = BehandlerKode(aktiv = true, oid = 0, verdi = "KI"),
+                SykmelderGodkjenning(
+                    autorisasjon = SykmelderKode(aktiv = true, oid = 7704, verdi = "1"),
+                    helsepersonellkategori = SykmelderKode(aktiv = true, oid = 0, verdi = "KI"),
                     tillegskompetanse = null,
                 )
             )
 
-        BehandlerScenarios.AKTIV_KIROPRAKTOR_MED_TILLEGGSKOMPETANSE ->
+        SykmelderScenarios.AKTIV_KIROPRAKTOR_MED_TILLEGGSKOMPETANSE ->
             listOf(
-                BehandlerGodkjenning(
-                    autorisasjon = BehandlerKode(aktiv = true, oid = 7704, verdi = "1"),
-                    helsepersonellkategori = BehandlerKode(aktiv = true, oid = 0, verdi = "KI"),
+                SykmelderGodkjenning(
+                    autorisasjon = SykmelderKode(aktiv = true, oid = 7704, verdi = "1"),
+                    helsepersonellkategori = SykmelderKode(aktiv = true, oid = 0, verdi = "KI"),
                     tillegskompetanse =
                         listOf(
-                            BehandlerTilleggskompetanse(
+                            SykmelderTilleggskompetanse(
                                 avsluttetStatus = null,
                                 gyldig =
-                                    BehandlerPeriode(
+                                    SykmelderPeriode(
                                         fra = LocalDate.of(2000, 1, 1).atStartOfDay(),
                                         til = null,
                                     ),
-                                type = BehandlerKode(aktiv = true, oid = 7702, verdi = "1"),
+                                type = SykmelderKode(aktiv = true, oid = 7702, verdi = "1"),
                             )
                         ),
                 )
             )
 
-        BehandlerScenarios.AKTIV_FYSIOTERAPEUT_MED_FEIL_TILLEGGSKOMPETANSE_TYPE ->
+        SykmelderScenarios.AKTIV_FYSIOTERAPEUT_MED_FEIL_TILLEGGSKOMPETANSE_TYPE ->
             listOf(
-                BehandlerGodkjenning(
-                    autorisasjon = BehandlerKode(aktiv = true, oid = 7704, verdi = "1"),
-                    helsepersonellkategori = BehandlerKode(aktiv = true, oid = 0, verdi = "FT"),
+                SykmelderGodkjenning(
+                    autorisasjon = SykmelderKode(aktiv = true, oid = 7704, verdi = "1"),
+                    helsepersonellkategori = SykmelderKode(aktiv = true, oid = 0, verdi = "FT"),
                     tillegskompetanse =
                         listOf(
-                            BehandlerTilleggskompetanse(
+                            SykmelderTilleggskompetanse(
                                 avsluttetStatus = null,
                                 gyldig =
-                                    BehandlerPeriode(
+                                    SykmelderPeriode(
                                         fra = LocalDate.of(2000, 1, 1).atStartOfDay(),
                                         til = null,
                                     ),
                                 type =
-                                    BehandlerKode(
+                                    SykmelderKode(
                                         aktiv = true,
                                         oid = 7702,
                                         verdi = "2", // Wrong value, should be "1"
@@ -151,22 +151,22 @@ internal fun testBehandlerGodkjenninger(variant: BehandlerScenarios): List<Behan
                 )
             )
 
-        BehandlerScenarios.AKTIV_FYSIOTERAPEUT_MED_INAKTIV_TILLEGGSKOMPETANSE ->
+        SykmelderScenarios.AKTIV_FYSIOTERAPEUT_MED_INAKTIV_TILLEGGSKOMPETANSE ->
             listOf(
-                BehandlerGodkjenning(
-                    autorisasjon = BehandlerKode(aktiv = true, oid = 7704, verdi = "1"),
-                    helsepersonellkategori = BehandlerKode(aktiv = true, oid = 0, verdi = "FT"),
+                SykmelderGodkjenning(
+                    autorisasjon = SykmelderKode(aktiv = true, oid = 7704, verdi = "1"),
+                    helsepersonellkategori = SykmelderKode(aktiv = true, oid = 0, verdi = "FT"),
                     tillegskompetanse =
                         listOf(
-                            BehandlerTilleggskompetanse(
+                            SykmelderTilleggskompetanse(
                                 avsluttetStatus = null,
                                 gyldig =
-                                    BehandlerPeriode(
+                                    SykmelderPeriode(
                                         fra = LocalDate.of(2000, 1, 1).atStartOfDay(),
                                         til = null,
                                     ),
                                 type =
-                                    BehandlerKode(
+                                    SykmelderKode(
                                         aktiv = false, // Inactive
                                         oid = 7702,
                                         verdi = "1",
@@ -176,27 +176,27 @@ internal fun testBehandlerGodkjenninger(variant: BehandlerScenarios): List<Behan
                 )
             )
 
-        BehandlerScenarios
+        SykmelderScenarios
             .AKTIV_KIROPRAKTOR_MED_TILLEGGSKOMPETANSE_OG_ANNEN_HELSEPERSONELLKATEGORI ->
             listOf(
-                BehandlerGodkjenning(
-                    autorisasjon = BehandlerKode(aktiv = true, oid = 7704, verdi = "1"),
-                    helsepersonellkategori = BehandlerKode(aktiv = true, oid = 9060, verdi = "ET"),
+                SykmelderGodkjenning(
+                    autorisasjon = SykmelderKode(aktiv = true, oid = 7704, verdi = "1"),
+                    helsepersonellkategori = SykmelderKode(aktiv = true, oid = 9060, verdi = "ET"),
                     tillegskompetanse = null,
                 ),
-                BehandlerGodkjenning(
-                    autorisasjon = BehandlerKode(aktiv = true, oid = 7704, verdi = "1"),
-                    helsepersonellkategori = BehandlerKode(aktiv = true, oid = 9060, verdi = "KI"),
+                SykmelderGodkjenning(
+                    autorisasjon = SykmelderKode(aktiv = true, oid = 7704, verdi = "1"),
+                    helsepersonellkategori = SykmelderKode(aktiv = true, oid = 9060, verdi = "KI"),
                     tillegskompetanse =
                         listOf(
-                            BehandlerTilleggskompetanse(
+                            SykmelderTilleggskompetanse(
                                 avsluttetStatus = null,
                                 gyldig =
-                                    BehandlerPeriode(
+                                    SykmelderPeriode(
                                         fra = LocalDate.of(2015, 8, 16).atStartOfDay(),
                                         til = LocalDate.of(2059, 1, 5).atStartOfDay(),
                                     ),
-                                type = BehandlerKode(aktiv = true, oid = 7702, verdi = "1"),
+                                type = SykmelderKode(aktiv = true, oid = 7702, verdi = "1"),
                             )
                         ),
                 ),

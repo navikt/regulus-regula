@@ -23,7 +23,7 @@ class ValideringRulesTest {
                         rulesetVersion = "2",
                         aktivitet = emptyList(),
                         legekontorOrgnr = "123123123",
-                        behandlerFnr = "08201023912",
+                        sykmelderFnr = "08201023912",
                         avsenderFnr = "01912391932",
                         pasientIdent = pasientFnr,
                         utdypendeOpplysninger = emptyMap(),
@@ -41,7 +41,7 @@ class ValideringRulesTest {
                 ValideringRule.UGYLDIG_REGELSETTVERSJON to false,
                 ValideringRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
                 ValideringRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR to false,
-                ValideringRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR to false,
+                ValideringRule.SYKMELDER_FNR_ER_SAMME_SOM_PASIENT_FNR to false,
             ),
         )
 
@@ -55,7 +55,7 @@ class ValideringRulesTest {
                 "pasientIdent" to pasientFnr,
                 "legekontorOrgnr" to "123123123",
                 "avsenderFnr" to "01912391932",
-                "behandlerFnr" to "08201023912",
+                "sykmelderFnr" to "08201023912",
             ),
         )
 
@@ -71,7 +71,7 @@ class ValideringRulesTest {
                         rulesetVersion = "69",
                         aktivitet = emptyList(),
                         legekontorOrgnr = "123123123",
-                        behandlerFnr = "08201023912",
+                        sykmelderFnr = "08201023912",
                         avsenderFnr = "01912391932",
                         pasientIdent = "07091912345",
                         utdypendeOpplysninger = emptyMap(),
@@ -116,7 +116,7 @@ class ValideringRulesTest {
                         rulesetVersion = "2",
                         aktivitet = perioderMedFomForDritlengesiden,
                         legekontorOrgnr = "123123123",
-                        behandlerFnr = "08201023912",
+                        sykmelderFnr = "08201023912",
                         avsenderFnr = "01912391932",
                         pasientIdent = "07091912345",
                         utdypendeOpplysninger = emptyMap(),
@@ -185,7 +185,7 @@ class ValideringRulesTest {
                         rulesetVersion = "2",
                         aktivitet = perioderMedFomForDritlengesiden,
                         legekontorOrgnr = null,
-                        behandlerFnr = "07091912345",
+                        sykmelderFnr = "07091912345",
                         pasientIdent = "08201023912",
                         avsenderFnr = "08201023913",
                         utdypendeOpplysninger = utdypendeOpplysninger,
@@ -222,7 +222,7 @@ class ValideringRulesTest {
     }
 
     @Test
-    fun `Behandler samme som pasient, Status INVALID`() {
+    fun `Sykmelder samme som pasient, Status INVALID`() {
         val pasientFnr = generatePersonNumber(LocalDate.now().minusYears(31), false)
 
         val result =
@@ -232,7 +232,7 @@ class ValideringRulesTest {
                         rulesetVersion = "2",
                         aktivitet = emptyList(),
                         legekontorOrgnr = null,
-                        behandlerFnr = pasientFnr,
+                        sykmelderFnr = pasientFnr,
                         pasientIdent = pasientFnr,
                         avsenderFnr = "08201023912",
                         utdypendeOpplysninger = emptyMap(),
@@ -250,7 +250,7 @@ class ValideringRulesTest {
                 ValideringRule.UGYLDIG_REGELSETTVERSJON to false,
                 ValideringRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
                 ValideringRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR to false,
-                ValideringRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR to true,
+                ValideringRule.SYKMELDER_FNR_ER_SAMME_SOM_PASIENT_FNR to true,
             ),
         )
 
@@ -264,13 +264,13 @@ class ValideringRulesTest {
                 "legekontorOrgnr" to "",
                 "avsenderFnr" to "08201023912",
                 "pasientIdent" to pasientFnr,
-                "behandlerFnr" to pasientFnr,
+                "sykmelderFnr" to pasientFnr,
             ),
         )
 
         assertEquals(
             result.treeResult.getOutcome(),
-            ValideringRule.Outcomes.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR,
+            ValideringRule.Outcomes.SYKMELDER_FNR_ER_SAMME_SOM_PASIENT_FNR,
         )
     }
 
@@ -286,7 +286,7 @@ class ValideringRulesTest {
                         rulesetVersion = "2",
                         aktivitet = emptyList(),
                         legekontorOrgnr = "1232344",
-                        behandlerFnr = "08201023912",
+                        sykmelderFnr = "08201023912",
                         avsenderFnr = "2",
                         pasientIdent = pasientFnr,
                         utdypendeOpplysninger = emptyMap(),
@@ -314,7 +314,7 @@ class ValideringRulesTest {
                         rulesetVersion = "3",
                         aktivitet = emptyList(),
                         legekontorOrgnr = null,
-                        behandlerFnr = "08201023912",
+                        sykmelderFnr = "08201023912",
                         avsenderFnr = pasientFnr,
                         pasientIdent = pasientFnr,
                         utdypendeOpplysninger = emptyMap(),

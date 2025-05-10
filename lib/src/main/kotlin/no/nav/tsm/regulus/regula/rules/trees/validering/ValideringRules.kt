@@ -17,7 +17,7 @@ private fun getValideringRule(rules: ValideringRule): ValideringRuleFn =
 
         ValideringRule.UGYLDIG_ORGNR_LENGDE -> Rules.ugyldingOrgNummerLengde
         ValideringRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR -> Rules.avsenderSammeSomPasient
-        ValideringRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR -> Rules.behandlerSammeSomPasient
+        ValideringRule.SYKMELDER_FNR_ER_SAMME_SOM_PASIENT_FNR -> Rules.sykmelderSammeSomPasient
         ValideringRule.PAPIRSYKMELDING -> Rules.papirsykmelding
     }
 
@@ -90,17 +90,17 @@ private val Rules =
             )
         }
 
-        val behandlerSammeSomPasient: ValideringRuleFn = { payload ->
-            val behandlerFnr = payload.behandlerFnr
+        val sykmelderSammeSomPasient: ValideringRuleFn = { payload ->
+            val sykmelderFnr = payload.sykmelderFnr
             val pasientFodselsNummer = payload.pasientIdent
 
-            val behandlerSammeSomPasient = behandlerFnr == pasientFodselsNummer
+            val sykmelderSammeSomPasient = sykmelderFnr == pasientFodselsNummer
 
             RuleOutput(
                 ruleInputs =
-                    mapOf("behandlerFnr" to behandlerFnr, "pasientIdent" to pasientFodselsNummer),
-                rule = ValideringRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR,
-                ruleResult = behandlerSammeSomPasient,
+                    mapOf("sykmelderFnr" to sykmelderFnr, "pasientIdent" to pasientFodselsNummer),
+                rule = ValideringRule.SYKMELDER_FNR_ER_SAMME_SOM_PASIENT_FNR,
+                ruleResult = sykmelderSammeSomPasient,
             )
         }
 

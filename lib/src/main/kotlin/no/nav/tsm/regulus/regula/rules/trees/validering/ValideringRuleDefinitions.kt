@@ -8,7 +8,7 @@ internal enum class ValideringRule {
     MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39,
     UGYLDIG_ORGNR_LENGDE,
     AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR,
-    BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR,
+    SYKMELDER_FNR_ER_SAMME_SOM_PASIENT_FNR,
     PAPIRSYKMELDING;
 
     enum class Outcomes(
@@ -50,13 +50,13 @@ internal enum class ValideringRule {
                     "Avsender fnr er det samme som pasient fnr",
             messageForUser = "Den som signert sykmeldingen er også pasient.",
         ),
-        BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR(
+        SYKMELDER_FNR_ER_SAMME_SOM_PASIENT_FNR(
             status = RuleStatus.INVALID,
             messageForSender =
                 "Sykmeldingen kan ikke rettes." +
                     " Pasienten har fått beskjed, den ble avvist grunnet følgende:" +
-                    "Behandler fnr er det samme som pasient fnr",
-            messageForUser = "Den som er behandler av sykmeldingen er også pasient.",
+                    "Sykmelder fnr er det samme som pasient fnr",
+            messageForUser = "Den som er sykmelder av sykmeldingen er også pasient.",
         ),
     }
 }
