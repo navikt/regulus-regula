@@ -8,9 +8,13 @@ internal fun registerVersionMetrics() {
 }
 
 internal fun registerResultMetrics(regulaResult: RegulaResult, mode: ExecutionMode) {
-    ruleNodeRuleHitCounter
-        .labels(regulaResult.status.name, regulaResult.outcome?.rule ?: "OK", mode.name)
-        .inc()
+    val labelValue =
+        when (regulaResult) {
+            is RegulaResult.OK -> "OK"
+            is RegulaResult.NotOk -> regulaResult.outcome.rule
+        }
+
+    ruleNodeRuleHitCounter.labels(regulaResult.status.name, labelValue, mode.name).inc()
 
     regulaResult.results.forEach { ruleNodeRulePathCounter.labels(it.rulePath, mode.name).inc() }
 }

@@ -95,7 +95,18 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
             )
         }
 
-    val regulaResult = RegulaResult(status = overallStatus, outcome = outcome, results = results)
+    val regulaResult =
+        when (overallStatus) {
+            RegulaStatus.OK -> RegulaResult.OK(results = results)
+            RegulaStatus.MANUAL_PROCESSING,
+            RegulaStatus.INVALID -> {
+                requireNotNull(outcome) {
+                    "Outcome should not be null when status is MANUAL_PROCESSING or INVALID. This should not be possible."
+                }
+
+                RegulaResult.NotOk(status = overallStatus, outcome = outcome, results = results)
+            }
+        }
 
     registerResultMetrics(regulaResult, mode)
 

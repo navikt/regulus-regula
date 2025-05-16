@@ -4,7 +4,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
+import kotlin.test.assertIs
 import no.nav.helse.diagnosekoder.Diagnosekoder
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.payload.Aktivitet
@@ -102,10 +102,11 @@ class RegulaKtTest {
                 ExecutionMode.NORMAL,
             )
 
+        assertIs<RegulaResult.OK>(result)
+        assertEquals(result.status, RegulaStatus.OK)
+
         // All 8 chains
         assertEquals(result.results.size, 8)
-        assertEquals(result.status, RegulaStatus.OK)
-        assertNull(result.outcome)
     }
 
     @Test
@@ -160,10 +161,11 @@ class RegulaKtTest {
                 ExecutionMode.NORMAL,
             )
 
+        assertIs<RegulaResult.OK>(result)
+        assertEquals(result.status, RegulaStatus.OK)
+
         // All 8 chains
         assertEquals(result.results.size, 8)
-        assertEquals(result.status, RegulaStatus.OK)
-        assertNull(result.outcome)
     }
 
     @Test
@@ -218,10 +220,11 @@ class RegulaKtTest {
                 ExecutionMode.PAPIR,
             )
 
+        assertIs<RegulaResult.OK>(result)
+        assertEquals(result.status, RegulaStatus.OK)
+
         // All 8 chains
         assertEquals(result.results.size, 8)
-        assertEquals(result.status, RegulaStatus.OK)
-        assertNull(result.outcome)
     }
 
     @Test
@@ -260,8 +263,10 @@ class RegulaKtTest {
 
         val result = executeRegulaRules(payload, ExecutionMode.NORMAL)
 
-        assertEquals(result.results.size, 4)
+        assertIs<RegulaResult.NotOk>(result)
         assertEquals(result.status, RegulaStatus.INVALID)
-        assertEquals(result.outcome?.rule, "BEHANDLER_IKKE_I_HPR")
+
+        assertEquals(result.results.size, 4)
+        assertEquals(result.outcome.rule, "BEHANDLER_IKKE_I_HPR")
     }
 }
