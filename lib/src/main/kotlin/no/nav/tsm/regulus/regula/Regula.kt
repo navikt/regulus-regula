@@ -56,22 +56,28 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
     val overallStatus: RegulaStatus =
         executedChain
             .map { it.treeResult.status }
+            .firstOrNull { it != RuleStatus.OK }
             .let {
-                it.firstOrNull { status -> status == RuleStatus.INVALID }
-                    ?: it.firstOrNull { status -> status == RuleStatus.MANUAL_PROCESSING }
-                    ?: RuleStatus.OK
+                when (it) {
+                    RuleStatus.INVALID -> RegulaStatus.INVALID
+                    RuleStatus.MANUAL_PROCESSING -> RegulaStatus.MANUAL_PROCESSING
+                    RuleStatus.OK,
+                    null -> RegulaStatus.OK
+                }
             }
-            .toRegulaStatus()
 
     val outcome: RegulaOutcome? =
         executedChain
             .mapNotNull { it.treeResult.getOutcome() }
             .map {
                 RegulaOutcome(
-                    status = it.status.toRegulaStatus(),
+                    status = it.status.toRegulaOutcomeStatus(),
                     rule = it.name,
-                    messageForSender = it.messageForSender,
-                    messageForUser = it.messageForUser,
+                    reason =
+                        RegulaOutcomeReason(
+                            sykmeldt = it.messageForUser,
+                            sykmelder = it.messageForSender,
+                        ),
                 )
             }
             .firstOrNull()
@@ -79,14 +85,17 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
     val results: List<TreeResult> =
         executedChain.map {
             TreeResult(
-                status = it.treeResult.status.toRegulaStatus(),
+                status = overallStatus,
                 outcome =
                     it.treeResult.getOutcome()?.let { outcome ->
                         RegulaOutcome(
-                            status = outcome.status.toRegulaStatus(),
+                            status = outcome.status.toRegulaOutcomeStatus(),
                             rule = outcome.name,
-                            messageForSender = outcome.messageForSender,
-                            messageForUser = outcome.messageForUser,
+                            reason =
+                                RegulaOutcomeReason(
+                                    sykmeldt = outcome.messageForUser,
+                                    sykmelder = outcome.messageForSender,
+                                ),
                         )
                     },
                 rulePath = it.getRulePath(),
@@ -113,11 +122,14 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
     return regulaResult
 }
 
-private fun RuleStatus.toRegulaStatus(): RegulaStatus =
+private fun RuleStatus.toRegulaOutcomeStatus(): RegulaOutcomeStatus =
     when (this) {
-        RuleStatus.OK -> RegulaStatus.OK
-        RuleStatus.MANUAL_PROCESSING -> RegulaStatus.MANUAL_PROCESSING
-        RuleStatus.INVALID -> RegulaStatus.INVALID
+        RuleStatus.MANUAL_PROCESSING -> RegulaOutcomeStatus.MANUAL_PROCESSING
+        RuleStatus.INVALID -> RegulaOutcomeStatus.INVALID
+        RuleStatus.OK ->
+            throw IllegalStateException(
+                "OK status should not be converted to RegulaOutcomeStatus. This should not be possible."
+            )
     }
 
 /**

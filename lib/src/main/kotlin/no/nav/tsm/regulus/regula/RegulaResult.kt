@@ -30,9 +30,15 @@ sealed class RegulaResult(
     ) : RegulaResult(status, results)
 }
 
+enum class RegulaOutcomeStatus {
+    MANUAL_PROCESSING,
+    INVALID,
+}
+
+data class RegulaOutcomeReason(val sykmeldt: String, val sykmelder: String)
+
 data class RegulaOutcome(
-    val status: RegulaStatus,
+    val status: RegulaOutcomeStatus,
     val rule: String,
-    val messageForUser: String,
-    val messageForSender: String,
+    val reason: RegulaOutcomeReason,
 )
