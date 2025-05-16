@@ -10,7 +10,7 @@ internal fun registerVersionMetrics() {
 internal fun registerResultMetrics(regulaResult: RegulaResult, mode: ExecutionMode) {
     val labelValue =
         when (regulaResult) {
-            is RegulaResult.OK -> "OK"
+            is RegulaResult.Ok -> "OK"
             is RegulaResult.NotOk -> regulaResult.outcome.rule
         }
 

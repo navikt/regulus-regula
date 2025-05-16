@@ -102,7 +102,7 @@ class RegulaKtTest {
                 ExecutionMode.NORMAL,
             )
 
-        assertIs<RegulaResult.OK>(result)
+        assertIs<RegulaResult.Ok>(result)
         assertEquals(result.status, RegulaStatus.OK)
 
         // All 8 chains
@@ -161,7 +161,7 @@ class RegulaKtTest {
                 ExecutionMode.NORMAL,
             )
 
-        assertIs<RegulaResult.OK>(result)
+        assertIs<RegulaResult.Ok>(result)
         assertEquals(result.status, RegulaStatus.OK)
 
         // All 8 chains
@@ -220,7 +220,7 @@ class RegulaKtTest {
                 ExecutionMode.PAPIR,
             )
 
-        assertIs<RegulaResult.OK>(result)
+        assertIs<RegulaResult.Ok>(result)
         assertEquals(result.status, RegulaStatus.OK)
 
         // All 8 chains

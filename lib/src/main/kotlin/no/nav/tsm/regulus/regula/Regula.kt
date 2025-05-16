@@ -97,7 +97,7 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
 
     val regulaResult =
         when (overallStatus) {
-            RegulaStatus.OK -> RegulaResult.OK(results = results)
+            RegulaStatus.OK -> RegulaResult.Ok(results = results)
             RegulaStatus.MANUAL_PROCESSING,
             RegulaStatus.INVALID -> {
                 requireNotNull(outcome) {

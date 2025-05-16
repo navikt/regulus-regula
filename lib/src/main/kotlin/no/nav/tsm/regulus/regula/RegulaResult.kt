@@ -20,7 +20,7 @@ sealed class RegulaResult(
     @Deprecated(message = "This is an internal API and should not be used outside of the library.")
     open val results: List<TreeResult>,
 ) {
-    data class OK(override val results: List<TreeResult>) :
+    data class Ok(override val results: List<TreeResult>) :
         RegulaResult(status = RegulaStatus.OK, results)
 
     data class NotOk(
