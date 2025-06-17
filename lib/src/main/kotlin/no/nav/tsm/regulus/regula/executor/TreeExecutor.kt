@@ -24,6 +24,7 @@ enum class ExecutionMode {
  * - a payload specific to the rules/tree
  */
 internal abstract class TreeExecutor<RuleEnum, Payload : BasePayload>(
+    private val name: String,
     private val tree: RuleNode<RuleEnum>,
     private val payload: Payload,
 ) {
@@ -63,7 +64,7 @@ internal abstract class TreeExecutor<RuleEnum, Payload : BasePayload>(
 
     private fun TreeNode<RuleEnum>.evaluate(payload: Payload): TreeOutput<RuleEnum> =
         when (this) {
-            is LeafNode -> TreeOutput(treeResult = this)
+            is LeafNode -> TreeOutput(name = name, treeResult = this)
             is RuleNode -> {
                 val rule = getRule(rule)
                 val result = rule(payload)
@@ -75,6 +76,7 @@ internal abstract class TreeExecutor<RuleEnum, Payload : BasePayload>(
 
 private infix fun <Enum> RuleOutput<Enum>.join(rulesOutput: TreeOutput<Enum>) =
     TreeOutput(
+        name = rulesOutput.name,
         ruleInputs = ruleInputs + rulesOutput.ruleInputs,
         rulePath = listOf(this) + rulesOutput.rulePath,
         treeResult = rulesOutput.treeResult,

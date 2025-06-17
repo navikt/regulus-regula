@@ -149,6 +149,7 @@ tasks.register<JavaExec>("generateMermaidFull") {
 }
 
 tasks.named("sourcesJar") { dependsOn("generateRegulaVersion") }
+
 tasks.named("build") {
     dependsOn("lintTrees")
     dependsOn("generateMermaid")

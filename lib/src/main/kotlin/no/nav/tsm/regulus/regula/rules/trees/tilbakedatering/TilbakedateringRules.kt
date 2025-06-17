@@ -13,6 +13,7 @@ import no.nav.tsm.regulus.regula.utils.latestTom
 
 internal class TilbakedateringRules(payload: TilbakedateringRulePayload) :
     TreeExecutor<TilbakedateringRule, TilbakedateringRulePayload>(
+        "Tilbakedatering",
         tilbakedateringRuleTree,
         payload,
     ) {

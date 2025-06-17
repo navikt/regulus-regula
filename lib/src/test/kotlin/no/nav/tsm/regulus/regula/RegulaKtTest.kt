@@ -269,6 +269,7 @@ class RegulaKtTest {
 
         assertEquals(result.results.size, 4)
         assertEquals(result.outcome.rule, "BEHANDLER_IKKE_I_HPR")
+        assertEquals(result.outcome.tree, "Behandler i HPR")
         assertEquals(
             result.outcome.reason.sykmeldt,
             "Avsender fodselsnummer er ikke registert i Helsepersonellregisteret (HPR)",

@@ -5,6 +5,7 @@ import no.nav.tsm.regulus.regula.executor.TreeExecutor
 
 internal class LegeSuspensjonRules(legeSuspensjonPayload: LegeSuspensjonRulePayload) :
     TreeExecutor<LegeSuspensjonRule, LegeSuspensjonRulePayload>(
+        "Suspendert lege",
         legeSuspensjonRuleTree,
         legeSuspensjonPayload,
     ) {

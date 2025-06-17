@@ -5,7 +5,11 @@ import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.utils.daysBetween
 
 internal class ValideringRules(validationRulePayload: ValideringRulePayload) :
-    TreeExecutor<ValideringRule, ValideringRulePayload>(valideringRuleTree, validationRulePayload) {
+    TreeExecutor<ValideringRule, ValideringRulePayload>(
+        "Strukturell validering",
+        valideringRuleTree,
+        validationRulePayload,
+    ) {
     override fun getRule(rule: ValideringRule) = getValideringRule(rule)
 }
 

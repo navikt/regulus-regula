@@ -12,7 +12,7 @@ import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.latestTom
 
 internal class HprRules(hprRulePayload: HprRulePayload) :
-    TreeExecutor<HprRule, HprRulePayload>(hprRuleTree, hprRulePayload) {
+    TreeExecutor<HprRule, HprRulePayload>("Behandler i HPR", hprRuleTree, hprRulePayload) {
     override fun getRule(rule: HprRule) = getHprRule(rule)
 }
 

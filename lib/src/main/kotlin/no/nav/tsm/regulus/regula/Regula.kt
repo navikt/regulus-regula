@@ -68,27 +68,30 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
 
     val outcome: RegulaOutcome? =
         executedChain
-            .mapNotNull { it.treeResult.getOutcome() }
-            .map {
+            .map { it.name to it.treeResult.getOutcome() }
+            .mapNotNull { (tree, outcome) -> outcome?.let { tree to outcome } }
+            .map { (treeName, outcome) ->
                 RegulaOutcome(
-                    status = it.status.toRegulaOutcomeStatus(),
-                    rule = it.name,
+                    tree = treeName,
+                    status = outcome.status.toRegulaOutcomeStatus(),
+                    rule = outcome.name,
                     reason =
                         RegulaOutcomeReason(
-                            sykmeldt = it.messageForUser,
-                            sykmelder = it.messageForSender,
+                            sykmeldt = outcome.messageForUser,
+                            sykmelder = outcome.messageForSender,
                         ),
                 )
             }
             .firstOrNull()
 
     val results: List<TreeResult> =
-        executedChain.map {
+        executedChain.map { tree ->
             TreeResult(
                 status = overallStatus,
                 outcome =
-                    it.treeResult.getOutcome()?.let { outcome ->
+                    tree.treeResult.getOutcome()?.let { outcome ->
                         RegulaOutcome(
+                            tree = tree.name,
                             status = outcome.status.toRegulaOutcomeStatus(),
                             rule = outcome.name,
                             reason =
@@ -98,9 +101,9 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
                                 ),
                         )
                     },
-                rulePath = it.getRulePath(),
-                ruleInputs = it.ruleInputs,
-                juridisk = it.treeResult.juridisk.toRegulaJuridisk(),
+                rulePath = tree.getRulePath(),
+                ruleInputs = tree.ruleInputs,
+                juridisk = tree.treeResult.juridisk.toRegulaJuridisk(),
             )
         }
 
