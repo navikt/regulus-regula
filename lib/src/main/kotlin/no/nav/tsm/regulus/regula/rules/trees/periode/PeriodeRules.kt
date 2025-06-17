@@ -10,7 +10,7 @@ import no.nav.tsm.regulus.regula.utils.daysBetween
 import no.nav.tsm.regulus.regula.utils.workdaysBetween
 
 internal class PeriodeRules(payload: PeriodeRulePayload) :
-    TreeExecutor<PeriodeRule, PeriodeRulePayload>(periodeRuleTree, payload) {
+    TreeExecutor<PeriodeRule, PeriodeRulePayload>("Sykmeldingsperioder", periodeRuleTree, payload) {
     override fun getRule(rule: PeriodeRule): (PeriodeRulePayload) -> RuleOutput<PeriodeRule> =
         getPeriodeRule(rule)
 }

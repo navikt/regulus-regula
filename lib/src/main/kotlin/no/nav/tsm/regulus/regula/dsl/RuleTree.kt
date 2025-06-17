@@ -8,9 +8,10 @@ internal enum class RuleStatus {
 
 internal interface RuleOutcome {
     val status: RuleStatus
-    val name: String
     val messageForUser: String
     val messageForSender: String
+    /** This will become the enums actual name, and won't have to be provided by the implementor. */
+    val name: String
 }
 
 internal sealed class TreeNode<Enum> {

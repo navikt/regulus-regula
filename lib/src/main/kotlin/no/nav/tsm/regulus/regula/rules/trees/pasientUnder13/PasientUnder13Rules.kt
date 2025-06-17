@@ -5,7 +5,11 @@ import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.utils.latestTom
 
 internal class PasientUnder13Rules(payload: PasientUnder13RulePayload) :
-    TreeExecutor<PasientUnder13Rule, PasientUnder13RulePayload>(pasientUnder13RuleTree, payload) {
+    TreeExecutor<PasientUnder13Rule, PasientUnder13RulePayload>(
+        "Pasient under 13",
+        pasientUnder13RuleTree,
+        payload,
+    ) {
     override fun getRule(rule: PasientUnder13Rule): PasientUnder13RuleFn =
         getPasientUnder13Rule(rule)
 }

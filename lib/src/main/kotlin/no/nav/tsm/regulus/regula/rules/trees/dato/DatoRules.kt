@@ -8,7 +8,7 @@ import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.latestTom
 
 internal class DatoRules(periodePayload: DatoRulePayload) :
-    TreeExecutor<DatoRule, DatoRulePayload>(datoRuleTree, periodePayload) {
+    TreeExecutor<DatoRule, DatoRulePayload>("Dato", datoRuleTree, periodePayload) {
     override fun getRule(rule: DatoRule) = getDatoRule(rule)
 }
 

@@ -46,7 +46,7 @@ private val testTree =
 private class TestRules(
     payload: TestPayload,
     val getTestRule: (TestEnumRule) -> (TestPayload) -> RuleOutput<TestEnumRule>,
-) : TreeExecutor<TestEnumRule, TestPayload>(testTree, payload) {
+) : TreeExecutor<TestEnumRule, TestPayload>("Test tree", testTree, payload) {
     override fun getRule(rule: TestEnumRule): (TestPayload) -> RuleOutput<TestEnumRule> =
         getTestRule(rule)
 }

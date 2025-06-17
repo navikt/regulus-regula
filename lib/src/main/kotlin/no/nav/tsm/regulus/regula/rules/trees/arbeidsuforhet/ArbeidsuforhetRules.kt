@@ -6,7 +6,11 @@ import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.payload.Diagnose
 
 internal class ArbeidsuforhetRules(val payload: ArbeidsuforhetRulePayload) :
-    TreeExecutor<ArbeidsuforhetRule, ArbeidsuforhetRulePayload>(arbeidsuforhetRuleTree, payload) {
+    TreeExecutor<ArbeidsuforhetRule, ArbeidsuforhetRulePayload>(
+        "Arbeidsuførhet",
+        arbeidsuforhetRuleTree,
+        payload,
+    ) {
     override fun getRule(rule: ArbeidsuforhetRule): ArbeidsuforhetRuleFn =
         getArbeidsuforhetRule(rule)
 }

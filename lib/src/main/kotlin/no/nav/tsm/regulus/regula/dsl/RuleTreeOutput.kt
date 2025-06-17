@@ -21,6 +21,8 @@ internal data class RuleOutput<Enum>(
  * inputs that have been used to perform the functional checks of the rules in the tree.
  */
 internal data class TreeOutput<Enum>(
+    /** Name of the tree */
+    val name: String,
     /**
      * Cumulative inputs that have been used to perform the functional checks of the rules in the
      * tree.

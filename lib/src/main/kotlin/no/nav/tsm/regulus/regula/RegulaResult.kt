@@ -39,6 +39,7 @@ data class RegulaOutcomeReason(val sykmeldt: String, val sykmelder: String)
 
 data class RegulaOutcome(
     val status: RegulaOutcomeStatus,
+    val tree: String,
     val rule: String,
     val reason: RegulaOutcomeReason,
 )
