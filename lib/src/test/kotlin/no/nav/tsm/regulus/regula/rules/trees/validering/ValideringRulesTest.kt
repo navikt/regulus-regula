@@ -21,13 +21,14 @@ class ValideringRulesTest {
                     ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
                         rulesetVersion = "2",
-                        aktivitet = emptyList(),
+                        aktivitet = enAktivitet,
                         legekontorOrgnr = "123123123",
                         behandlerFnr = "08201023912",
                         avsenderFnr = "01912391932",
                         pasientIdent = pasientFnr,
                         utdypendeOpplysninger = emptyMap(),
                         papirsykmelding = false,
+                        tidligereSykmeldinger = emptyList(),
                     )
                 )
                 .execute(ExecutionMode.NORMAL)
@@ -50,7 +51,7 @@ class ValideringRulesTest {
             mapOf(
                 "rulesetVersion" to "2",
                 "papirsykmelding" to false,
-                "sykmeldingPerioder" to emptyList<Any>(),
+                "sykmeldingPerioder" to enAktivitet,
                 "utdypendeOpplysninger" to emptyMap<String, Any>(),
                 "pasientIdent" to pasientFnr,
                 "legekontorOrgnr" to "123123123",
@@ -69,13 +70,14 @@ class ValideringRulesTest {
                     ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
                         rulesetVersion = "69",
-                        aktivitet = emptyList(),
+                        aktivitet = enAktivitet,
                         legekontorOrgnr = "123123123",
                         behandlerFnr = "08201023912",
                         avsenderFnr = "01912391932",
                         pasientIdent = "07091912345",
                         utdypendeOpplysninger = emptyMap(),
                         papirsykmelding = false,
+                        tidligereSykmeldinger = emptyList(),
                     )
                 )
                 .execute(ExecutionMode.NORMAL)
@@ -121,6 +123,7 @@ class ValideringRulesTest {
                         pasientIdent = "07091912345",
                         utdypendeOpplysninger = emptyMap(),
                         papirsykmelding = false,
+                        tidligereSykmeldinger = emptyList(),
                     )
                 )
                 .execute(ExecutionMode.NORMAL)
@@ -190,6 +193,7 @@ class ValideringRulesTest {
                         avsenderFnr = "08201023913",
                         utdypendeOpplysninger = utdypendeOpplysninger,
                         papirsykmelding = false,
+                        tidligereSykmeldinger = emptyList(),
                     )
                 )
                 .execute(ExecutionMode.NORMAL)
@@ -230,13 +234,14 @@ class ValideringRulesTest {
                     ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
                         rulesetVersion = "2",
-                        aktivitet = emptyList(),
+                        aktivitet = enAktivitet,
                         legekontorOrgnr = null,
                         behandlerFnr = pasientFnr,
                         pasientIdent = pasientFnr,
                         avsenderFnr = "08201023912",
                         utdypendeOpplysninger = emptyMap(),
                         papirsykmelding = false,
+                        tidligereSykmeldinger = emptyList(),
                     )
                 )
                 .execute(ExecutionMode.NORMAL)
@@ -259,7 +264,7 @@ class ValideringRulesTest {
             mapOf(
                 "rulesetVersion" to "2",
                 "papirsykmelding" to false,
-                "sykmeldingPerioder" to emptyList<Any>(),
+                "sykmeldingPerioder" to enAktivitet,
                 "utdypendeOpplysninger" to emptyMap<String, Any>(),
                 "legekontorOrgnr" to "",
                 "avsenderFnr" to "08201023912",
@@ -284,13 +289,14 @@ class ValideringRulesTest {
                     ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
                         rulesetVersion = "2",
-                        aktivitet = emptyList(),
+                        aktivitet = enAktivitet,
                         legekontorOrgnr = "1232344",
                         behandlerFnr = "08201023912",
                         avsenderFnr = "2",
                         pasientIdent = pasientFnr,
                         utdypendeOpplysninger = emptyMap(),
                         papirsykmelding = false,
+                        tidligereSykmeldinger = emptyList(),
                     )
                 )
                 .execute(ExecutionMode.NORMAL)
@@ -312,13 +318,14 @@ class ValideringRulesTest {
                     ValideringRulePayload(
                         sykmeldingId = "sykmeldingId",
                         rulesetVersion = "3",
-                        aktivitet = emptyList(),
+                        aktivitet = enAktivitet,
                         legekontorOrgnr = null,
                         behandlerFnr = "08201023912",
                         avsenderFnr = pasientFnr,
                         pasientIdent = pasientFnr,
                         utdypendeOpplysninger = emptyMap(),
                         papirsykmelding = false,
+                        tidligereSykmeldinger = emptyList(),
                     )
                 )
                 .execute(ExecutionMode.NORMAL)
@@ -340,7 +347,7 @@ class ValideringRulesTest {
             mapOf(
                 "rulesetVersion" to "3",
                 "papirsykmelding" to false,
-                "sykmeldingPerioder" to emptyList<Any>(),
+                "sykmeldingPerioder" to enAktivitet,
                 "utdypendeOpplysninger" to emptyMap<String, Any>(),
                 "legekontorOrgnr" to "",
                 "avsenderFnr" to pasientFnr,
@@ -353,4 +360,12 @@ class ValideringRulesTest {
             ValideringRule.Outcomes.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR,
         )
     }
+
+    private val enAktivitet: List<Aktivitet> =
+        listOf(
+            Aktivitet.IkkeMulig(
+                fom = LocalDate.now().minusDays(1),
+                tom = LocalDate.now().plusDays(1),
+            )
+        )
 }
