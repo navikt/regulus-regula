@@ -18,6 +18,8 @@ dependencies {
     testImplementation("org.slf4j:slf4j-nop:2.0.9")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+
     api(libs.diagnosekoder)
     api(libs.slf4j)
     api(libs.prometheus)
@@ -120,6 +122,20 @@ tasks.register<JavaExec>("generateMermaid") {
     }
 }
 
+tasks.register<JavaExec>("generateTexts") {
+    val output = ByteArrayOutputStream()
+    mainClass.set("no.nav.tsm.regulus.regula.meta.GenerateTextsKt")
+    classpath = sourceSets["main"].runtimeClasspath
+    group = "documentation"
+    description = "Generates a JSON file with all rule texts"
+    standardOutput = output
+    doLast {
+        val textsFile = File("all-texts.json")
+
+        textsFile.writeText(output.toString())
+    }
+}
+
 tasks.register<JavaExec>("generateMermaidFull") {
     val output = ByteArrayOutputStream()
     mainClass.set("no.nav.tsm.regulus.regula.meta.GenerateMermaidKt")
@@ -154,4 +170,5 @@ tasks.named("build") {
     dependsOn("lintTrees")
     dependsOn("generateMermaid")
     dependsOn("generateMermaidFull")
+    dependsOn("generateTexts")
 }
