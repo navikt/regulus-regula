@@ -20,12 +20,19 @@ sealed class RegulaResult(
     @Deprecated(message = "This is an internal API and should not be used outside of the library.")
     open val results: List<TreeResult>,
 ) {
-    data class Ok(override val results: List<TreeResult>) :
-        RegulaResult(status = RegulaStatus.OK, results)
+    data class Ok(
+        @Deprecated(
+            message = "This is an internal API and should not be used outside of the library."
+        )
+        override val results: List<TreeResult>
+    ) : RegulaResult(status = RegulaStatus.OK, results)
 
     data class NotOk(
         override val status: RegulaStatus,
         val outcome: RegulaOutcome,
+        @Deprecated(
+            message = "This is an internal API and should not be used outside of the library."
+        )
         override val results: List<TreeResult>,
     ) : RegulaResult(status, results)
 }
