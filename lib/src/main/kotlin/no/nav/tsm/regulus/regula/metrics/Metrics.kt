@@ -14,7 +14,9 @@ internal fun registerResultMetrics(regulaResult: RegulaResult, mode: ExecutionMo
             is RegulaResult.NotOk -> regulaResult.outcome.rule
         }
 
-    ruleNodeRuleHitCounter.labels(regulaResult.status.name, labelValue, mode.name).inc()
+    ruleNodeRuleHitCounter.labelValues(regulaResult.status.name, labelValue, mode.name).inc()
 
-    regulaResult.results.forEach { ruleNodeRulePathCounter.labels(it.rulePath, mode.name).inc() }
+    regulaResult.results.forEach {
+        ruleNodeRulePathCounter.labelValues(it.rulePath, mode.name).inc()
+    }
 }
