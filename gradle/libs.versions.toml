@@ -1,12 +1,12 @@
 [versions]
 junit-jupiter-engine = "5.10.3"
 slf4j = "1.7.25"
-prometheus = "1.4.3"
+prometheus = "0.16.0"
 diagnosekoder = "1.2025.0"
 
 [libraries]
 slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
-prometheus = { module = "io.prometheus:prometheus-metrics-core", version.ref = "prometheus" }
+prometheus = { module = "io.prometheus:simpleclient", version.ref = "prometheus" }
 diagnosekoder = { module = "no.nav.helse:diagnosekoder", version.ref = "diagnosekoder" }
 
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter-engine" }
