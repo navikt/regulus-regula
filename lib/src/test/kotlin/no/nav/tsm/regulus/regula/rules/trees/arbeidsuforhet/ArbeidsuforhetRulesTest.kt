@@ -5,6 +5,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import no.nav.tsm.diagnoser.ICD10
 import no.nav.tsm.diagnoser.ICPC2
+import no.nav.tsm.diagnoser.ICPC2B
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.getOutcome
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
@@ -341,6 +342,39 @@ class ArbeidsuforhetRulesTest {
         assertEquals(
             result.treeResult.getOutcome(),
             ArbeidsuforhetRule.Outcomes.UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE,
+        )
+    }
+
+    @Test
+    fun `ICPC2B skal godkjennes som ICPC2`() {
+        val payload =
+            testArbeidsuforhetPayload(
+                hoveddiagnose = Diagnose(system = ICPC2B.OID, kode = "A03.0005")
+            )
+
+        val result = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
+
+        println(result)
+
+        assertEquals(RuleStatus.OK, result.treeResult.status)
+        assertPath(
+            result.rulePath,
+            listOf(
+                ArbeidsuforhetRule.HOVEDDIAGNOSE_MANGLER to false,
+                ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE to false,
+                ArbeidsuforhetRule.ICPC_2_Z_DIAGNOSE to false,
+                ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_BIDIAGNOSE to false,
+            ),
+        )
+        assertEquals(
+            result.ruleInputs,
+            mapOf(
+                "hoveddiagnoseMangler" to false,
+                "diagnoseSystem" to ICPC2B.OID,
+                "diagnoseKode" to "A03.0005",
+                "icpc2ZDiagnose" to false,
+                "ugyldigKodeVerkBiDiagnose" to false,
+            ),
         )
     }
 }

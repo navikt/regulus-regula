@@ -113,7 +113,7 @@ private fun Diagnose.isValidKode(): Boolean =
     when (this.system) {
         ICD10.OID -> ICD10[this.kode] != null
         ICPC2.OID -> ICPC2[this.kode] != null
-        ICPC2B.OID -> ICPC2B[this.kode]?.toICPC2() == null
+        ICPC2B.OID -> ICPC2B[this.kode]?.toICPC2() != null
         else -> false
     }
 
