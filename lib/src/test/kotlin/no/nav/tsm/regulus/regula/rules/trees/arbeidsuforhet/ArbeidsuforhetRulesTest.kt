@@ -3,7 +3,8 @@ package no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
-import no.nav.helse.diagnosekoder.Diagnosekoder
+import no.nav.tsm.diagnoser.ICD10
+import no.nav.tsm.diagnoser.ICPC2
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.getOutcome
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
@@ -166,8 +167,8 @@ class ArbeidsuforhetRulesTest {
         fun `All OK`() {
             val payload =
                 testArbeidsuforhetPayload(
-                    hoveddiagnose = Diagnose(system = Diagnosekoder.ICPC2_CODE, kode = "R24"),
-                    bidiagnoser = listOf(Diagnose(system = Diagnosekoder.ICPC2_CODE, kode = "R24")),
+                    hoveddiagnose = Diagnose(system = ICPC2.OID, kode = "R24"),
+                    bidiagnoser = listOf(Diagnose(system = ICPC2.OID, kode = "R24")),
                 )
 
             val result = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
@@ -186,7 +187,8 @@ class ArbeidsuforhetRulesTest {
                 result.ruleInputs,
                 mapOf(
                     "hoveddiagnoseMangler" to false,
-                    "ugyldigKodeverkHovedDiagnose" to false,
+                    "diagnoseSystem" to ICPC2.OID,
+                    "diagnoseKode" to "R24",
                     "icpc2ZDiagnose" to false,
                     "ugyldigKodeVerkBiDiagnose" to false,
                 ),
@@ -214,7 +216,7 @@ class ArbeidsuforhetRulesTest {
         )
         assertEquals(
             result.ruleInputs,
-            mapOf("hoveddiagnoseMangler" to false, "ugyldigKodeverkHovedDiagnose" to true),
+            mapOf("hoveddiagnoseMangler" to false, "diagnoseSystem" to "2.16.578.1.12.4.1.1.9999"),
         )
         assertEquals(
             result.treeResult.getOutcome(),
@@ -225,9 +227,7 @@ class ArbeidsuforhetRulesTest {
     @Test
     fun `Diagnosen er icpc 2 z diagnose, Status INVALID`() {
         val payload =
-            testArbeidsuforhetPayload(
-                hoveddiagnose = Diagnose(system = Diagnosekoder.ICPC2_CODE, kode = "Z09")
-            )
+            testArbeidsuforhetPayload(hoveddiagnose = Diagnose(system = ICPC2.OID, kode = "Z09"))
 
         val result = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
 
@@ -244,7 +244,8 @@ class ArbeidsuforhetRulesTest {
             result.ruleInputs,
             mapOf(
                 "hoveddiagnoseMangler" to false,
-                "ugyldigKodeverkHovedDiagnose" to false,
+                "diagnoseSystem" to ICPC2.OID,
+                "diagnoseKode" to "Z09",
                 "icpc2ZDiagnose" to true,
             ),
         )
@@ -300,7 +301,8 @@ class ArbeidsuforhetRulesTest {
             result.ruleInputs,
             mapOf(
                 "hoveddiagnoseMangler" to false,
-                "ugyldigKodeverkHovedDiagnose" to false,
+                "diagnoseSystem" to ICPC2.OID,
+                "diagnoseKode" to "R24",
                 "icpc2ZDiagnose" to false,
                 "ugyldigKodeVerkBiDiagnose" to true,
             ),
@@ -330,7 +332,11 @@ class ArbeidsuforhetRulesTest {
         )
         assertEquals(
             result.ruleInputs,
-            mapOf("hoveddiagnoseMangler" to false, "ugyldigKodeverkHovedDiagnose" to true),
+            mapOf(
+                "hoveddiagnoseMangler" to false,
+                "diagnoseSystem" to ICD10.OID,
+                "diagnoseKode" to "Z09",
+            ),
         )
         assertEquals(
             result.treeResult.getOutcome(),

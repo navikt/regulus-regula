@@ -1,11 +1,11 @@
 package no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet
 
-import no.nav.helse.diagnosekoder.Diagnosekoder
+import no.nav.tsm.diagnoser.ICPC2
 import no.nav.tsm.regulus.regula.payload.AnnenFravarsArsak
 import no.nav.tsm.regulus.regula.payload.Diagnose
 
 internal fun testArbeidsuforhetPayload(
-    hoveddiagnose: Diagnose? = Diagnose(kode = "Y01", system = Diagnosekoder.ICPC2_CODE),
+    hoveddiagnose: Diagnose? = Diagnose(kode = "Y01", system = ICPC2.OID),
     bidiagnoser: List<Diagnose> = emptyList(),
     annenFravarsArsak: AnnenFravarsArsak? = null,
 ) =

@@ -1,6 +1,9 @@
 package no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet
 
-import no.nav.helse.diagnosekoder.Diagnosekoder
+import no.nav.tsm.diagnoser.ICD10
+import no.nav.tsm.diagnoser.ICPC2
+import no.nav.tsm.diagnoser.ICPC2B
+import no.nav.tsm.diagnoser.toICPC2
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.payload.Diagnose
@@ -71,36 +74,31 @@ private val Rules =
 
         val ugyldigKodeVerkHovedDiagnose: ArbeidsuforhetRuleFn = { payload ->
             val hoveddiagnose = payload.hoveddiagnose
+            val validDiagnoseSystemOids = arrayOf(ICPC2.OID, ICPC2B.OID, ICD10.OID)
 
-            val ugyldigKodeverkHovedDiagnose =
-                (hoveddiagnose?.system !in
-                    arrayOf(Diagnosekoder.ICPC2_CODE, Diagnosekoder.ICD10_CODE) ||
-                    hoveddiagnose?.let { diagnose ->
-                        if (diagnose.isICPC2()) {
-                            Diagnosekoder.icpc2.containsKey(diagnose.kode)
-                        } else {
-                            Diagnosekoder.icd10.containsKey(diagnose.kode)
-                        }
-                    } != true)
-
-            RuleOutput(
-                ruleInputs = mapOf("ugyldigKodeverkHovedDiagnose" to ugyldigKodeverkHovedDiagnose),
-                rule = ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE,
-                ruleResult = ugyldigKodeverkHovedDiagnose,
-            )
+            if (hoveddiagnose == null || hoveddiagnose.system !in validDiagnoseSystemOids) {
+                RuleOutput(
+                    ruleInputs = mapOf("diagnoseSystem" to (hoveddiagnose?.system ?: "Ikke satt")),
+                    rule = ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE,
+                    ruleResult = true,
+                )
+            } else {
+                RuleOutput(
+                    ruleInputs =
+                        mapOf(
+                            "diagnoseSystem" to (hoveddiagnose.system),
+                            "diagnoseKode" to (hoveddiagnose.kode),
+                        ),
+                    rule = ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE,
+                    ruleResult = !hoveddiagnose.isValidKode(),
+                )
+            }
         }
 
         val ugyldigKodeVerkBiDiagnose: ArbeidsuforhetRuleFn = { payload ->
             val biDiagnoser = payload.bidiagnoser
 
-            val ugyldigKodeVerkBiDiagnose =
-                !biDiagnoser.all { diagnose ->
-                    if (diagnose.isICPC2()) {
-                        Diagnosekoder.icpc2.containsKey(diagnose.kode)
-                    } else {
-                        Diagnosekoder.icd10.containsKey(diagnose.kode)
-                    }
-                }
+            val ugyldigKodeVerkBiDiagnose = !biDiagnoser.all { it.isValidKode() }
 
             RuleOutput(
                 ruleInputs = mapOf("ugyldigKodeVerkBiDiagnose" to ugyldigKodeVerkBiDiagnose),
@@ -110,4 +108,13 @@ private val Rules =
         }
     }
 
-private fun Diagnose.isICPC2(): Boolean = system == Diagnosekoder.ICPC2_CODE
+/** Automatically validates ICPC2B as its ICPC2-parent code. */
+private fun Diagnose.isValidKode(): Boolean =
+    when (this.system) {
+        ICD10.OID -> ICD10[this.kode] != null
+        ICPC2.OID -> ICPC2[this.kode] != null
+        ICPC2B.OID -> ICPC2B[this.kode]?.toICPC2() == null
+        else -> false
+    }
+
+private fun Diagnose.isICPC2(): Boolean = system == ICPC2.OID

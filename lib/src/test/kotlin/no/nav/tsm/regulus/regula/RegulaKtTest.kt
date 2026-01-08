@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
-import no.nav.helse.diagnosekoder.Diagnosekoder
+import no.nav.tsm.diagnoser.ICPC2
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.AnnenFravarsArsak
@@ -24,8 +24,8 @@ class RegulaKtTest {
             executeRegulaRules(
                 RegulaPayload(
                     sykmeldingId = "123456789",
-                    hoveddiagnose = Diagnose(kode = "A01", system = Diagnosekoder.ICPC2_CODE),
-                    bidiagnoser = listOf(Diagnose(kode = "B02", system = Diagnosekoder.ICPC2_CODE)),
+                    hoveddiagnose = Diagnose(kode = "A01", system = ICPC2.OID),
+                    bidiagnoser = listOf(Diagnose(kode = "B02", system = ICPC2.OID)),
                     annenFravarsArsak =
                         AnnenFravarsArsak(
                             grunn = listOf("Annen årsak"),
@@ -115,7 +115,7 @@ class RegulaKtTest {
             executeRegulaRules(
                 RegulaPayload(
                     sykmeldingId = "123456789",
-                    hoveddiagnose = Diagnose(kode = "A01", system = Diagnosekoder.ICPC2_CODE),
+                    hoveddiagnose = Diagnose(kode = "A01", system = ICPC2.OID),
                     aktivitet =
                         listOf(
                             Aktivitet.IkkeMulig(
@@ -174,7 +174,7 @@ class RegulaKtTest {
             executeRegulaRules(
                 RegulaPayload(
                     sykmeldingId = "123456789",
-                    hoveddiagnose = Diagnose(kode = "A01", system = Diagnosekoder.ICPC2_CODE),
+                    hoveddiagnose = Diagnose(kode = "A01", system = ICPC2.OID),
                     aktivitet =
                         listOf(
                             Aktivitet.IkkeMulig(
