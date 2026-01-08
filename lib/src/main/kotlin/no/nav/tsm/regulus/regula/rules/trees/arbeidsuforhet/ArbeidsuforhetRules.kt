@@ -42,7 +42,7 @@ private val Rules =
                     hoveddiagnose.kode.startsWith("Z")
 
             RuleOutput(
-                ruleInputs = mapOf("icpc2ZDiagnose" to icpc2ZDiagnose),
+                ruleInputs = mapOf("diagnoseKode" to (hoveddiagnose?.kode ?: "Ikke satt")),
                 rule = ArbeidsuforhetRule.ICPC_2_Z_DIAGNOSE,
                 ruleResult = icpc2ZDiagnose,
             )
@@ -117,4 +117,4 @@ private fun Diagnose.isValidKode(): Boolean =
         else -> false
     }
 
-private fun Diagnose.isICPC2(): Boolean = system == ICPC2.OID
+private fun Diagnose.isICPC2(): Boolean = system == ICPC2.OID || system == ICPC2B.OID

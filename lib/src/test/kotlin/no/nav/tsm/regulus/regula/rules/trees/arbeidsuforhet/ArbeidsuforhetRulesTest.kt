@@ -190,7 +190,6 @@ class ArbeidsuforhetRulesTest {
                     "hoveddiagnoseMangler" to false,
                     "diagnoseSystem" to ICPC2.OID,
                     "diagnoseKode" to "R24",
-                    "icpc2ZDiagnose" to false,
                     "ugyldigKodeVerkBiDiagnose" to false,
                 ),
             )
@@ -226,7 +225,7 @@ class ArbeidsuforhetRulesTest {
     }
 
     @Test
-    fun `Diagnosen er icpc 2 z diagnose, Status INVALID`() {
+    fun `Diagnosen er ICPC2 Z-diagnose, Status INVALID`() {
         val payload =
             testArbeidsuforhetPayload(hoveddiagnose = Diagnose(system = ICPC2.OID, kode = "Z09"))
 
@@ -247,7 +246,35 @@ class ArbeidsuforhetRulesTest {
                 "hoveddiagnoseMangler" to false,
                 "diagnoseSystem" to ICPC2.OID,
                 "diagnoseKode" to "Z09",
-                "icpc2ZDiagnose" to true,
+            ),
+        )
+        assertEquals(result.treeResult.getOutcome(), ArbeidsuforhetRule.Outcomes.ICPC_2_Z_DIAGNOSE)
+    }
+
+    @Test
+    fun `Diagnosen er ICPC2B Z-diagnose, Status INVALID`() {
+        val payload =
+            testArbeidsuforhetPayload(
+                hoveddiagnose = Diagnose(system = ICPC2B.OID, kode = "Z01.0003")
+            )
+
+        val result = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
+
+        assertEquals(result.treeResult.status, RuleStatus.INVALID)
+        assertPath(
+            result.rulePath,
+            listOf(
+                ArbeidsuforhetRule.HOVEDDIAGNOSE_MANGLER to false,
+                ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE to false,
+                ArbeidsuforhetRule.ICPC_2_Z_DIAGNOSE to true,
+            ),
+        )
+        assertEquals(
+            result.ruleInputs,
+            mapOf(
+                "hoveddiagnoseMangler" to false,
+                "diagnoseSystem" to ICPC2B.OID,
+                "diagnoseKode" to "Z01.0003",
             ),
         )
         assertEquals(result.treeResult.getOutcome(), ArbeidsuforhetRule.Outcomes.ICPC_2_Z_DIAGNOSE)
@@ -304,7 +331,6 @@ class ArbeidsuforhetRulesTest {
                 "hoveddiagnoseMangler" to false,
                 "diagnoseSystem" to ICPC2.OID,
                 "diagnoseKode" to "R24",
-                "icpc2ZDiagnose" to false,
                 "ugyldigKodeVerkBiDiagnose" to true,
             ),
         )
@@ -372,7 +398,6 @@ class ArbeidsuforhetRulesTest {
                 "hoveddiagnoseMangler" to false,
                 "diagnoseSystem" to ICPC2B.OID,
                 "diagnoseKode" to "A03.0005",
-                "icpc2ZDiagnose" to false,
                 "ugyldigKodeVerkBiDiagnose" to false,
             ),
         )
