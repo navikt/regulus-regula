@@ -1,7 +1,7 @@
 package no.nav.tsm.regulus.regula.rules.trees.tilbakedatering
 
 import java.time.temporal.ChronoUnit
-import no.nav.helse.diagnosekoder.Diagnosekoder
+import no.nav.tsm.diagnoser.ICD10
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.extras.Forlengelse
@@ -173,7 +173,7 @@ private val Rules =
         }
 
         val spesialisthelsetjenesten: TilbakedateringRuleFn = { payload ->
-            val spesialhelsetjenesten = payload.hoveddiagnose?.system == Diagnosekoder.ICD10_CODE
+            val spesialhelsetjenesten = payload.hoveddiagnose?.system == ICD10.OID
 
             RuleOutput(
                 ruleInputs =

@@ -1,7 +1,7 @@
 package no.nav.tsm.regulus.regula.testutils
 
 import java.time.LocalDate
-import no.nav.helse.diagnosekoder.Diagnosekoder
+import no.nav.tsm.diagnoser.ICPC2
 import no.nav.tsm.regulus.regula.RegulaStatus
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.RelevanteMerknader
@@ -14,7 +14,7 @@ internal fun testTidligereSykmelding(fom: LocalDate, tom: LocalDate): List<Tidli
         TidligereSykmelding(
             sykmeldingId = "foo-bar-baz",
             aktivitet = listOf(TidligereSykmeldingAktivitet.IkkeMulig(fom = fom, tom = tom)),
-            hoveddiagnose = Diagnose(kode = "X01", system = Diagnosekoder.ICPC2_CODE),
+            hoveddiagnose = Diagnose(kode = "X01", system = ICPC2.OID),
             meta =
                 TidligereSykmeldingMeta(
                     status = RegulaStatus.OK,
@@ -27,7 +27,7 @@ internal fun testTidligereSykmelding(fom: LocalDate, tom: LocalDate): List<Tidli
 
 internal fun testTidligereSykmelding(
     dates: List<Pair<LocalDate, LocalDate>>,
-    hoveddiagnose: Diagnose? = Diagnose(kode = "X01", system = Diagnosekoder.ICPC2_CODE),
+    hoveddiagnose: Diagnose? = Diagnose(kode = "X01", system = ICPC2.OID),
     status: RegulaStatus = RegulaStatus.OK,
     userAction: String = "SENDT",
     merknader: List<RelevanteMerknader>? = null,

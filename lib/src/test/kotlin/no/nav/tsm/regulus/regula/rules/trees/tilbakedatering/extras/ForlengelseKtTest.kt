@@ -3,7 +3,7 @@ package no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.extras
 import java.time.LocalDate
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import no.nav.helse.diagnosekoder.Diagnosekoder
+import no.nav.tsm.diagnoser.ICPC2
 import no.nav.tsm.regulus.regula.RegulaStatus
 import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.Diagnose
@@ -15,7 +15,7 @@ import no.nav.tsm.regulus.regula.testutils.*
 private fun testTidligereSykmelding(fom: LocalDate, tom: LocalDate) =
     TidligereSykmelding(
         sykmeldingId = "foo-bar",
-        hoveddiagnose = Diagnose(kode = "L89", system = Diagnosekoder.ICPC2_CODE),
+        hoveddiagnose = Diagnose(kode = "L89", system = ICPC2.OID),
         aktivitet = listOf(TidligereSykmeldingAktivitet.IkkeMulig(fom, tom)),
         meta =
             TidligereSykmeldingMeta(
@@ -32,7 +32,7 @@ class ForlengelseKtTest {
         val result =
             isForlengelse(
                 perioder = listOf(Aktivitet.IkkeMulig(17.february(2023), 28.february(2023))),
-                hoveddiagnose = Diagnose(kode = "L89", system = Diagnosekoder.ICPC2_CODE),
+                hoveddiagnose = Diagnose(kode = "L89", system = ICPC2.OID),
                 tidligereSykmeldinger =
                     listOf(
                         testTidligereSykmelding(1.january(2023), 31.january(2023)),
@@ -48,7 +48,7 @@ class ForlengelseKtTest {
         val result =
             isForlengelse(
                 perioder = listOf(Aktivitet.IkkeMulig(16.february(2023), 28.february(2023))),
-                hoveddiagnose = Diagnose(kode = "L89", system = Diagnosekoder.ICPC2_CODE),
+                hoveddiagnose = Diagnose(kode = "L89", system = ICPC2.OID),
                 tidligereSykmeldinger =
                     listOf(
                         testTidligereSykmelding(1.january(2023), 31.january(2023)),
@@ -67,7 +67,7 @@ class ForlengelseKtTest {
         val result =
             isForlengelse(
                 perioder = listOf(Aktivitet.IkkeMulig(16.february(2023), 28.february(2023))),
-                hoveddiagnose = Diagnose(kode = "L89", system = Diagnosekoder.ICPC2_CODE),
+                hoveddiagnose = Diagnose(kode = "L89", system = ICPC2.OID),
                 tidligereSykmeldinger =
                     listOf(
                         testTidligereSykmelding(1.january(2023), 31.january(2023)),
@@ -89,7 +89,7 @@ class ForlengelseKtTest {
     fun `sykmelding forlengelse hensyntar helg`() {
         val result =
             isForlengelse(
-                hoveddiagnose = Diagnose(kode = "L89", system = Diagnosekoder.ICPC2_CODE),
+                hoveddiagnose = Diagnose(kode = "L89", system = ICPC2.OID),
                 tidligereSykmeldinger =
                     listOf(
                         testTidligereSykmelding(1.january(2023), 31.january(2023)),
@@ -120,7 +120,7 @@ class ForlengelseKtTest {
         val result =
             isForlengelse(
                 perioder = listOf(Aktivitet.IkkeMulig(17.february(2023), 28.february(2023))),
-                hoveddiagnose = Diagnose(kode = "L89", system = Diagnosekoder.ICPC2_CODE),
+                hoveddiagnose = Diagnose(kode = "L89", system = ICPC2.OID),
                 tidligereSykmeldinger =
                     listOf(
                         testTidligereSykmelding(1.january(2023), 31.january(2023)),
@@ -144,7 +144,7 @@ class ForlengelseKtTest {
                         testTidligereSykmelding(1.january(2023), 31.january(2023)),
                         testTidligereSykmelding(1.february(2023), 17.february(2023)),
                     ),
-                hoveddiagnose = Diagnose(kode = "L89", system = Diagnosekoder.ICPC2_CODE),
+                hoveddiagnose = Diagnose(kode = "L89", system = ICPC2.OID),
             )
 
         assertEquals(
@@ -158,7 +158,7 @@ class ForlengelseKtTest {
         val result =
             isForlengelse(
                 perioder = listOf(Aktivitet.IkkeMulig(1.february(2023), 17.february(2023))),
-                hoveddiagnose = Diagnose(kode = "L89", system = Diagnosekoder.ICPC2_CODE),
+                hoveddiagnose = Diagnose(kode = "L89", system = ICPC2.OID),
                 tidligereSykmeldinger =
                     listOf(testTidligereSykmelding(1.february(2023), 17.february(2023))),
             )

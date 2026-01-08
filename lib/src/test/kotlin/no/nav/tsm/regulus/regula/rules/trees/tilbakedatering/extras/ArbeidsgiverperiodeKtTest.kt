@@ -5,7 +5,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import no.nav.helse.diagnosekoder.Diagnosekoder
+import no.nav.tsm.diagnoser.ICPC2
 import no.nav.tsm.regulus.regula.RegulaStatus
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
@@ -141,7 +141,7 @@ class ArbeidsgiverperiodeKtTest {
 private fun testTidligereSykmelding(fom: LocalDate, tom: LocalDate, id: String = "foo-bar") =
     TidligereSykmelding(
         sykmeldingId = id,
-        hoveddiagnose = Diagnose(kode = "L89", system = Diagnosekoder.ICPC2_CODE),
+        hoveddiagnose = Diagnose(kode = "L89", system = ICPC2.OID),
         aktivitet = listOf(TidligereSykmeldingAktivitet.IkkeMulig(fom, tom)),
         meta =
             TidligereSykmeldingMeta(

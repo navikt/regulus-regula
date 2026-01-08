@@ -2,7 +2,7 @@ package no.nav.tsm.regulus.regula.rules.shared
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import no.nav.helse.diagnosekoder.Diagnosekoder
+import no.nav.tsm.diagnoser.ICPC2
 import no.nav.tsm.regulus.regula.RegulaStatus
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.RelevanteMerknader
@@ -11,7 +11,7 @@ import no.nav.tsm.regulus.regula.testutils.testTidligereSykmelding
 
 class TidligereSykmeldingerKtTest {
 
-    val testDiagnose = { Diagnose(kode = "X01", system = Diagnosekoder.ICPC2_CODE) }
+    val testDiagnose = { Diagnose(kode = "X01", system = ICPC2.OID) }
 
     @Test
     fun `shall not do anything with a OK sendt sykmelding`() {
@@ -63,14 +63,12 @@ class TidligereSykmeldingerKtTest {
         val result =
             testTidligereSykmelding(
                     dates = listOf(16.january(2023) to 31.january(2023)),
-                    hoveddiagnose = Diagnose(system = Diagnosekoder.ICPC2_CODE, kode = "X01"),
+                    hoveddiagnose = Diagnose(system = ICPC2.OID, kode = "X01"),
                     status = RegulaStatus.OK,
                     userAction = "SENDT",
                     merknader = emptyList(),
                 )
-                .onlyRelevantWithSameDiagnosis(
-                    Diagnose(system = Diagnosekoder.ICPC2_CODE, kode = "X02")
-                )
+                .onlyRelevantWithSameDiagnosis(Diagnose(system = ICPC2.OID, kode = "X02"))
 
         assertEquals(result.size, 0)
     }

@@ -5,7 +5,8 @@ import java.time.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
-import no.nav.helse.diagnosekoder.Diagnosekoder
+import no.nav.tsm.diagnoser.ICD10
+import no.nav.tsm.diagnoser.ICPC2
 import no.nav.tsm.regulus.regula.RegulaStatus
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.getOutcome
@@ -79,7 +80,7 @@ class TilbakedateringRulesTest {
             assertEquals(
                 result.ruleInputs,
                 mapOf(
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
@@ -112,7 +113,7 @@ class TilbakedateringRulesTest {
             assertEquals(
                 result.ruleInputs,
                 mapOf(
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
@@ -133,7 +134,7 @@ class TilbakedateringRulesTest {
                             TidligereSykmelding(
                                 sykmeldingId = "dette-er-ettersendelse",
                                 aktivitet = testTidligereAktivitet(-8, -7),
-                                hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
+                                hoveddiagnose = Diagnose("X01", ICPC2.OID),
                                 TidligereSykmeldingMeta(
                                     status = RegulaStatus.OK,
                                     userAction = "SENDT",
@@ -141,7 +142,7 @@ class TilbakedateringRulesTest {
                                 ),
                             )
                         ),
-                    hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
+                    hoveddiagnose = Diagnose("X01", ICPC2.OID),
                 )
 
             val result =
@@ -168,7 +169,7 @@ class TilbakedateringRulesTest {
             assertEquals(
                 result.ruleInputs,
                 mapOf(
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
@@ -217,7 +218,7 @@ class TilbakedateringRulesTest {
             assertEquals(
                 result.ruleInputs,
                 mapOf(
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
@@ -257,7 +258,7 @@ class TilbakedateringRulesTest {
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "0 ord",
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                 ),
             )
@@ -289,7 +290,7 @@ class TilbakedateringRulesTest {
                         ),
                     signaturdato = 24.february(2023).atStartOfDay(),
                     begrunnelseIkkeKontakt = null,
-                    hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
+                    hoveddiagnose = Diagnose("X01", ICPC2.OID),
                     tidligereSykmeldinger =
                         listOf(
                             TidligereSykmelding(
@@ -301,7 +302,7 @@ class TilbakedateringRulesTest {
                                             tom = 15.february(2023),
                                         )
                                     ),
-                                hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
+                                hoveddiagnose = Diagnose("X01", ICPC2.OID),
                                 TidligereSykmeldingMeta(
                                     status = RegulaStatus.OK,
                                     userAction = "SENDT",
@@ -330,7 +331,7 @@ class TilbakedateringRulesTest {
             assertEquals(
                 result.ruleInputs,
                 mapOf(
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
@@ -380,7 +381,7 @@ class TilbakedateringRulesTest {
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "0 ord",
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                 ),
             )
@@ -394,7 +395,7 @@ class TilbakedateringRulesTest {
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = null,
                     tidligereSykmeldinger = emptyList(),
-                    hoveddiagnose = Diagnose("X01", Diagnosekoder.ICD10_CODE),
+                    hoveddiagnose = Diagnose("X01", ICD10.OID),
                 )
 
             val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
@@ -410,7 +411,7 @@ class TilbakedateringRulesTest {
                 mapOf(
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
-                    "diagnosesystem" to Diagnosekoder.ICD10_CODE,
+                    "diagnosesystem" to ICD10.OID,
                     "spesialisthelsetjenesten" to true,
                 ),
             )
@@ -428,7 +429,7 @@ class TilbakedateringRulesTest {
                     perioder = testAktivitet(-9, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = null,
-                    hoveddiagnose = Diagnose("X01", Diagnosekoder.ICD10_CODE),
+                    hoveddiagnose = Diagnose("X01", ICD10.OID),
                 )
             val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
@@ -442,7 +443,7 @@ class TilbakedateringRulesTest {
                 mapOf(
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
-                    "diagnosesystem" to Diagnosekoder.ICD10_CODE,
+                    "diagnosesystem" to ICD10.OID,
                     "spesialisthelsetjenesten" to true,
                 ),
             )
@@ -476,12 +477,12 @@ class TilbakedateringRulesTest {
             assertEquals(
                 result.ruleInputs,
                 mapOf(
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "0 ord",
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                 ),
             )
@@ -519,7 +520,7 @@ class TilbakedateringRulesTest {
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "0 ord",
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                 ),
             )
@@ -545,7 +546,7 @@ class TilbakedateringRulesTest {
                                             tom = 15.february(2023),
                                         )
                                     ),
-                                hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
+                                hoveddiagnose = Diagnose("X01", ICPC2.OID),
                                 TidligereSykmeldingMeta(
                                     status = RegulaStatus.OK,
                                     userAction = "SENDT",
@@ -554,7 +555,7 @@ class TilbakedateringRulesTest {
                             )
                         ),
                     begrunnelseIkkeKontakt = "abcdefghijklmnopq",
-                    hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
+                    hoveddiagnose = Diagnose("X01", ICPC2.OID),
                 )
             val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
@@ -576,7 +577,7 @@ class TilbakedateringRulesTest {
             assertEquals(
                 result.ruleInputs,
                 mapOf(
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
@@ -626,7 +627,7 @@ class TilbakedateringRulesTest {
                     "tom" to payload.aktivitet.latestTom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "1 ord",
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                 ),
             )
@@ -664,7 +665,7 @@ class TilbakedateringRulesTest {
                 mapOf(
                     "fom" to payload.aktivitet.earliestFom(),
                     "tom" to payload.aktivitet.latestTom(),
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "1 ord",
@@ -707,7 +708,7 @@ class TilbakedateringRulesTest {
                     "tom" to payload.aktivitet.latestTom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "1 ord",
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                 ),
             )
@@ -715,7 +716,7 @@ class TilbakedateringRulesTest {
 
         @Test
         fun `Med Begrunnelse, Utenfor arbeidsgiverperioden andre sykmelding, MANUELL`() {
-            val hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE)
+            val hoveddiagnose = Diagnose("X01", ICPC2.OID)
             val payload =
                 testTilbakedateringRulePayload(
                     perioder = testAktivitet(0, 2),
@@ -766,7 +767,7 @@ class TilbakedateringRulesTest {
                 mapOf(
                     "fom" to payload.aktivitet.earliestFom(),
                     "tom" to payload.aktivitet.latestTom(),
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "1 ord",
                     "spesialisthelsetjenesten" to false,
@@ -781,7 +782,7 @@ class TilbakedateringRulesTest {
                     perioder = testAktivitet(-19, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = "abcdefghijklmnopq",
-                    hoveddiagnose = Diagnose("X01", Diagnosekoder.ICD10_CODE),
+                    hoveddiagnose = Diagnose("X01", ICD10.OID),
                     tidligereSykmeldinger = listOf(),
                 )
 
@@ -798,7 +799,7 @@ class TilbakedateringRulesTest {
                 mapOf(
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
-                    "diagnosesystem" to Diagnosekoder.ICD10_CODE,
+                    "diagnosesystem" to ICD10.OID,
                     "spesialisthelsetjenesten" to true,
                 ),
             )
@@ -836,7 +837,7 @@ class TilbakedateringRulesTest {
             assertEquals(
                 result.ruleInputs,
                 mapOf(
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
@@ -872,12 +873,12 @@ class TilbakedateringRulesTest {
             assertEquals(
                 result.ruleInputs,
                 mapOf(
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "2 ord",
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                 ),
             )
@@ -890,7 +891,7 @@ class TilbakedateringRulesTest {
                     perioder = testAktivitet(-31, 0),
                     signaturdato = LocalDateTime.now(),
                     begrunnelseIkkeKontakt = "abcdefghijklmno",
-                    hoveddiagnose = Diagnose("X01", Diagnosekoder.ICD10_CODE),
+                    hoveddiagnose = Diagnose("X01", ICD10.OID),
                 )
             val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
 
@@ -905,7 +906,7 @@ class TilbakedateringRulesTest {
                 mapOf(
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
-                    "diagnosesystem" to Diagnosekoder.ICD10_CODE,
+                    "diagnosesystem" to ICD10.OID,
                     "spesialisthelsetjenesten" to true,
                 ),
             )
@@ -924,7 +925,7 @@ class TilbakedateringRulesTest {
                         ),
                     signaturdato = LocalDate.of(2024, 8, 31).atStartOfDay(),
                     begrunnelseIkkeKontakt = "abcdefghijklmno",
-                    hoveddiagnose = Diagnose("X01", Diagnosekoder.ICPC2_CODE),
+                    hoveddiagnose = Diagnose("X01", ICPC2.OID),
                 )
 
             val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
@@ -946,11 +947,11 @@ class TilbakedateringRulesTest {
             assertEquals(
                 result.ruleInputs,
                 mapOf(
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "begrunnelse" to "1 ord",
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                 ),
             )
@@ -992,7 +993,7 @@ class TilbakedateringRulesTest {
             assertEquals(
                 result.ruleInputs,
                 mapOf(
-                    "diagnosesystem" to Diagnosekoder.ICPC2_CODE,
+                    "diagnosesystem" to ICPC2.OID,
                     "spesialisthelsetjenesten" to false,
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
@@ -1017,7 +1018,7 @@ class TilbakedateringRulesTest {
                         ),
                     signaturdato = LocalDate.of(2024, 2, 29).atStartOfDay(),
                     begrunnelseIkkeKontakt = "abcghgfgh",
-                    hoveddiagnose = Diagnose("X01", Diagnosekoder.ICD10_CODE),
+                    hoveddiagnose = Diagnose("X01", ICD10.OID),
                 )
 
             val result = TilbakedateringRules(payload).execute(ExecutionMode.NORMAL)
@@ -1033,7 +1034,7 @@ class TilbakedateringRulesTest {
                 mapOf(
                     "fom" to payload.aktivitet.earliestFom(),
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
-                    "diagnosesystem" to Diagnosekoder.ICD10_CODE,
+                    "diagnosesystem" to ICD10.OID,
                     "spesialisthelsetjenesten" to true,
                 ),
             )
