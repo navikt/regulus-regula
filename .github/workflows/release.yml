@@ -6,6 +6,7 @@ on:
       - 'lib/**'
       - 'lib/version'
       - 'scripts/create-release.sh'
+      - 'gradle/libs.versions.toml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.branch }}
