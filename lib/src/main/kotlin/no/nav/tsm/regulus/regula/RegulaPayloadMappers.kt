@@ -30,6 +30,7 @@ internal fun RegulaPayload.toValideringRulePayload(mode: ExecutionMode): Valider
         behandlerFnr = behandler.fnr,
         avsenderFnr = if (avsender is RegulaAvsender.Finnes) avsender.fnr else null,
         pasientIdent = pasient.ident,
+        tidligereSykmeldinger = tidligereSykmeldinger,
     )
 }
 
