@@ -18,7 +18,6 @@ class PasientUnder13RulesTest {
             PasientUnder13Rules(
                     PasientUnder13RulePayload(
                         pasientFodselsdato = person14Years,
-                        sykmeldingId = "foo-bar-baz",
                         aktivitet =
                             listOf(
                                 Aktivitet.IkkeMulig(
@@ -44,7 +43,6 @@ class PasientUnder13RulesTest {
             PasientUnder13Rules(
                     PasientUnder13RulePayload(
                         pasientFodselsdato = person12Years,
-                        sykmeldingId = "foo-bar-baz",
                         aktivitet =
                             listOf(
                                 Aktivitet.IkkeMulig(

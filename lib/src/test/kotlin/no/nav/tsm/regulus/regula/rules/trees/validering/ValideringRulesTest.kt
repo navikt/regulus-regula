@@ -19,7 +19,6 @@ class ValideringRulesTest {
         val result =
             ValideringRules(
                     ValideringRulePayload(
-                        sykmeldingId = "sykmeldingId",
                         rulesetVersion = "2",
                         aktivitet = emptyList(),
                         legekontorOrgnr = "123123123",
@@ -67,7 +66,6 @@ class ValideringRulesTest {
         val result =
             ValideringRules(
                     ValideringRulePayload(
-                        sykmeldingId = "sykmeldingId",
                         rulesetVersion = "69",
                         aktivitet = emptyList(),
                         legekontorOrgnr = "123123123",
@@ -112,7 +110,6 @@ class ValideringRulesTest {
         val result =
             ValideringRules(
                     ValideringRulePayload(
-                        sykmeldingId = "sykmeldingId",
                         rulesetVersion = "2",
                         aktivitet = perioderMedFomForDritlengesiden,
                         legekontorOrgnr = "123123123",
@@ -181,7 +178,6 @@ class ValideringRulesTest {
         val result =
             ValideringRules(
                     ValideringRulePayload(
-                        sykmeldingId = "sykmeldingId",
                         rulesetVersion = "2",
                         aktivitet = perioderMedFomForDritlengesiden,
                         legekontorOrgnr = null,
@@ -228,7 +224,6 @@ class ValideringRulesTest {
         val result =
             ValideringRules(
                     ValideringRulePayload(
-                        sykmeldingId = "sykmeldingId",
                         rulesetVersion = "2",
                         aktivitet = emptyList(),
                         legekontorOrgnr = null,
@@ -282,7 +277,6 @@ class ValideringRulesTest {
         val result =
             ValideringRules(
                     ValideringRulePayload(
-                        sykmeldingId = "sykmeldingId",
                         rulesetVersion = "2",
                         aktivitet = emptyList(),
                         legekontorOrgnr = "1232344",
@@ -310,7 +304,6 @@ class ValideringRulesTest {
         val result =
             ValideringRules(
                     ValideringRulePayload(
-                        sykmeldingId = "sykmeldingId",
                         rulesetVersion = "3",
                         aktivitet = emptyList(),
                         legekontorOrgnr = null,

@@ -18,13 +18,7 @@ class DatoRulesTest {
             listOf(Aktivitet.IkkeMulig(fom = LocalDate.now(), tom = LocalDate.now().plusDays(7)))
 
         val result =
-            DatoRules(
-                    DatoRulePayload(
-                        sykmeldingId = "sykmeldingId",
-                        aktivitet = perioder,
-                        signaturdato = now,
-                    )
-                )
+            DatoRules(DatoRulePayload(aktivitet = perioder, signaturdato = now))
                 .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.OK)
@@ -64,13 +58,7 @@ class DatoRulesTest {
             )
 
         val result =
-            DatoRules(
-                    DatoRulePayload(
-                        sykmeldingId = "sykmeldingId",
-                        aktivitet = perioder,
-                        signaturdato = now,
-                    )
-                )
+            DatoRules(DatoRulePayload(aktivitet = perioder, signaturdato = now))
                 .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)
@@ -101,13 +89,7 @@ class DatoRulesTest {
             )
 
         val result =
-            DatoRules(
-                    DatoRulePayload(
-                        sykmeldingId = "sykmeldingId",
-                        aktivitet = perioder,
-                        signaturdato = now,
-                    )
-                )
+            DatoRules(DatoRulePayload(aktivitet = perioder, signaturdato = now))
                 .execute(ExecutionMode.NORMAL)
 
         assertEquals(result.treeResult.status, RuleStatus.INVALID)

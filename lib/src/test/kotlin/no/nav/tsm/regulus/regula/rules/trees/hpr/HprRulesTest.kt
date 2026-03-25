@@ -25,7 +25,6 @@ class HprRulesTest {
         signaturdato: LocalDateTime = LocalDateTime.now(),
     ) =
         HprRulePayload(
-            sykmeldingId = "test-sykmelding-id",
             behandlerGodkjenninger = behandlerGodkjenninger,
             aktivitet = perioder,
             tidligereSykmeldinger = tidligereSykmeldinger,

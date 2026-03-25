@@ -38,7 +38,6 @@ internal fun testPeriodeRulePayload(
     receivedDate: LocalDateTime = LocalDateTime.now(),
 ) =
     PeriodeRulePayload(
-        sykmeldingId = "sykmeldingId",
         aktivitet = perioder,
         behandletTidspunkt = behandletTidspunkt,
         mottattDato = receivedDate,
