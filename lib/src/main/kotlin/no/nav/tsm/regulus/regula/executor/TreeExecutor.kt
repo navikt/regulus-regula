@@ -23,7 +23,7 @@ enum class ExecutionMode {
  * - a set of rule implementations
  * - a payload specific to the rules/tree
  */
-internal abstract class TreeExecutor<RuleEnum, Payload : BasePayload>(
+internal abstract class TreeExecutor<RuleEnum, Payload>(
     private val name: String,
     private val tree: RuleNode<RuleEnum>,
     private val payload: Payload,
@@ -35,9 +35,7 @@ internal abstract class TreeExecutor<RuleEnum, Payload : BasePayload>(
     fun execute(mode: ExecutionMode): TreeOutput<RuleEnum> {
         val executedTreeResult =
             tree.evaluate(payload).also { treeOutput: TreeOutput<RuleEnum> ->
-                logger.info(
-                    "Rules (mode=${mode.name}) ${payload.sykmeldingId}, ${treeOutput.getRulePath()}"
-                )
+                logger.info("Rules (mode=${mode.name}), ${treeOutput.getRulePath()}")
             }
 
         return if (mode == ExecutionMode.PAPIR) {

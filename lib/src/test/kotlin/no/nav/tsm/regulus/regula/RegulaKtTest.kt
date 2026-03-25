@@ -23,7 +23,6 @@ class RegulaKtTest {
         val result =
             executeRegulaRules(
                 RegulaPayload(
-                    sykmeldingId = "123456789",
                     hoveddiagnose = Diagnose(kode = "A01", system = ICPC2.OID),
                     bidiagnoser = listOf(Diagnose(kode = "B02", system = ICPC2.OID)),
                     annenFravarsArsak =
@@ -114,7 +113,6 @@ class RegulaKtTest {
         val result =
             executeRegulaRules(
                 RegulaPayload(
-                    sykmeldingId = "123456789",
                     hoveddiagnose = Diagnose(kode = "A01", system = ICPC2.OID),
                     aktivitet =
                         listOf(
@@ -173,7 +171,6 @@ class RegulaKtTest {
         val result =
             executeRegulaRules(
                 RegulaPayload(
-                    sykmeldingId = "123456789",
                     hoveddiagnose = Diagnose(kode = "A01", system = ICPC2.OID),
                     aktivitet =
                         listOf(
@@ -231,7 +228,6 @@ class RegulaKtTest {
     fun `should give the name of the outcome based on the enum named`() {
         val payload =
             RegulaPayload(
-                sykmeldingId = "123456789",
                 hoveddiagnose = null,
                 bidiagnoser = null,
                 annenFravarsArsak = null,
@@ -267,9 +263,9 @@ class RegulaKtTest {
         assertEquals(result.status, RegulaStatus.INVALID)
         assertEquals(result.outcome.status, RegulaOutcomeStatus.INVALID)
 
-        assertEquals(result.results.size, 4)
         assertEquals(result.outcome.rule, "BEHANDLER_IKKE_I_HPR")
         assertEquals(result.outcome.tree, "Behandler i HPR")
+        assertEquals(result.results.size, 4)
         assertEquals(
             result.outcome.reason.sykmeldt,
             "Avsender fodselsnummer er ikke registert i Helsepersonellregisteret (HPR)",

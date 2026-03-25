@@ -10,26 +10,18 @@ import org.slf4j.LoggerFactory
 
 private val logger = LoggerFactory.getLogger("Ettersending")
 
-internal data class Ettersendelse(
-    val sykmeldingId: String,
-    val fom: LocalDate,
-    val tom: LocalDate,
-    val gradert: Int?,
-)
+internal data class Ettersendelse(val fom: LocalDate, val tom: LocalDate, val gradert: Int?)
 
 internal fun isEttersending(
-    sykmeldingId: String,
     perioder: List<Aktivitet>,
     hoveddiagnose: Diagnose?,
     tidligereSykmeldinger: List<TidligereSykmelding>,
 ): Ettersendelse? {
     if (perioder.size > 1) {
-        logger.info("Flere perioder i periodelisten returnerer false ${sykmeldingId}")
         return null
     }
 
     if (hoveddiagnose == null) {
-        logger.info("Diagnosekode mangler for ${sykmeldingId}")
         return null
     }
 
@@ -49,17 +41,16 @@ internal fun isEttersending(
 
     if (tidligereSykmeldingEttersendelse != null) {
         logger.info(
-            "Sykmelding ${sykmeldingId} er ettersending av ${tidligereSykmeldingEttersendelse.second.sykmeldingId}"
+            "Sykmelding er ettersending av ${tidligereSykmeldingEttersendelse.second.sykmeldingId}"
         )
     } else {
         logger.info(
-            "Could not find ettersending for ${sykmeldingId} from ${tidligereSykmeldinger.map { it.sykmeldingId }}"
+            "Could not find ettersending from ${tidligereSykmeldinger.map { it.sykmeldingId }}"
         )
     }
 
-    return tidligereSykmeldingEttersendelse?.let { (periode, sykmelding) ->
+    return tidligereSykmeldingEttersendelse?.let { (periode) ->
         Ettersendelse(
-            sykmeldingId = sykmelding.sykmeldingId,
             // TODO: Dobbeltsjekk at dette blir riktig mtp. forrige impl. som brukte earliestFom →
             // latestTom
             fom = periode.fom,

@@ -51,7 +51,7 @@ private class TestRules(
         getTestRule(rule)
 }
 
-private data class TestPayload(override val sykmeldingId: String) : BasePayload
+private data class TestPayload(val whatever: String)
 
 class TreeExecutorTest {
 

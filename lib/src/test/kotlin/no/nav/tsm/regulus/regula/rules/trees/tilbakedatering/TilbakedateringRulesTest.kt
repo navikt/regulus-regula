@@ -175,7 +175,6 @@ class TilbakedateringRulesTest {
                     "genereringstidspunkt" to payload.signaturdato.toLocalDate(),
                     "ettersending" to
                         Ettersendelse(
-                            sykmeldingId = "dette-er-ettersendelse",
                             fom = makePerioder().first().fom,
                             tom = makePerioder().first().tom,
                             gradert = null,

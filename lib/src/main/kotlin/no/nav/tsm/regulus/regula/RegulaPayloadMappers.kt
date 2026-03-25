@@ -12,15 +12,13 @@ import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRulePayload
 
 internal fun RegulaPayload.toLegeSuspensjonRulePayload(): LegeSuspensjonRulePayload {
     return LegeSuspensjonRulePayload(
-        sykmeldingId = sykmeldingId,
         behandlerSuspendert =
-            if (behandler is RegulaBehandler.Finnes) behandler.suspendert else false,
+            if (behandler is RegulaBehandler.Finnes) behandler.suspendert else false
     )
 }
 
 internal fun RegulaPayload.toValideringRulePayload(mode: ExecutionMode): ValideringRulePayload {
     return ValideringRulePayload(
-        sykmeldingId = sykmeldingId,
         aktivitet = aktivitet,
         utdypendeOpplysninger = utdypendeOpplysninger,
         rulesetVersion = if (meta is RegulaMeta.LegacyMeta) meta.rulesetVersion else "3",
@@ -35,7 +33,6 @@ internal fun RegulaPayload.toValideringRulePayload(mode: ExecutionMode): Valider
 
 internal fun RegulaPayload.toPeriodeRulePayload(): PeriodeRulePayload {
     return PeriodeRulePayload(
-        sykmeldingId = sykmeldingId,
         aktivitet = aktivitet,
         behandletTidspunkt = behandletTidspunkt,
         mottattDato =
@@ -48,7 +45,6 @@ internal fun RegulaPayload.toPeriodeRulePayload(): PeriodeRulePayload {
 
 internal fun RegulaPayload.toHprRulePayload(): HprRulePayload {
     return HprRulePayload(
-        sykmeldingId = sykmeldingId,
         behandlerGodkjenninger =
             if (behandler is RegulaBehandler.Finnes) behandler.godkjenninger else null,
         aktivitet = aktivitet,
@@ -63,7 +59,6 @@ internal fun RegulaPayload.toHprRulePayload(): HprRulePayload {
 
 internal fun RegulaPayload.toArbeidsuforhetRulePayload(): ArbeidsuforhetRulePayload {
     return ArbeidsuforhetRulePayload(
-        sykmeldingId = sykmeldingId,
         hoveddiagnose = hoveddiagnose,
         bidiagnoser = bidiagnoser ?: emptyList(),
         annenFravarsArsak = annenFravarsArsak,
@@ -72,7 +67,6 @@ internal fun RegulaPayload.toArbeidsuforhetRulePayload(): ArbeidsuforhetRulePayl
 
 internal fun RegulaPayload.toPasientUnder13RulePayload(): PasientUnder13RulePayload {
     return PasientUnder13RulePayload(
-        sykmeldingId = sykmeldingId,
         aktivitet = aktivitet,
         pasientFodselsdato = pasient.fodselsdato,
     )
@@ -80,7 +74,6 @@ internal fun RegulaPayload.toPasientUnder13RulePayload(): PasientUnder13RulePayl
 
 internal fun RegulaPayload.toDatoRulePayload(): DatoRulePayload {
     return DatoRulePayload(
-        sykmeldingId = sykmeldingId,
         aktivitet = aktivitet,
         signaturdato =
             when (meta) {
@@ -92,7 +85,6 @@ internal fun RegulaPayload.toDatoRulePayload(): DatoRulePayload {
 
 internal fun RegulaPayload.toTilbakedateringRulePayload(): TilbakedateringRulePayload {
     return TilbakedateringRulePayload(
-        sykmeldingId = sykmeldingId,
         aktivitet = aktivitet,
         tidligereSykmeldinger = tidligereSykmeldinger,
         signaturdato =

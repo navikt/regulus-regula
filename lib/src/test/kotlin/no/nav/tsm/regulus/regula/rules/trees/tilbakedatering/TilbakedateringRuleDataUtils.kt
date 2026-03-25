@@ -18,7 +18,6 @@ internal fun testTilbakedateringRulePayload(
     startdato: LocalDate? = null,
 ) =
     TilbakedateringRulePayload(
-        sykmeldingId = "foo-bar-baz",
         signaturdato = signaturdato,
         aktivitet = perioder,
         hoveddiagnose = hoveddiagnose,

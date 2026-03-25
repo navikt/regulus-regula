@@ -10,7 +10,6 @@ internal fun testArbeidsuforhetPayload(
     annenFravarsArsak: AnnenFravarsArsak? = null,
 ) =
     ArbeidsuforhetRulePayload(
-        sykmeldingId = "foo-bar-baz",
         hoveddiagnose = hoveddiagnose,
         bidiagnoser = bidiagnoser,
         annenFravarsArsak = annenFravarsArsak,

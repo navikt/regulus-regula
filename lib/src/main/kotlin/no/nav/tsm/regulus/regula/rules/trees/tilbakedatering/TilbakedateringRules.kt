@@ -132,7 +132,6 @@ private val Rules =
         val ettersending: TilbakedateringRuleFn = { payload ->
             val ettersendingAv =
                 isEttersending(
-                    sykmeldingId = payload.sykmeldingId,
                     perioder = payload.aktivitet,
                     hoveddiagnose = payload.hoveddiagnose,
                     tidligereSykmeldinger = payload.tidligereSykmeldinger,
