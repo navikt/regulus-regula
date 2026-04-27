@@ -102,7 +102,10 @@ private val Rules =
 
             RuleOutput(
                 ruleInputs =
-                    mapOf("behandlerFnr" to behandlerFnr, "pasientIdent" to pasientFodselsNummer),
+                    mapOf(
+                        "behandlerFnr" to (behandlerFnr ?: "mangler"),
+                        "pasientIdent" to pasientFodselsNummer,
+                    ),
                 rule = ValideringRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR,
                 ruleResult = behandlerSammeSomPasient,
             )

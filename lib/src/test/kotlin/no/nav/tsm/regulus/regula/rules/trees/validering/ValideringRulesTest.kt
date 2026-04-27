@@ -270,6 +270,55 @@ class ValideringRulesTest {
     }
 
     @Test
+    fun `Behandler finnes ikke shouldn't trigger any rules`() {
+        val pasientFnr = generatePersonNumber(LocalDate.now().minusYears(31), false)
+
+        val result =
+            ValideringRules(
+                    ValideringRulePayload(
+                        rulesetVersion = "2",
+                        aktivitet = emptyList(),
+                        legekontorOrgnr = null,
+                        behandlerFnr = null,
+                        pasientIdent = pasientFnr,
+                        avsenderFnr = "08201023912",
+                        utdypendeOpplysninger = emptyMap(),
+                        papirsykmelding = false,
+                    )
+                )
+                .execute(ExecutionMode.NORMAL)
+
+        assertEquals(result.treeResult.status, RuleStatus.OK)
+        assertPath(
+            result.rulePath,
+            listOf(
+                ValideringRule.UGYLDIG_ORGNR_LENGDE to false,
+                ValideringRule.PAPIRSYKMELDING to false,
+                ValideringRule.UGYLDIG_REGELSETTVERSJON to false,
+                ValideringRule.MANGLENDE_DYNAMISKE_SPOERSMAL_VERSJON2_UKE_39 to false,
+                ValideringRule.AVSENDER_FNR_ER_SAMME_SOM_PASIENT_FNR to false,
+                ValideringRule.BEHANDLER_FNR_ER_SAMME_SOM_PASIENT_FNR to false,
+            ),
+        )
+
+        assertEquals(
+            result.ruleInputs,
+            mapOf(
+                "rulesetVersion" to "2",
+                "papirsykmelding" to false,
+                "sykmeldingPerioder" to emptyList<Any>(),
+                "utdypendeOpplysninger" to emptyMap<String, Any>(),
+                "legekontorOrgnr" to "",
+                "avsenderFnr" to "08201023912",
+                "pasientIdent" to pasientFnr,
+                "behandlerFnr" to "mangler",
+            ),
+        )
+
+        assertNull(result.treeResult.getOutcome())
+    }
+
+    @Test
     fun `Ugyldig orgnummer lengde, Status INVALID`() {
         val person31Years = LocalDate.now().minusYears(31)
         val pasientFnr = generatePersonNumber(person31Years, false)
