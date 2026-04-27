@@ -7,7 +7,7 @@ internal data class ValideringRulePayload(
     val papirsykmelding: Boolean,
     val aktivitet: List<Aktivitet>,
     val legekontorOrgnr: String?,
-    val behandlerFnr: String,
+    val behandlerFnr: String?,
     val avsenderFnr: String?,
     val pasientIdent: String,
     val utdypendeOpplysninger: Map<String, Map<String, Map<String, String>>>?,

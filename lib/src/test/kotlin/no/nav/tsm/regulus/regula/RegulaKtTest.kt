@@ -253,7 +253,7 @@ class RegulaKtTest {
                         mottattDato = LocalDateTime.now(),
                         rulesetVersion = "2",
                     ),
-                behandler = RegulaBehandler.FinnesIkke(fnr = "10987654321"),
+                behandler = RegulaBehandler.FinnesIkke,
                 avsender = RegulaAvsender.IngenAvsender,
             )
 

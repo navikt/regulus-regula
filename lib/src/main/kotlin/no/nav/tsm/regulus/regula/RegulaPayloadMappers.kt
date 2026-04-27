@@ -25,7 +25,7 @@ internal fun RegulaPayload.toValideringRulePayload(mode: ExecutionMode): Valider
         papirsykmelding = mode == ExecutionMode.PAPIR,
         legekontorOrgnr =
             if (behandler is RegulaBehandler.Finnes) behandler.legekontorOrgnr else null,
-        behandlerFnr = behandler.fnr,
+        behandlerFnr = if (behandler is RegulaBehandler.Finnes) behandler.fnr else null,
         avsenderFnr = if (avsender is RegulaAvsender.Finnes) avsender.fnr else null,
         pasientIdent = pasient.ident,
     )

@@ -37,10 +37,10 @@ data class RegulaPasient(
  * In the new architecture this is the same fnr as the RegulaBehandler.fnr, in the legacy it can be
  * different
  */
-sealed class RegulaAvsender {
-    data class Finnes(val fnr: String) : RegulaAvsender()
+sealed interface RegulaAvsender {
+    data class Finnes(val fnr: String) : RegulaAvsender
 
-    data object IngenAvsender : RegulaAvsender()
+    object IngenAvsender : RegulaAvsender
 }
 
 /** Values that are not directly in the sykmelding document, but assosiated with it * */
@@ -56,7 +56,7 @@ sealed class RegulaMeta {
     data class Meta(val sendtTidspunkt: LocalDateTime) : RegulaMeta()
 }
 
-sealed class RegulaBehandler(open val fnr: String) {
+sealed interface RegulaBehandler {
     data class Finnes(
         /**
          * Er behandleren suspendert i btsys? Denne verdien SKAL komme rett fra btsys fra
@@ -69,8 +69,8 @@ sealed class RegulaBehandler(open val fnr: String) {
          */
         val godkjenninger: List<BehandlerGodkjenning>,
         val legekontorOrgnr: String?,
-        override val fnr: String,
-    ) : RegulaBehandler(fnr)
+        val fnr: String,
+    ) : RegulaBehandler
 
-    data class FinnesIkke(override val fnr: String) : RegulaBehandler(fnr)
+    object FinnesIkke : RegulaBehandler
 }
