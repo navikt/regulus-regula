@@ -7,6 +7,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import no.nav.tsm.diagnoser.ICPC2
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
+import no.nav.tsm.regulus.regula.juridisk.toJuridiskVurdering
 import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.AnnenFravarsArsak
 import no.nav.tsm.regulus.regula.payload.BehandlerGodkjenning
@@ -105,7 +106,7 @@ class RegulaKtTest {
         assertEquals(result.status, RegulaStatus.OK)
 
         // All 8 chains
-        assertEquals(result.results.size, 8)
+        assertEquals(result.trees.size, 8)
     }
 
     @Test
@@ -163,7 +164,7 @@ class RegulaKtTest {
         assertEquals(result.status, RegulaStatus.OK)
 
         // All 8 chains
-        assertEquals(result.results.size, 8)
+        assertEquals(result.trees.size, 8)
     }
 
     @Test
@@ -221,7 +222,7 @@ class RegulaKtTest {
         assertEquals(result.status, RegulaStatus.OK)
 
         // All 8 chains
-        assertEquals(result.results.size, 8)
+        assertEquals(result.trees.size, 8)
     }
 
     @Test
@@ -264,11 +265,83 @@ class RegulaKtTest {
         assertEquals(result.outcome.status, RegulaOutcomeStatus.INVALID)
 
         assertEquals(result.outcome.rule, "BEHANDLER_IKKE_I_HPR")
-        assertEquals(result.outcome.tree, "Behandler i HPR")
-        assertEquals(result.results.size, 4)
+        assertEquals(result.outcome.tree.display, "Behandler i HPR")
+        assertEquals(result.trees.size, 4)
         assertEquals(
             result.outcome.reason.sykmeldt,
             "Avsender fodselsnummer er ikke registert i Helsepersonellregisteret (HPR)",
         )
+    }
+
+    @Test
+    fun `last possible rule executed should give entire tree and juridisk stuff`() {
+        val payload =
+            RegulaPayload(
+                hoveddiagnose = Diagnose(kode = "A01", system = ICPC2.OID),
+                bidiagnoser = null,
+                annenFravarsArsak = null,
+                aktivitet =
+                    listOf(
+                        Aktivitet.IkkeMulig(
+                            fom = LocalDate.now().minusDays(32),
+                            tom = LocalDate.now().minusDays(14),
+                        )
+                    ),
+                utdypendeOpplysninger = null,
+                tidligereSykmeldinger = emptyList(),
+                kontaktPasientBegrunnelseIkkeKontakt = "ikke3ord",
+                pasient =
+                    RegulaPasient(
+                        ident = "12345678910",
+                        fodselsdato = LocalDate.now().minusYears(30),
+                    ),
+                behandletTidspunkt = LocalDateTime.now(),
+                meta = RegulaMeta.Meta(sendtTidspunkt = LocalDateTime.now()),
+                behandler =
+                    RegulaBehandler.Finnes(
+                        suspendert = false,
+                        godkjenninger =
+                            listOf(
+                                BehandlerGodkjenning(
+                                    autorisasjon =
+                                        BehandlerKode(aktiv = true, oid = 7704, verdi = "1"),
+                                    helsepersonellkategori =
+                                        BehandlerKode(aktiv = true, oid = 9060, verdi = "LE"),
+                                    tillegskompetanse = null,
+                                )
+                            ),
+                        legekontorOrgnr = "123456789",
+                        fnr = "10987654321",
+                    ),
+                avsender = RegulaAvsender.IngenAvsender,
+            )
+
+        val result = executeRegulaRules(payload, ExecutionMode.NORMAL)
+
+        assertIs<RegulaResult.NotOk>(result)
+        assertEquals(result.status, RegulaStatus.INVALID)
+        assertEquals(result.outcome.status, RegulaOutcomeStatus.INVALID)
+
+        assertEquals(result.outcome.rule, "OVER_1_MND")
+        assertEquals(result.outcome.tree.display, "Tilbakedatering")
+        assertEquals(result.trees.size, 8)
+        assertEquals(
+            result.outcome.reason.sykmeldt,
+            "Sykmeldingen er tilbakedatert uten tilstrekkelig begrunnelse fra den som sykmeldte deg.",
+        )
+
+        assertEquals(result.juridisk.size, 4)
+        val fullVurdering =
+            result.juridisk.map {
+                it.toJuridiskVurdering(
+                    id = "fake-uuid",
+                    eventName = "subsumsjon",
+                    version = "1.0.69",
+                    kilde = "fake-syk-inn",
+                    versjonAvKode = "7c2d106d-54c5-4d25-bfe6-3c7711c0d3bb",
+                    sporing = mapOf("sykmeldingId" to "06c51bac-2845-44dd-bfa2-447145729f28"),
+                )
+            }
+        assertEquals(fullVurdering.size, 4)
     }
 }

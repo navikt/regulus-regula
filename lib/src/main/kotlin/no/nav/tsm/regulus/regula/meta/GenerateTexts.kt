@@ -1,5 +1,6 @@
 package no.nav.tsm.regulus.regula.meta
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
@@ -13,6 +14,7 @@ import no.nav.tsm.regulus.regula.rules.trees.periode.PeriodeRule
 import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.TilbakedateringRule
 import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRule
 
+@OptIn(ExperimentalSerializationApi::class)
 fun main() {
     val ruleTrees =
         listOf(

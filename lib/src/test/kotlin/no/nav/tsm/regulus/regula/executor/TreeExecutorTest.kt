@@ -1,6 +1,7 @@
 package no.nav.tsm.regulus.regula.executor
 
 import kotlin.test.Test
+import no.nav.tsm.regulus.regula.RegulaTree
 import no.nav.tsm.regulus.regula.dsl.RuleJuridisk
 import no.nav.tsm.regulus.regula.dsl.RuleOutcome
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
@@ -46,7 +47,7 @@ private val testTree =
 private class TestRules(
     payload: TestPayload,
     val getTestRule: (TestEnumRule) -> (TestPayload) -> RuleOutput<TestEnumRule>,
-) : TreeExecutor<TestEnumRule, TestPayload>("Test tree", testTree, payload) {
+) : TreeExecutor<TestEnumRule, TestPayload>(RegulaTree.UNDER_13, testTree, payload) {
     override fun getRule(rule: TestEnumRule): (TestPayload) -> RuleOutput<TestEnumRule> =
         getTestRule(rule)
 }

@@ -2,9 +2,10 @@
 
 package no.nav.tsm.regulus.regula
 
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.getOutcome
-import no.nav.tsm.regulus.regula.dsl.getRulePath
 import no.nav.tsm.regulus.regula.dsl.toRegulaJuridisk
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
@@ -28,6 +29,18 @@ import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.TilbakedateringRule
 import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRulePayload
 import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRules
 
+/** All enums in the entire regulus-regula module */
+enum class RegulaTree(val display: String) {
+    SUSPENSJON("Suspendert lege"),
+    VALIDERING("Strukturell validering"),
+    PERIODER("Sykmeldingsperioder"),
+    HPR("Behandler i HPR"),
+    ARBEIDSUFORHET("Arbeidsuførhet"),
+    UNDER_13("Pasient under 13"),
+    DATO("Dato"),
+    TILBAKEDATERING("Tilbakedatering"),
+}
+
 /**
  * Executes the Regula rules based on the provided [RegulaPayload] and [ExecutionMode].
  *
@@ -37,6 +50,7 @@ import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRules
 fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode): RegulaResult {
     registerVersionMetrics()
 
+    val ruledAt = ZonedDateTime.now(ZoneId.of("Europe/Oslo"))
     val executedChain =
         runRules(
             sequence =
@@ -84,9 +98,10 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
             }
             .firstOrNull()
 
-    val results: List<TreeResult> =
+    val executedTrees: List<RegulaExecutedTree> =
         executedChain.map { tree ->
-            TreeResult(
+            RegulaExecutedTree(
+                tree = tree.name,
                 status = overallStatus,
                 outcome =
                     tree.treeResult.getOutcome()?.let { outcome ->
@@ -101,22 +116,24 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
                                 ),
                         )
                     },
-                rulePath = tree.getRulePath(),
-                ruleInputs = tree.ruleInputs,
-                juridisk = tree.treeResult.juridisk.toRegulaJuridisk(),
+                juridisk =
+                    tree.toRegulaJuridisk(
+                        pasientIdent = ruleExecutionPayload.pasient.ident,
+                        vurdert = ruledAt,
+                    ),
             )
         }
 
     val regulaResult =
         when (overallStatus) {
-            RegulaStatus.OK -> RegulaResult.Ok(results = results)
+            RegulaStatus.OK -> RegulaResult.Ok(trees = executedTrees)
             RegulaStatus.MANUAL_PROCESSING,
             RegulaStatus.INVALID -> {
                 requireNotNull(outcome) {
                     "Outcome should not be null when status is MANUAL_PROCESSING or INVALID. This should not be possible."
                 }
 
-                RegulaResult.NotOk(status = overallStatus, outcome = outcome, results = results)
+                RegulaResult.NotOk(status = overallStatus, outcome = outcome, trees = executedTrees)
             }
         }
 

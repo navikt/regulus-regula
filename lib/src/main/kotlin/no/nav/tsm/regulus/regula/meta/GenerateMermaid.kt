@@ -1,6 +1,7 @@
 package no.nav.tsm.regulus.regula.meta
 
-import no.nav.tsm.regulus.regula.RegulaJuridiskHenvisning
+import no.nav.tsm.regulus.regula.JuridiskHenvisning
+import no.nav.tsm.regulus.regula.RegulaTree
 import no.nav.tsm.regulus.regula.dsl.*
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.TreeNode.*
@@ -18,21 +19,21 @@ private val renderJuridiskHenvisning = System.getenv("JURIDISK_HENVISNING")?.toB
 fun main() {
     val ruleTrees =
         listOf(
-            "Suspendert lege" to legeSuspensjonRuleTree,
-            "Strukturell validering" to valideringRuleTree,
-            "Sykmeldingsperioder" to periodeRuleTree,
-            "Behandler i HPR" to hprRuleTree,
-            "Arbeidsuførhet" to arbeidsuforhetRuleTree,
-            "Pasient under 13" to pasientUnder13RuleTree,
-            "Dato" to datoRuleTree,
-            "Tilbakedatering" to tilbakedateringRuleTree,
+            RegulaTree.SUSPENSJON.display to legeSuspensjonRuleTree,
+            RegulaTree.VALIDERING.display to valideringRuleTree,
+            RegulaTree.PERIODER.display to periodeRuleTree,
+            RegulaTree.HPR.display to hprRuleTree,
+            RegulaTree.ARBEIDSUFORHET.display to arbeidsuforhetRuleTree,
+            RegulaTree.UNDER_13.display to pasientUnder13RuleTree,
+            RegulaTree.DATO.display to datoRuleTree,
+            RegulaTree.TILBAKEDATERING.display to tilbakedateringRuleTree,
         )
 
     ruleTrees.forEachIndexed { idx, (name, ruleTree) -> // add index to differentiate each loop
         val builder = StringBuilder()
         builder.append("## $idx. $name\n\n") // section headers with added index number
 
-        val juridiskeHenvisninger: List<RegulaJuridiskHenvisning> =
+        val juridiskeHenvisninger: List<JuridiskHenvisning> =
             ruleTree.extractJuridiskHenvisninger().distinctBy { it.paragraf }
 
         require(juridiskeHenvisninger.size <= 1) {
@@ -64,7 +65,7 @@ fun main() {
     }
 }
 
-private fun <Enum> TreeNode<Enum>.extractJuridiskHenvisninger(): List<RegulaJuridiskHenvisning> {
+private fun <Enum> TreeNode<Enum>.extractJuridiskHenvisninger(): List<JuridiskHenvisning> {
     return when (this) {
         is LeafNode -> {
             if (juridisk.juridiskHenvisning != null) {
@@ -191,7 +192,7 @@ private fun <Enum> TreeNode<Enum>.traverseTree(
     }
 }
 
-private fun RegulaJuridiskHenvisning.hyperlenke(): String =
+private fun JuridiskHenvisning.hyperlenke(): String =
     "https://lovdata.no/nav/folketrygdloven/kap${this.paragraf.split("-").first()}#PARAGRAF_${this.paragraf}"
 
 private fun RuleJuridisk.folkelig(): String {

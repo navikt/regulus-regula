@@ -1,6 +1,7 @@
 package no.nav.tsm.regulus.regula.rules.trees.hpr
 
 import java.time.LocalDateTime
+import no.nav.tsm.regulus.regula.RegulaTree
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.payload.BehandlerGodkjenning
@@ -12,7 +13,7 @@ import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.latestTom
 
 internal class HprRules(hprRulePayload: HprRulePayload) :
-    TreeExecutor<HprRule, HprRulePayload>("Behandler i HPR", hprRuleTree, hprRulePayload) {
+    TreeExecutor<HprRule, HprRulePayload>(RegulaTree.HPR, hprRuleTree, hprRulePayload) {
     override fun getRule(rule: HprRule) = getHprRule(rule)
 }
 

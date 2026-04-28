@@ -1,13 +1,16 @@
 package no.nav.tsm.regulus.regula.dsl
 
-import no.nav.tsm.regulus.regula.RegulaJuridiskHenvisning
-import no.nav.tsm.regulus.regula.RegulaLovverk
+import java.time.ZonedDateTime
+import no.nav.tsm.regulus.regula.JuridiskHenvisning
+import no.nav.tsm.regulus.regula.JuridiskHenvisningLovverk
+import no.nav.tsm.regulus.regula.JuridiskUtfall
+import no.nav.tsm.regulus.regula.RegulaJuridiskVurdering
 
-internal enum class RuleJuridisk(val juridiskHenvisning: RegulaJuridiskHenvisning?) {
+internal enum class RuleJuridisk(val juridiskHenvisning: JuridiskHenvisning?) {
     INGEN(null),
     FOLKETRYGDLOVEN_8_3_1(
-        RegulaJuridiskHenvisning(
-            lovverk = RegulaLovverk.FOLKETRYGDLOVEN,
+        JuridiskHenvisning(
+            lovverk = JuridiskHenvisningLovverk.FOLKETRYGDLOVEN,
             paragraf = "8-3",
             ledd = 1,
             punktum = null,
@@ -15,8 +18,8 @@ internal enum class RuleJuridisk(val juridiskHenvisning: RegulaJuridiskHenvisnin
         )
     ),
     FOLKETRYGDLOVEN_8_4(
-        RegulaJuridiskHenvisning(
-            lovverk = RegulaLovverk.FOLKETRYGDLOVEN,
+        JuridiskHenvisning(
+            lovverk = JuridiskHenvisningLovverk.FOLKETRYGDLOVEN,
             paragraf = "8-4",
             ledd = 1,
             punktum = null,
@@ -24,8 +27,8 @@ internal enum class RuleJuridisk(val juridiskHenvisning: RegulaJuridiskHenvisnin
         )
     ),
     FOLKETRYGDLOVEN_8_7(
-        RegulaJuridiskHenvisning(
-            lovverk = RegulaLovverk.FOLKETRYGDLOVEN,
+        JuridiskHenvisning(
+            lovverk = JuridiskHenvisningLovverk.FOLKETRYGDLOVEN,
             paragraf = "8-7",
             ledd = null,
             punktum = null,
@@ -33,8 +36,8 @@ internal enum class RuleJuridisk(val juridiskHenvisning: RegulaJuridiskHenvisnin
         )
     ),
     FOLKETRYGDLOVEN_8_7_1(
-        RegulaJuridiskHenvisning(
-            lovverk = RegulaLovverk.FOLKETRYGDLOVEN,
+        JuridiskHenvisning(
+            lovverk = JuridiskHenvisningLovverk.FOLKETRYGDLOVEN,
             paragraf = "8-7",
             ledd = 1,
             punktum = null,
@@ -42,8 +45,8 @@ internal enum class RuleJuridisk(val juridiskHenvisning: RegulaJuridiskHenvisnin
         )
     ),
     FOLKETRYGDLOVEN_8_7_1_1(
-        RegulaJuridiskHenvisning(
-            lovverk = RegulaLovverk.FOLKETRYGDLOVEN,
+        JuridiskHenvisning(
+            lovverk = JuridiskHenvisningLovverk.FOLKETRYGDLOVEN,
             paragraf = "8-7",
             ledd = 1,
             punktum = 1,
@@ -51,8 +54,8 @@ internal enum class RuleJuridisk(val juridiskHenvisning: RegulaJuridiskHenvisnin
         )
     ),
     FOLKETRYGDLOVEN_8_7_2_2(
-        RegulaJuridiskHenvisning(
-            lovverk = RegulaLovverk.FOLKETRYGDLOVEN,
+        JuridiskHenvisning(
+            lovverk = JuridiskHenvisningLovverk.FOLKETRYGDLOVEN,
             paragraf = "8-7",
             ledd = 2,
             punktum = 2,
@@ -61,9 +64,25 @@ internal enum class RuleJuridisk(val juridiskHenvisning: RegulaJuridiskHenvisnin
     ),
 }
 
-internal fun RuleJuridisk.toRegulaJuridisk(): RegulaJuridiskHenvisning? {
-    return when (this) {
-        RuleJuridisk.INGEN -> null
-        else -> juridiskHenvisning
-    }
+internal fun TreeOutput<*>.toRegulaJuridisk(
+    pasientIdent: String,
+    vurdert: ZonedDateTime,
+): RegulaJuridiskVurdering? {
+    val juridisk = this.treeResult.juridisk
+    if (juridisk == RuleJuridisk.INGEN || juridisk.juridiskHenvisning == null) return null
+
+    return RegulaJuridiskVurdering(
+        henvisning = juridisk.juridiskHenvisning,
+        utfall = this.treeResult.status.toJuridiskUtfall(),
+        input = this.ruleInputs,
+        fodselsnummer = pasientIdent,
+        tidsstempel = vurdert,
+    )
 }
+
+internal fun RuleStatus.toJuridiskUtfall() =
+    when (this) {
+        RuleStatus.OK -> JuridiskUtfall.VILKAR_OPPFYLT
+        RuleStatus.INVALID -> JuridiskUtfall.VILKAR_IKKE_OPPFYLT
+        RuleStatus.MANUAL_PROCESSING -> JuridiskUtfall.VILKAR_UAVKLART
+    }

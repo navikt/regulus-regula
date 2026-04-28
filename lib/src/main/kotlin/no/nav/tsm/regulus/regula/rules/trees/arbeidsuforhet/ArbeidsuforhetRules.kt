@@ -4,13 +4,14 @@ import no.nav.tsm.diagnoser.ICD10
 import no.nav.tsm.diagnoser.ICPC2
 import no.nav.tsm.diagnoser.ICPC2B
 import no.nav.tsm.diagnoser.toICPC2
+import no.nav.tsm.regulus.regula.RegulaTree
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.payload.Diagnose
 
 internal class ArbeidsuforhetRules(val payload: ArbeidsuforhetRulePayload) :
     TreeExecutor<ArbeidsuforhetRule, ArbeidsuforhetRulePayload>(
-        "Arbeidsuførhet",
+        RegulaTree.ARBEIDSUFORHET,
         arbeidsuforhetRuleTree,
         payload,
     ) {

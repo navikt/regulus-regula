@@ -1,16 +1,35 @@
 package no.nav.tsm.regulus.regula
 
 import java.time.LocalDate
+import java.time.ZonedDateTime
 
-data class RegulaJuridiskHenvisning(
-    val lovverk: RegulaLovverk,
+enum class JuridiskUtfall {
+    VILKAR_OPPFYLT,
+    VILKAR_IKKE_OPPFYLT,
+    VILKAR_UAVKLART,
+}
+
+data class RegulaJuridiskVurdering(
+    val henvisning: JuridiskHenvisning,
+    val utfall: JuridiskUtfall,
+    val fodselsnummer: String,
+    val tidsstempel: ZonedDateTime,
+    val input: Map<String, Any>,
+)
+
+data class JuridiskHenvisning(
+    val lovverk: JuridiskHenvisningLovverk,
     val paragraf: String,
     val ledd: Int?,
     val punktum: Int?,
     val bokstav: String?,
 )
 
-enum class RegulaLovverk(val navn: String, val kortnavn: String, val lovverksversjon: LocalDate) {
+enum class JuridiskHenvisningLovverk(
+    val navn: String,
+    val kortnavn: String,
+    val lovverksversjon: LocalDate,
+) {
     FOLKETRYGDLOVEN(
         navn = "Lov om folketrygd",
         kortnavn = "Folketrygdloven",

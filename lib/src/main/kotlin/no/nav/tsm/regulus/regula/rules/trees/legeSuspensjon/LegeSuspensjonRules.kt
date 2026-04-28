@@ -1,11 +1,12 @@
 package no.nav.tsm.regulus.regula.rules.trees.legeSuspensjon
 
+import no.nav.tsm.regulus.regula.RegulaTree
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 
 internal class LegeSuspensjonRules(legeSuspensjonPayload: LegeSuspensjonRulePayload) :
     TreeExecutor<LegeSuspensjonRule, LegeSuspensjonRulePayload>(
-        "Suspendert lege",
+        RegulaTree.SUSPENSJON,
         legeSuspensjonRuleTree,
         legeSuspensjonPayload,
     ) {
