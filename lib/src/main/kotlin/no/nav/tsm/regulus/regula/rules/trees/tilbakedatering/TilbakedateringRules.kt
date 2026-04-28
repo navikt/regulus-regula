@@ -2,6 +2,7 @@ package no.nav.tsm.regulus.regula.rules.trees.tilbakedatering
 
 import java.time.temporal.ChronoUnit
 import no.nav.tsm.diagnoser.ICD10
+import no.nav.tsm.regulus.regula.RegulaTree
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.extras.Forlengelse
@@ -13,7 +14,7 @@ import no.nav.tsm.regulus.regula.utils.latestTom
 
 internal class TilbakedateringRules(payload: TilbakedateringRulePayload) :
     TreeExecutor<TilbakedateringRule, TilbakedateringRulePayload>(
-        "Tilbakedatering",
+        RegulaTree.TILBAKEDATERING,
         tilbakedateringRuleTree,
         payload,
     ) {

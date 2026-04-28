@@ -6,35 +6,35 @@ enum class RegulaStatus {
     INVALID,
 }
 
-data class TreeResult(
+data class RegulaExecutedTree(
+    val tree: RegulaTree,
+    /** The tree's overall status */
     val status: RegulaStatus,
-    val rulePath: String,
-    val ruleInputs: Map<String, Any>,
+    /** Given that the tree resulted in a non-OK status, this will be the outcome details */
     val outcome: RegulaOutcome?,
-    val juridisk: RegulaJuridiskHenvisning?,
+    /**
+     * The base juridisk for the tree, can be enhanced by the application to create the complete
+     * juridisk vurdering to be produced to the PIK-topic.
+     */
+    val juridisk: RegulaJuridiskVurdering?,
 )
 
-sealed class RegulaResult(
-    open val status: RegulaStatus,
-    /** The entire result set from the executed chain. For internal library use only. */
-    @Deprecated(message = "This is an internal API and should not be used outside of the library.")
-    open val results: List<TreeResult>,
-) {
-    data class Ok(
-        @Deprecated(
-            message = "This is an internal API and should not be used outside of the library."
-        )
-        override val results: List<TreeResult>
-    ) : RegulaResult(status = RegulaStatus.OK, results)
+sealed interface RegulaResult {
+    val status: RegulaStatus
+    val trees: List<RegulaExecutedTree>
+
+    data class Ok(override val trees: List<RegulaExecutedTree>) : RegulaResult {
+        override val status = RegulaStatus.OK
+    }
 
     data class NotOk(
         override val status: RegulaStatus,
+        override val trees: List<RegulaExecutedTree>,
         val outcome: RegulaOutcome,
-        @Deprecated(
-            message = "This is an internal API and should not be used outside of the library."
-        )
-        override val results: List<TreeResult>,
-    ) : RegulaResult(status, results)
+    ) : RegulaResult
+
+    val juridisk: List<RegulaJuridiskVurdering>
+        get() = trees.mapNotNull { it.juridisk }
 }
 
 enum class RegulaOutcomeStatus {
@@ -46,7 +46,7 @@ data class RegulaOutcomeReason(val sykmeldt: String, val sykmelder: String)
 
 data class RegulaOutcome(
     val status: RegulaOutcomeStatus,
-    val tree: String,
+    val tree: RegulaTree,
     val rule: String,
     val reason: RegulaOutcomeReason,
 )

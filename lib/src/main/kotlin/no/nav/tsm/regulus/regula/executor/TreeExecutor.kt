@@ -1,5 +1,6 @@
 package no.nav.tsm.regulus.regula.executor
 
+import no.nav.tsm.regulus.regula.RegulaTree
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.TreeNode
@@ -24,7 +25,7 @@ enum class ExecutionMode {
  * - a payload specific to the rules/tree
  */
 internal abstract class TreeExecutor<RuleEnum, Payload>(
-    private val name: String,
+    private val name: RegulaTree,
     private val tree: RuleNode<RuleEnum>,
     private val payload: Payload,
 ) {

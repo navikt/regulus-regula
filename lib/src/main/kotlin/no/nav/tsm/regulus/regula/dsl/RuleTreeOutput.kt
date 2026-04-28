@@ -1,5 +1,6 @@
 package no.nav.tsm.regulus.regula.dsl
 
+import no.nav.tsm.regulus.regula.RegulaTree
 import no.nav.tsm.regulus.regula.dsl.TreeNode.*
 import no.nav.tsm.regulus.regula.dsl.TreeNode.LeafNode.*
 
@@ -22,7 +23,7 @@ internal data class RuleOutput<Enum>(
  */
 internal data class TreeOutput<Enum>(
     /** Name of the tree */
-    val name: String,
+    val name: RegulaTree,
     /**
      * Cumulative inputs that have been used to perform the functional checks of the rules in the
      * tree.

@@ -1,12 +1,13 @@
 package no.nav.tsm.regulus.regula.rules.trees.pasientUnder13
 
+import no.nav.tsm.regulus.regula.RegulaTree
 import no.nav.tsm.regulus.regula.dsl.RuleOutput
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
 import no.nav.tsm.regulus.regula.utils.latestTom
 
 internal class PasientUnder13Rules(payload: PasientUnder13RulePayload) :
     TreeExecutor<PasientUnder13Rule, PasientUnder13RulePayload>(
-        "Pasient under 13",
+        RegulaTree.UNDER_13,
         pasientUnder13RuleTree,
         payload,
     ) {

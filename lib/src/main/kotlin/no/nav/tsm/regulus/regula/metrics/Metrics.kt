@@ -16,5 +16,6 @@ internal fun registerResultMetrics(regulaResult: RegulaResult, mode: ExecutionMo
 
     ruleNodeRuleHitCounter.labels(regulaResult.status.name, labelValue, mode.name).inc()
 
-    regulaResult.results.forEach { ruleNodeRulePathCounter.labels(it.rulePath, mode.name).inc() }
+    // TODO:
+    // regulaResult.results.forEach { ruleNodeRulePathCounter.labels(it.rulePath, mode.name).inc() }
 }
