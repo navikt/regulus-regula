@@ -7,12 +7,8 @@ plugins {
     id("maven-publish")
 }
 
-repositories {
-    mavenCentral()
-    maven { url = uri("https://github-package-registry-mirror.gc.nav.no/cached/maven-release") }
-}
-
 dependencies {
+    api(project(":juridisk"))
     testImplementation(libs.junit.jupiter.engine)
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.slf4j:slf4j-nop:2.0.9")
@@ -25,18 +21,9 @@ dependencies {
     api(libs.prometheus)
 }
 
-java {
-    toolchain { languageVersion = JavaLanguageVersion.of(21) }
-    withSourcesJar()
-}
-
-tasks.withType<Jar>().configureEach {
-    manifest { attributes["Implementation-Version"] = file("version").readText().trim() }
-}
-
 val generateVersionFile =
     tasks.register("generateRegulaVersion") {
-        val version = file("version").readText().trim()
+        val version = project.version.toString()
         val outputDir = layout.buildDirectory.dir("generated/regula")
         outputs.dir(outputDir)
 
@@ -59,30 +46,7 @@ val generateVersionFile =
 
 sourceSets["main"].kotlin.srcDir(generateVersionFile.map { it.outputs.files })
 
-publishing {
-    publications {
-        create<MavenPublication>("gpr") {
-            from(components["java"])
-            groupId = "no.nav.tsm.regulus"
-            artifactId = "regula"
-            version = file("version").readText().trim()
-        }
-    }
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/navikt/regulus-regula")
-            credentials {
-                username = "x-access-token"
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
-}
-
 spotless { kotlin { ktfmt("0.54").kotlinlangStyle() } }
-
-tasks.named<Test>("test") { useJUnitPlatform() }
 
 tasks.register<JavaExec>("lintTrees") {
     logging.captureStandardOutput(LogLevel.LIFECYCLE)
@@ -103,7 +67,7 @@ tasks.register<JavaExec>("generateMermaid") {
     description = "Generates mermaid diagram source of rules"
     standardOutput = output
     doLast {
-        val readme = File("README.md")
+        val readme = rootProject.file("README.md")
         val lines = readme.readLines()
 
         val starterTag = "<!-- RULE_MARKER_START -->"
@@ -130,7 +94,7 @@ tasks.register<JavaExec>("generateTexts") {
     description = "Generates a JSON file with all rule texts"
     standardOutput = output
     doLast {
-        val textsFile = File("all-texts.json")
+        val textsFile = rootProject.file("all-texts.json")
 
         textsFile.writeText(output.toString())
     }
@@ -145,7 +109,7 @@ tasks.register<JavaExec>("generateMermaidFull") {
     description = "Generates mermaid diagram source of rules"
     standardOutput = output
     doLast {
-        val readme = File("RULE-TREE.md")
+        val readme = rootProject.file("RULE-TREE.md")
         val lines = readme.readLines()
 
         val starterTag = "<!-- RULE_MARKER_START -->"

@@ -7,7 +7,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import no.nav.tsm.diagnoser.ICPC2
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
-import no.nav.tsm.regulus.regula.juridisk.toJuridiskVurdering
 import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.AnnenFravarsArsak
 import no.nav.tsm.regulus.regula.payload.BehandlerGodkjenning

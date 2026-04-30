@@ -1,10 +1,10 @@
 package no.nav.tsm.regulus.regula.meta
 
-import no.nav.tsm.regulus.regula.JuridiskHenvisning
 import no.nav.tsm.regulus.regula.RegulaTree
 import no.nav.tsm.regulus.regula.dsl.*
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.TreeNode.*
+import no.nav.tsm.regulus.regula.juridisk.JuridiskHenvisning
 import no.nav.tsm.regulus.regula.rules.trees.arbeidsuforhet.arbeidsuforhetRuleTree
 import no.nav.tsm.regulus.regula.rules.trees.dato.datoRuleTree
 import no.nav.tsm.regulus.regula.rules.trees.hpr.hprRuleTree

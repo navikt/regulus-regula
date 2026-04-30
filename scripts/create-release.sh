@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e
 
-VERSION=$(cat lib/version)
+VERSION=$(cat gradle/version)
 LAST_TAG=$(git tag --sort=-creatordate | head -n 1)
 COMMITS=$(git log ${LAST_TAG}..HEAD --pretty=format:"* %s" | grep -v "set next version")
 
 if [ -z "$VERSION" ]; then
-  echo "No version found in lib/version"
+  echo "No version found in gradle/version"
   exit 1
 fi
 

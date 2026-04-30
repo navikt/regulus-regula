@@ -1,21 +1,6 @@
-package no.nav.tsm.regulus.regula
+package no.nav.tsm.regulus.regula.juridisk
 
 import java.time.LocalDate
-import java.time.ZonedDateTime
-
-enum class JuridiskUtfall {
-    VILKAR_OPPFYLT,
-    VILKAR_IKKE_OPPFYLT,
-    VILKAR_UAVKLART,
-}
-
-data class RegulaJuridiskVurdering(
-    val henvisning: JuridiskHenvisning,
-    val utfall: JuridiskUtfall,
-    val fodselsnummer: String,
-    val tidsstempel: ZonedDateTime,
-    val input: Map<String, Any>,
-)
 
 data class JuridiskHenvisning(
     val lovverk: JuridiskHenvisningLovverk,
@@ -45,4 +30,10 @@ enum class JuridiskHenvisningLovverk(
         kortnavn = "Helsepersonelloven",
         lovverksversjon = LocalDate.of(2022, 1, 1),
     ),
+}
+
+enum class JuridiskUtfall {
+    VILKAR_OPPFYLT,
+    VILKAR_IKKE_OPPFYLT,
+    VILKAR_UAVKLART,
 }

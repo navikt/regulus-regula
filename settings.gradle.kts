@@ -4,4 +4,5 @@ plugins {
 
 rootProject.name = "regulus-regula"
 
-include("lib")
+include("regula")
+include("juridisk")

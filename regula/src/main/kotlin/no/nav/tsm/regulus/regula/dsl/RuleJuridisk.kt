@@ -1,10 +1,10 @@
 package no.nav.tsm.regulus.regula.dsl
 
 import java.time.ZonedDateTime
-import no.nav.tsm.regulus.regula.JuridiskHenvisning
-import no.nav.tsm.regulus.regula.JuridiskHenvisningLovverk
-import no.nav.tsm.regulus.regula.JuridiskUtfall
 import no.nav.tsm.regulus.regula.RegulaJuridiskVurdering
+import no.nav.tsm.regulus.regula.juridisk.JuridiskHenvisning
+import no.nav.tsm.regulus.regula.juridisk.JuridiskHenvisningLovverk
+import no.nav.tsm.regulus.regula.juridisk.JuridiskUtfall
 
 internal enum class RuleJuridisk(val juridiskHenvisning: JuridiskHenvisning?) {
     INGEN(null),
