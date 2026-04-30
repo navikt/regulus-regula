@@ -1,9 +1,6 @@
 package no.nav.tsm.regulus.regula.juridisk
 
 import java.time.ZonedDateTime
-import no.nav.tsm.regulus.regula.JuridiskHenvisning
-import no.nav.tsm.regulus.regula.JuridiskUtfall
-import no.nav.tsm.regulus.regula.RegulaJuridiskVurdering
 
 /**
  * The final "Juridisk Vurdering" that is produced to the "paragraf i kode" topic on kafka. This
@@ -25,26 +22,3 @@ data class JuridiskVurdering(
     val tidsstempel: ZonedDateTime,
     val utfall: JuridiskUtfall,
 )
-
-fun RegulaJuridiskVurdering.toJuridiskVurdering(
-    id: String,
-    eventName: String,
-    version: String,
-    kilde: String,
-    versjonAvKode: String,
-    sporing: Map<String, String>,
-): JuridiskVurdering {
-    return JuridiskVurdering(
-        id = id,
-        eventName = eventName,
-        version = version,
-        kilde = kilde,
-        versjonAvKode = versjonAvKode,
-        sporing = sporing,
-        fodselsnummer = this.fodselsnummer,
-        juridiskHenvisning = this.henvisning,
-        input = this.input,
-        tidsstempel = this.tidsstempel,
-        utfall = this.utfall,
-    )
-}

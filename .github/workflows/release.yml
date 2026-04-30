@@ -3,9 +3,13 @@ on:
   push:
     paths:
       - .github/workflows/release.yml
-      - 'lib/**'
-      - 'lib/version'
+      - 'build.gradle.kts'
+      - 'settings.gradle.kts'
+      - 'regula/**'
+      - 'juridisk/**'
+      - 'gradle/version'
       - 'scripts/create-release.sh'
+      - 'scripts/bump-version.sh'
       - 'gradle/libs.versions.toml'
 
 concurrency:
@@ -59,7 +63,7 @@ jobs:
       - name: Publish package
         if: github.ref == 'refs/heads/main' && needs.should_release.outputs.skip == 'false'
         run: |
-          ./gradlew publish
+          ./gradlew publishAll
           ./scripts/create-release.sh
           ./scripts/bump-version.sh
         env:
