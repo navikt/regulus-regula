@@ -1,6 +1,7 @@
 package no.nav.tsm.regulus.regula.rules.trees.validering
 
 import java.time.LocalDate
+import kotlin.collections.emptyList
 import kotlin.test.*
 import kotlin.test.Test
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
@@ -25,7 +26,7 @@ class ValideringRulesTest {
                         behandlerFnr = "08201023912",
                         avsenderFnr = "01912391932",
                         pasientIdent = pasientFnr,
-                        utdypendeOpplysninger = emptyMap(),
+                        besvarteUtypendeOpplysninger = emptyList(),
                         papirsykmelding = false,
                     )
                 )
@@ -50,7 +51,7 @@ class ValideringRulesTest {
                 "rulesetVersion" to "2",
                 "papirsykmelding" to false,
                 "sykmeldingPerioder" to emptyList<Any>(),
-                "utdypendeOpplysninger" to emptyMap<String, Any>(),
+                "utdypendeOpplysninger" to emptyList<String>(),
                 "pasientIdent" to pasientFnr,
                 "legekontorOrgnr" to "123123123",
                 "avsenderFnr" to "01912391932",
@@ -72,7 +73,7 @@ class ValideringRulesTest {
                         behandlerFnr = "08201023912",
                         avsenderFnr = "01912391932",
                         pasientIdent = "07091912345",
-                        utdypendeOpplysninger = emptyMap(),
+                        besvarteUtypendeOpplysninger = emptyList(),
                         papirsykmelding = false,
                     )
                 )
@@ -116,7 +117,7 @@ class ValideringRulesTest {
                         behandlerFnr = "08201023912",
                         avsenderFnr = "01912391932",
                         pasientIdent = "07091912345",
-                        utdypendeOpplysninger = emptyMap(),
+                        besvarteUtypendeOpplysninger = emptyList(),
                         papirsykmelding = false,
                     )
                 )
@@ -139,7 +140,7 @@ class ValideringRulesTest {
                 "legekontorOrgnr" to "123123123",
                 "papirsykmelding" to false,
                 "sykmeldingPerioder" to perioderMedFomForDritlengesiden,
-                "utdypendeOpplysninger" to emptyMap<String, Any>(),
+                "utdypendeOpplysninger" to emptyList<String>(),
             ),
         )
 
@@ -153,27 +154,7 @@ class ValideringRulesTest {
     fun `Manglende en av de dynamiske sporsmalene for ruleset v2 uke 39, INVALID`() {
         val perioderMedFomForDritlengesiden =
             listOf(Aktivitet.IkkeMulig(fom = LocalDate.now().minusDays(274), tom = LocalDate.now()))
-        val utdypendeOpplysninger =
-            mapOf(
-                "6.5" to
-                    mapOf(
-                        "6.5.1" to
-                            mapOf(
-                                "svar" to
-                                    "Thomson designs troy ratings differently york arrived, leaders scared done stanford assess package vegetarian, birmingham son preparation take forgot over hearings, being. "
-                            ),
-                        "6.5.3" to
-                            mapOf(
-                                "svar" to
-                                    "Outline communist rear charming therapist grab pendant, reliability flesh acquired champagne typing keep strip, conjunction compact stuffed witness nova invisible setup. "
-                            ),
-                        "6.5.4" to
-                            mapOf(
-                                "svar" to
-                                    "Font trains vaccine assistant nano feedback inexpensive, web charles malpractice field dodge statewide redhead, velocity movies shot converter biz journey filename, occasion aerospace holland tank. "
-                            ),
-                    )
-            )
+        val utdypendeOpplysninger = listOf("6.5.1", "6.5.3", "6.5.4")
 
         val result =
             ValideringRules(
@@ -184,7 +165,7 @@ class ValideringRulesTest {
                         behandlerFnr = "07091912345",
                         pasientIdent = "08201023912",
                         avsenderFnr = "08201023913",
-                        utdypendeOpplysninger = utdypendeOpplysninger,
+                        besvarteUtypendeOpplysninger = utdypendeOpplysninger,
                         papirsykmelding = false,
                     )
                 )
@@ -230,7 +211,7 @@ class ValideringRulesTest {
                         behandlerFnr = pasientFnr,
                         pasientIdent = pasientFnr,
                         avsenderFnr = "08201023912",
-                        utdypendeOpplysninger = emptyMap(),
+                        besvarteUtypendeOpplysninger = emptyList(),
                         papirsykmelding = false,
                     )
                 )
@@ -255,7 +236,7 @@ class ValideringRulesTest {
                 "rulesetVersion" to "2",
                 "papirsykmelding" to false,
                 "sykmeldingPerioder" to emptyList<Any>(),
-                "utdypendeOpplysninger" to emptyMap<String, Any>(),
+                "utdypendeOpplysninger" to emptyList<String>(),
                 "legekontorOrgnr" to "",
                 "avsenderFnr" to "08201023912",
                 "pasientIdent" to pasientFnr,
@@ -282,7 +263,7 @@ class ValideringRulesTest {
                         behandlerFnr = null,
                         pasientIdent = pasientFnr,
                         avsenderFnr = "08201023912",
-                        utdypendeOpplysninger = emptyMap(),
+                        besvarteUtypendeOpplysninger = emptyList(),
                         papirsykmelding = false,
                     )
                 )
@@ -307,7 +288,7 @@ class ValideringRulesTest {
                 "rulesetVersion" to "2",
                 "papirsykmelding" to false,
                 "sykmeldingPerioder" to emptyList<Any>(),
-                "utdypendeOpplysninger" to emptyMap<String, Any>(),
+                "utdypendeOpplysninger" to emptyList<String>(),
                 "legekontorOrgnr" to "",
                 "avsenderFnr" to "08201023912",
                 "pasientIdent" to pasientFnr,
@@ -332,7 +313,7 @@ class ValideringRulesTest {
                         behandlerFnr = "08201023912",
                         avsenderFnr = "2",
                         pasientIdent = pasientFnr,
-                        utdypendeOpplysninger = emptyMap(),
+                        besvarteUtypendeOpplysninger = emptyList(),
                         papirsykmelding = false,
                     )
                 )
@@ -359,7 +340,7 @@ class ValideringRulesTest {
                         behandlerFnr = "08201023912",
                         avsenderFnr = pasientFnr,
                         pasientIdent = pasientFnr,
-                        utdypendeOpplysninger = emptyMap(),
+                        besvarteUtypendeOpplysninger = emptyList(),
                         papirsykmelding = false,
                     )
                 )
@@ -383,7 +364,7 @@ class ValideringRulesTest {
                 "rulesetVersion" to "3",
                 "papirsykmelding" to false,
                 "sykmeldingPerioder" to emptyList<Any>(),
-                "utdypendeOpplysninger" to emptyMap<String, Any>(),
+                "utdypendeOpplysninger" to emptyList<String>(),
                 "legekontorOrgnr" to "",
                 "avsenderFnr" to pasientFnr,
                 "pasientIdent" to pasientFnr,
