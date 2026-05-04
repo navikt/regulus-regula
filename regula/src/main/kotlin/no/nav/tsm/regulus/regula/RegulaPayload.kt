@@ -17,7 +17,7 @@ data class RegulaPayload(
     val annenFravarsArsak: AnnenFravarsArsak?,
     val aktivitet: List<Aktivitet>,
     val behandletTidspunkt: LocalDateTime,
-    val utdypendeOpplysninger: Map<String, Map<String, Map<String, String>>>?,
+    val besvarteUtdypendeOpplysninger: List<String>?,
     val tidligereSykmeldinger: List<TidligereSykmelding>,
     val kontaktPasientBegrunnelseIkkeKontakt: String?,
     val pasient: RegulaPasient,

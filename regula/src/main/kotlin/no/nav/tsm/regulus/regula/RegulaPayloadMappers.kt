@@ -20,7 +20,7 @@ internal fun RegulaPayload.toLegeSuspensjonRulePayload(): LegeSuspensjonRulePayl
 internal fun RegulaPayload.toValideringRulePayload(mode: ExecutionMode): ValideringRulePayload {
     return ValideringRulePayload(
         aktivitet = aktivitet,
-        utdypendeOpplysninger = utdypendeOpplysninger,
+        besvarteUtypendeOpplysninger = besvarteUtdypendeOpplysninger ?: emptyList(),
         rulesetVersion = if (meta is RegulaMeta.LegacyMeta) meta.rulesetVersion else "3",
         papirsykmelding = mode == ExecutionMode.PAPIR,
         legekontorOrgnr =

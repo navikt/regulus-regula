@@ -37,16 +37,7 @@ class RegulaKtTest {
                                 tom = LocalDate.now().plusDays(10),
                             )
                         ),
-                    utdypendeOpplysninger =
-                        mapOf(
-                            "6.5" to
-                                mapOf(
-                                    "6.5.1" to mapOf("tekst" to "Svar på spørsmål 1"),
-                                    "6.5.2" to mapOf("tekst" to "Svar på spørsmål 2"),
-                                    "6.5.3" to mapOf("tekst" to "Svar på spørsmål 3"),
-                                    "6.5.4" to mapOf("tekst" to "Svar på spørsmål 4"),
-                                )
-                        ),
+                    besvarteUtdypendeOpplysninger = listOf("6.5.1", "6.5.2", "6.5.3", "6.5.4"),
                     tidligereSykmeldinger =
                         listOf(
                             TidligereSykmelding(
@@ -131,7 +122,7 @@ class RegulaKtTest {
                     tidligereSykmeldinger = emptyList(),
                     bidiagnoser = null,
                     annenFravarsArsak = null,
-                    utdypendeOpplysninger = null,
+                    besvarteUtdypendeOpplysninger = null,
                     kontaktPasientBegrunnelseIkkeKontakt = null,
                     pasient =
                         RegulaPasient(
@@ -189,7 +180,7 @@ class RegulaKtTest {
                     tidligereSykmeldinger = emptyList(),
                     bidiagnoser = null,
                     annenFravarsArsak = null,
-                    utdypendeOpplysninger = null,
+                    besvarteUtdypendeOpplysninger = null,
                     kontaktPasientBegrunnelseIkkeKontakt = null,
                     pasient =
                         RegulaPasient(
@@ -238,7 +229,7 @@ class RegulaKtTest {
                             tom = LocalDate.now().plusDays(10),
                         )
                     ),
-                utdypendeOpplysninger = null,
+                besvarteUtdypendeOpplysninger = null,
                 tidligereSykmeldinger = emptyList(),
                 kontaktPasientBegrunnelseIkkeKontakt = null,
                 pasient =
@@ -286,7 +277,7 @@ class RegulaKtTest {
                             tom = LocalDate.now().minusDays(14),
                         )
                     ),
-                utdypendeOpplysninger = null,
+                besvarteUtdypendeOpplysninger = null,
                 tidligereSykmeldinger = emptyList(),
                 kontaktPasientBegrunnelseIkkeKontakt = "ikke3ord",
                 pasient =
