@@ -6,6 +6,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import no.nav.tsm.regulus.regula.dsl.RuleStatus
 import no.nav.tsm.regulus.regula.dsl.getOutcome
+import no.nav.tsm.regulus.regula.dsl.getRulePath
 import no.nav.tsm.regulus.regula.dsl.toRegulaJuridisk
 import no.nav.tsm.regulus.regula.executor.ExecutionMode
 import no.nav.tsm.regulus.regula.executor.TreeExecutor
@@ -28,6 +29,9 @@ import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.TilbakedateringRule
 import no.nav.tsm.regulus.regula.rules.trees.tilbakedatering.TilbakedateringRules
 import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRulePayload
 import no.nav.tsm.regulus.regula.rules.trees.validering.ValideringRules
+import org.slf4j.LoggerFactory
+
+private val logger = LoggerFactory.getLogger(RegulaTree::class.java)
 
 /** All enums in the entire regulus-regula module */
 enum class RegulaTree(val display: String) {
@@ -138,6 +142,11 @@ fun executeRegulaRules(ruleExecutionPayload: RegulaPayload, mode: ExecutionMode)
         }
 
     registerResultMetrics(regulaResult, mode)
+
+    logger.info(
+        "Rule execution ${mode.name}: ${overallStatus.name}\n" +
+            (executedChain.joinToString("\n") { "\t${it.name}: ${it.getRulePath()}" })
+    )
 
     return regulaResult
 }

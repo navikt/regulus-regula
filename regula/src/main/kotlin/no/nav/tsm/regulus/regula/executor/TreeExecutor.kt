@@ -7,8 +7,6 @@ import no.nav.tsm.regulus.regula.dsl.TreeNode
 import no.nav.tsm.regulus.regula.dsl.TreeNode.*
 import no.nav.tsm.regulus.regula.dsl.TreeNode.LeafNode.*
 import no.nav.tsm.regulus.regula.dsl.TreeOutput
-import no.nav.tsm.regulus.regula.dsl.getRulePath
-import org.slf4j.LoggerFactory
 
 enum class ExecutionMode {
     /** Normal mode will execute as normal */
@@ -29,15 +27,10 @@ internal abstract class TreeExecutor<RuleEnum, Payload>(
     private val tree: RuleNode<RuleEnum>,
     private val payload: Payload,
 ) {
-    private val logger = LoggerFactory.getLogger(this::class.java)
-
     abstract fun getRule(rule: RuleEnum): (Payload) -> RuleOutput<RuleEnum>
 
     fun execute(mode: ExecutionMode): TreeOutput<RuleEnum> {
-        val executedTreeResult =
-            tree.evaluate(payload).also { treeOutput: TreeOutput<RuleEnum> ->
-                logger.info("Rules (mode=${mode.name}), ${treeOutput.getRulePath()}")
-            }
+        val executedTreeResult = tree.evaluate(payload)
 
         return if (mode == ExecutionMode.PAPIR) {
             executedTreeResult.flipInvalidToManuell()
