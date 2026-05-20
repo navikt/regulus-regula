@@ -25,8 +25,6 @@ private fun getHprRule(rules: HprRule): HprRuleFn =
         HprRule.BEHANDLER_ER_LEGE_I_HPR -> Rules.behandlerErLege
         HprRule.BEHANDLER_ER_TANNLEGE_I_HPR -> Rules.behandlerErTannlege
         HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR -> Rules.behandlerErManuellterapeut
-        HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR ->
-            Rules.behandlerErFTMedTilligskompetanseSykmelding
         HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR ->
             Rules.behandlerErKIMedTilligskompetanseSykmelding
         HprRule.SYKEFRAVAR_OVER_12_UKER -> Rules.sykefravarOver12Uker
@@ -116,30 +114,6 @@ private val Rules =
                 ruleInputs = mapOf("behandlerGodkjenninger" to behandlerGodkjenninger),
                 rule = HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR,
                 ruleResult = behandlerErManuellterapeut,
-            )
-        }
-
-        val behandlerErFTMedTilligskompetanseSykmelding: HprRuleFn = { payload ->
-            val behandlerGodkjenninger = payload.behandlerGodkjenninger ?: emptyList()
-            val genereringsTidspunkt = payload.signaturdato
-
-            val erFtMedTilleggskompetanse =
-                erHelsepersonellKategoriMedTilleggskompetanse(
-                    behandlerGodkjenninger,
-                    genereringsTidspunkt,
-                    HelsepersonellKategori.FYSIOTERAPAEUT,
-                )
-
-            val result = erFtMedTilleggskompetanse
-
-            RuleOutput(
-                ruleInputs =
-                    mapOf(
-                        "behandlerGodkjenninger" to behandlerGodkjenninger,
-                        "genereringsTidspunkt" to genereringsTidspunkt,
-                    ),
-                rule = HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR,
-                ruleResult = result,
             )
         }
 

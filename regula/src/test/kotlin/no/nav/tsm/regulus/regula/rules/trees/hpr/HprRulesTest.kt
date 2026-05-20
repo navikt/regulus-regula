@@ -256,22 +256,17 @@ class HprRulesTest {
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_TANNLEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR to false,
-                HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR to false,
                 HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR to false,
             ),
         )
         assertEquals(
-            mapOf(
-                "harGodkjenninger" to true,
-                "behandlerGodkjenninger" to behandler,
-                "genereringsTidspunkt" to signaturdato,
-            ),
+            mapOf("harGodkjenninger" to true, "behandlerGodkjenninger" to behandler),
             result.ruleInputs,
         )
     }
 
     @Test
-    fun `Fysioterapeut med tilleggskompetanse, Status OK`() {
+    fun `Fysioterapeut med tilleggskompetanse, Status INVALID`() {
         val behandler =
             testBehandlerGodkjenninger(
                 BehandlerScenarios.AKTIV_FYSIOTERAPEUT_MED_TILLEGGSKOMPETANSE
@@ -289,7 +284,7 @@ class HprRulesTest {
                 )
                 .execute(ExecutionMode.NORMAL)
 
-        assertEquals(RuleStatus.OK, result.treeResult.status)
+        assertEquals(RuleStatus.INVALID, result.treeResult.status)
         assertPath(
             result.rulePath,
             listOf(
@@ -299,8 +294,7 @@ class HprRulesTest {
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_TANNLEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR to false,
-                HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR to true,
-                HprRule.SYKEFRAVAR_OVER_12_UKER to false,
+                HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR to false,
             ),
         )
     }
@@ -339,19 +333,11 @@ class HprRulesTest {
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_TANNLEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR to false,
-                HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR to true,
-                HprRule.SYKEFRAVAR_OVER_12_UKER to true,
+                HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR to false,
             ),
         )
         assertEquals(
-            mapOf(
-                "harGodkjenninger" to true,
-                "behandlerGodkjenninger" to behandler,
-                "genereringsTidspunkt" to signaturdato,
-                "fom" to perioder.first().fom,
-                "tom" to perioder.first().tom,
-                "startDatoSykefravær" to expectedStartDate,
-            ),
+            mapOf("harGodkjenninger" to true, "behandlerGodkjenninger" to behandler),
             result.ruleInputs,
         )
     }
@@ -382,16 +368,11 @@ class HprRulesTest {
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_TANNLEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR to false,
-                HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR to false,
                 HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR to false,
             ),
         )
         assertEquals(
-            mapOf(
-                "harGodkjenninger" to true,
-                "behandlerGodkjenninger" to behandler,
-                "genereringsTidspunkt" to signaturdato,
-            ),
+            mapOf("harGodkjenninger" to true, "behandlerGodkjenninger" to behandler),
             result.ruleInputs,
         )
     }
@@ -423,7 +404,6 @@ class HprRulesTest {
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_TANNLEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR to false,
-                HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR to false,
                 HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR to true,
                 HprRule.SYKEFRAVAR_OVER_12_UKER to false,
             ),
@@ -461,7 +441,6 @@ class HprRulesTest {
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_TANNLEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR to false,
-                HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR to false,
                 HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR to true,
                 HprRule.SYKEFRAVAR_OVER_12_UKER to true,
             ),
@@ -470,7 +449,6 @@ class HprRulesTest {
             mapOf(
                 "harGodkjenninger" to true,
                 "behandlerGodkjenninger" to behandler,
-                "genereringsTidspunkt" to signaturdato,
                 "fom" to perioder.first().fom,
                 "tom" to perioder.first().tom,
                 "startDatoSykefravær" to startdato,
@@ -516,7 +494,7 @@ class HprRulesTest {
                 )
                 .execute(ExecutionMode.NORMAL)
 
-        assertEquals(RuleStatus.OK, result.treeResult.status)
+        assertEquals(RuleStatus.INVALID, result.treeResult.status)
         assertPath(
             result.rulePath,
             listOf(
@@ -526,8 +504,7 @@ class HprRulesTest {
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_TANNLEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR to false,
-                HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR to true,
-                HprRule.SYKEFRAVAR_OVER_12_UKER to false,
+                HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR to false,
             ),
         )
     }
@@ -576,7 +553,6 @@ class HprRulesTest {
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_TANNLEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR to false,
-                HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR to false,
                 HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR to false,
             ),
         )
@@ -584,7 +560,6 @@ class HprRulesTest {
             mapOf(
                 "harGodkjenninger" to true,
                 "behandlerGodkjenninger" to behandlerWithCustomGyldig,
-                "genereringsTidspunkt" to signaturdato,
             ),
             result.ruleInputs,
         )
@@ -637,7 +612,6 @@ class HprRulesTest {
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_TANNLEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR to false,
-                HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR to false,
                 HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR to false,
             ),
         )
@@ -645,7 +619,6 @@ class HprRulesTest {
             mapOf(
                 "harGodkjenninger" to true,
                 "behandlerGodkjenninger" to behandlerWithCustomGyldig,
-                "genereringsTidspunkt" to signaturdato,
             ),
             result.ruleInputs,
         )
@@ -688,7 +661,7 @@ class HprRulesTest {
                 )
                 .execute(ExecutionMode.NORMAL)
 
-        assertEquals(RuleStatus.OK, result.treeResult.status)
+        assertEquals(RuleStatus.INVALID, result.treeResult.status)
         assertPath(
             result.rulePath,
             listOf(
@@ -698,8 +671,7 @@ class HprRulesTest {
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_TANNLEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR to false,
-                HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR to true,
-                HprRule.SYKEFRAVAR_OVER_12_UKER to false,
+                HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR to false,
             ),
         )
     }
@@ -733,16 +705,11 @@ class HprRulesTest {
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_TANNLEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR to false,
-                HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR to false,
                 HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR to false,
             ),
         )
         assertEquals(
-            mapOf(
-                "harGodkjenninger" to true,
-                "behandlerGodkjenninger" to behandler,
-                "genereringsTidspunkt" to signaturdato,
-            ),
+            mapOf("harGodkjenninger" to true, "behandlerGodkjenninger" to behandler),
             result.ruleInputs,
         )
     }
@@ -776,16 +743,11 @@ class HprRulesTest {
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_TANNLEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR to false,
-                HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR to false,
                 HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR to false,
             ),
         )
         assertEquals(
-            mapOf(
-                "harGodkjenninger" to true,
-                "behandlerGodkjenninger" to behandler,
-                "genereringsTidspunkt" to signaturdato,
-            ),
+            mapOf("harGodkjenninger" to true, "behandlerGodkjenninger" to behandler),
             result.ruleInputs,
         )
     }
@@ -817,7 +779,6 @@ class HprRulesTest {
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_TANNLEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR to false,
-                HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR to false,
                 HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR to true,
                 HprRule.SYKEFRAVAR_OVER_12_UKER to false,
             ),
@@ -854,7 +815,6 @@ class HprRulesTest {
                 HprRule.BEHANDLER_ER_LEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_TANNLEGE_I_HPR to false,
                 HprRule.BEHANDLER_ER_MANUELLTERAPEUT_I_HPR to false,
-                HprRule.BEHANDLER_ER_FT_MED_TILLEGSKOMPETANSE_I_HPR to false,
                 HprRule.BEHANDLER_ER_KI_MED_TILLEGSKOMPETANSE_I_HPR to true,
                 HprRule.SYKEFRAVAR_OVER_12_UKER to false,
             ),
