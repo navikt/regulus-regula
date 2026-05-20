@@ -5,6 +5,7 @@ import no.nav.tsm.regulus.regula.payload.Aktivitet
 import no.nav.tsm.regulus.regula.payload.Diagnose
 import no.nav.tsm.regulus.regula.payload.SykmeldingPeriodeType
 import no.nav.tsm.regulus.regula.payload.TidligereSykmelding
+import no.nav.tsm.regulus.regula.payload.TidligereSykmeldingAktivitet
 import no.nav.tsm.regulus.regula.rules.shared.onlyRelevantWithSameDiagnosis
 import no.nav.tsm.regulus.regula.utils.earliestFom
 import no.nav.tsm.regulus.regula.utils.isWorkingDaysBetween
@@ -40,7 +41,7 @@ internal fun isForlengelse(
                     id,
                     fom = periode.fom,
                     tom = periode.tom,
-                    gradert = if (periode is Aktivitet.Gradert) periode.grad else null,
+                    gradert = if(periode is TidligereSykmeldingAktivitet.Gradert) periode.grad else null,
                 )
             }
 
