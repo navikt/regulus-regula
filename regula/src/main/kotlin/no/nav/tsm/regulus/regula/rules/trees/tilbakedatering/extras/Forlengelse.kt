@@ -41,7 +41,8 @@ internal fun isForlengelse(
                     id,
                     fom = periode.fom,
                     tom = periode.tom,
-                    gradert = if(periode is TidligereSykmeldingAktivitet.Gradert) periode.grad else null,
+                    gradert =
+                        if (periode is TidligereSykmeldingAktivitet.Gradert) periode.grad else null,
                 )
             }
 
