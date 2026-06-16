@@ -54,17 +54,7 @@ internal val periodeRuleTree =
                                                                 .GRADERT_SYKMELDING_0_PROSENT
                                                         )
                                                     )
-                                                    no(
-                                                        PeriodeRule.SYKMELDING_MED_BEHANDLINGSDAGER
-                                                    ) {
-                                                        yes(
-                                                            MANUAL(
-                                                                PeriodeRule.Outcomes
-                                                                    .SYKMELDING_MED_BEHANDLINGSDAGER
-                                                            )
-                                                        )
-                                                        no(OK())
-                                                    }
+                                                    no(OK())
                                                 }
                                             }
                                         }

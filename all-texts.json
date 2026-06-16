@@ -21,8 +21,7 @@
     "AVVENTENDE_SYKMELDING_OVER_16_DAGER": "Sykmeldingen kan ikke rettes, det må skrives en ny. Pasienten har fått beskjed om å vente på ny sykmelding fra deg. Grunnet følgende:Hvis avventende sykmelding benyttes utover arbeidsgiverperioden på 16 kalenderdager, avvises meldingen.",
     "FOR_MANGE_BEHANDLINGSDAGER_PER_UKE": "Sykmeldingen kan ikke rettes, det må skrives en ny. Pasienten har fått beskjed om å vente på ny sykmelding fra deg. Grunnet følgende:Hvis antall dager oppgitt for behandlingsdager periode er for høyt i forhold til periodens lengde avvises meldingen. Mer enn en dag per uke er for høyt. 1 dag per påbegynt uke.",
     "GRADERT_SYKMELDING_OVER_99_PROSENT": "Sykmeldingen kan ikke rettes, det må skrives en ny. Pasienten har fått beskjed om å vente på ny sykmelding fra deg. Grunnet følgende:Hvis sykmeldingsgrad er høyere enn 99% for delvis sykmelding avvises meldingen",
-    "GRADERT_SYKMELDING_0_PROSENT": "Sykmeldingen kan ikke rettes, det må skrives en ny. Pasienten har fått beskjed om å vente på ny sykmelding fra deg. Grunnet følgende:Hvis sykmeldingsgrad er 0% for delvis sykmelding avvises meldingen",
-    "SYKMELDING_MED_BEHANDLINGSDAGER": "Sykmelding inneholder behandlingsdager (felt 4.4)."
+    "GRADERT_SYKMELDING_0_PROSENT": "Sykmeldingen kan ikke rettes, det må skrives en ny. Pasienten har fått beskjed om å vente på ny sykmelding fra deg. Grunnet følgende:Hvis sykmeldingsgrad er 0% for delvis sykmelding avvises meldingen"
   },
   "Behandler i HPR": {
     "BEHANDLER_IKKE_I_HPR": "Den som har skrevet sykmeldingen ble ikke funnet i Helsepersonellregisteret (HPR)",
