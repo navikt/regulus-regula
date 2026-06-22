@@ -19,9 +19,12 @@ internal val arbeidsuforhetRuleTree =
             yes(INVALID(ArbeidsuforhetRule.Outcomes.UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE))
             no(ArbeidsuforhetRule.ICPC_2_Z_DIAGNOSE) {
                 yes(INVALID(ArbeidsuforhetRule.Outcomes.ICPC_2_Z_DIAGNOSE))
-                no(ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_BIDIAGNOSE) {
-                    yes(INVALID(ArbeidsuforhetRule.Outcomes.UGYLDIG_KODEVERK_FOR_BIDIAGNOSE))
-                    no(OK())
+                no(ArbeidsuforhetRule.ICPC_2_A97) {
+                    yes(INVALID(ArbeidsuforhetRule.Outcomes.ICPC_2_A97))
+                    no(ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_BIDIAGNOSE) {
+                        yes(INVALID(ArbeidsuforhetRule.Outcomes.UGYLDIG_KODEVERK_FOR_BIDIAGNOSE))
+                        no(OK())
+                    }
                 }
             }
         }

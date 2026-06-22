@@ -22,6 +22,7 @@ internal class ArbeidsuforhetRules(val payload: ArbeidsuforhetRulePayload) :
 private fun getArbeidsuforhetRule(rules: ArbeidsuforhetRule): ArbeidsuforhetRuleFn {
     return when (rules) {
         ArbeidsuforhetRule.ICPC_2_Z_DIAGNOSE -> Rules.icpc2ZDiagnose
+        ArbeidsuforhetRule.ICPC_2_A97 -> Rules.icpc2A97Diagnose
         ArbeidsuforhetRule.HOVEDDIAGNOSE_MANGLER -> Rules.manglerHovedDiagnose
         ArbeidsuforhetRule.FRAVAERSGRUNN_MANGLER -> Rules.manglerAnnenFravarsArsak
         ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE -> Rules.ugyldigKodeVerkHovedDiagnose
@@ -46,6 +47,22 @@ private val Rules =
                 ruleInputs = mapOf("diagnoseKode" to (hoveddiagnose?.kode ?: "Ikke satt")),
                 rule = ArbeidsuforhetRule.ICPC_2_Z_DIAGNOSE,
                 ruleResult = icpc2ZDiagnose,
+            )
+        }
+
+        val icpc2A97Diagnose: ArbeidsuforhetRuleFn = { payload ->
+            val hoveddiagnose = payload.hoveddiagnose
+
+            val isIcpc2A97Diagnose =
+                hoveddiagnose != null &&
+                    hoveddiagnose.isICPC2() &&
+                    // Explicitly support both directly ICPC2 A97, as well as any ICPC2B A97.XXXX
+                    (hoveddiagnose.kode == "A97" || hoveddiagnose.kode.startsWith("A97."))
+
+            RuleOutput(
+                ruleInputs = mapOf("diagnoseKode" to (hoveddiagnose?.kode ?: "Ikke satt")),
+                rule = ArbeidsuforhetRule.ICPC_2_A97,
+                ruleResult = isIcpc2A97Diagnose,
             )
         }
 
