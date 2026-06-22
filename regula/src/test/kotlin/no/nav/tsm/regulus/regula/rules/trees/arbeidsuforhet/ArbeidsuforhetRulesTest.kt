@@ -181,6 +181,7 @@ class ArbeidsuforhetRulesTest {
                     ArbeidsuforhetRule.HOVEDDIAGNOSE_MANGLER to false,
                     ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE to false,
                     ArbeidsuforhetRule.ICPC_2_Z_DIAGNOSE to false,
+                    ArbeidsuforhetRule.ICPC_2_A97 to false,
                     ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_BIDIAGNOSE to false,
                 ),
             )
@@ -249,6 +250,64 @@ class ArbeidsuforhetRulesTest {
             ),
         )
         assertEquals(result.treeResult.getOutcome(), ArbeidsuforhetRule.Outcomes.ICPC_2_Z_DIAGNOSE)
+    }
+
+    @Test
+    fun `Diagnosen er ICPC2 A97-diagnose, Status INVALID`() {
+        val payload =
+            testArbeidsuforhetPayload(hoveddiagnose = Diagnose(system = ICPC2.OID, kode = "A97"))
+
+        val result = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
+
+        assertEquals(result.treeResult.status, RuleStatus.INVALID)
+        assertPath(
+            result.rulePath,
+            listOf(
+                ArbeidsuforhetRule.HOVEDDIAGNOSE_MANGLER to false,
+                ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE to false,
+                ArbeidsuforhetRule.ICPC_2_Z_DIAGNOSE to false,
+                ArbeidsuforhetRule.ICPC_2_A97 to true,
+            ),
+        )
+        assertEquals(
+            result.ruleInputs,
+            mapOf(
+                "hoveddiagnoseMangler" to false,
+                "diagnoseSystem" to ICPC2.OID,
+                "diagnoseKode" to "A97",
+            ),
+        )
+        assertEquals(result.treeResult.getOutcome(), ArbeidsuforhetRule.Outcomes.ICPC_2_A97)
+    }
+
+    @Test
+    fun `Diagnosen er ICPC2B A97-diagnose, Status INVALID`() {
+        val payload =
+            testArbeidsuforhetPayload(
+                hoveddiagnose = Diagnose(system = ICPC2B.OID, kode = "A97.0001")
+            )
+
+        val result = ArbeidsuforhetRules(payload).execute(ExecutionMode.NORMAL)
+
+        assertEquals(result.treeResult.status, RuleStatus.INVALID)
+        assertPath(
+            result.rulePath,
+            listOf(
+                ArbeidsuforhetRule.HOVEDDIAGNOSE_MANGLER to false,
+                ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE to false,
+                ArbeidsuforhetRule.ICPC_2_Z_DIAGNOSE to false,
+                ArbeidsuforhetRule.ICPC_2_A97 to true,
+            ),
+        )
+        assertEquals(
+            result.ruleInputs,
+            mapOf(
+                "hoveddiagnoseMangler" to false,
+                "diagnoseSystem" to ICPC2B.OID,
+                "diagnoseKode" to "A97.0001",
+            ),
+        )
+        assertEquals(result.treeResult.getOutcome(), ArbeidsuforhetRule.Outcomes.ICPC_2_A97)
     }
 
     @Test
@@ -322,6 +381,7 @@ class ArbeidsuforhetRulesTest {
                 ArbeidsuforhetRule.HOVEDDIAGNOSE_MANGLER to false,
                 ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE to false,
                 ArbeidsuforhetRule.ICPC_2_Z_DIAGNOSE to false,
+                ArbeidsuforhetRule.ICPC_2_A97 to false,
                 ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_BIDIAGNOSE to true,
             ),
         )
@@ -389,6 +449,7 @@ class ArbeidsuforhetRulesTest {
                 ArbeidsuforhetRule.HOVEDDIAGNOSE_MANGLER to false,
                 ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE to false,
                 ArbeidsuforhetRule.ICPC_2_Z_DIAGNOSE to false,
+                ArbeidsuforhetRule.ICPC_2_A97 to false,
                 ArbeidsuforhetRule.UGYLDIG_KODEVERK_FOR_BIDIAGNOSE to false,
             ),
         )

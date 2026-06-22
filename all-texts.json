@@ -32,6 +32,7 @@
   },
   "Arbeidsuførhet": {
     "ICPC_2_Z_DIAGNOSE": "Angitt hoveddiagnose (z-diagnose) gir ikke rett til sykepenger. Pasienten har fått beskjed.",
+    "ICPC_2_A97": "Angitt hoveddiagnose (A97) gir ikke rett til sykepenger. Pasienten har fått beskjed.",
     "FRAVAERSGRUNN_MANGLER": "Sykmeldingen kan ikke rettes, det må skrives en ny. Pasienten har fått beskjed om å vente på ny sykmelding fra deg. Grunnet følgende:Hoveddiagnose eller annen lovfestet fraværsgrunn mangler. ",
     "UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE": "Sykmeldingen kan ikke rettes, det må skrives en ny. Pasienten har fått beskjed om å vente på ny sykmelding fra deg. Grunnet følgende:Kodeverk for hoveddiagnose er ikke angitt eller ukjent.",
     "UGYLDIG_KODEVERK_FOR_BIDIAGNOSE": "Sykmeldingen kan ikke rettes, det må skrives en ny. Pasienten har fått beskjed om å vente på ny sykmelding fra deg. Grunnet følgende:Kodeverk for bidiagnose er ikke angitt eller ukjent."

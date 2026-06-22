@@ -5,6 +5,7 @@ import no.nav.tsm.regulus.regula.dsl.RuleStatus
 
 internal enum class ArbeidsuforhetRule {
     ICPC_2_Z_DIAGNOSE,
+    ICPC_2_A97,
     HOVEDDIAGNOSE_MANGLER,
     FRAVAERSGRUNN_MANGLER,
     UGYLDIG_KODEVERK_FOR_HOVEDDIAGNOSE,
@@ -19,6 +20,12 @@ internal enum class ArbeidsuforhetRule {
             status = RuleStatus.INVALID,
             messageForSender =
                 "Angitt hoveddiagnose (z-diagnose) gir ikke rett til sykepenger. Pasienten har fått beskjed.",
+            messageForUser = "Den må ha en gyldig diagnosekode som gir rett til sykepenger.",
+        ),
+        ICPC_2_A97(
+            status = RuleStatus.INVALID,
+            messageForSender =
+                "Angitt hoveddiagnose (A97) gir ikke rett til sykepenger. Pasienten har fått beskjed.",
             messageForUser = "Den må ha en gyldig diagnosekode som gir rett til sykepenger.",
         ),
         FRAVAERSGRUNN_MANGLER(
